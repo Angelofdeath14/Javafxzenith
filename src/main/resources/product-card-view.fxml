@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="460" prefWidth="320" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.ProductCardViewController">
+    <children>
+        <!-- Card Container -->
+        <VBox fx:id="cardContainer" layoutX="10" layoutY="10" prefHeight="440" prefWidth="300" spacing="10" style="                 -fx-background-color: white;                 -fx-background-radius: 12;                 -fx-padding: 12;                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10,0,0,2);               ">
+
+            <!-- Image Slider -->
+            <StackPane fx:id="imageSlider" prefHeight="206.0" prefWidth="276.0">
+                <ImageView fx:id="imageView" fitHeight="180" fitWidth="276" pickOnBounds="true" preserveRatio="true" />
+                <!-- Prev / Next Controls -->
+                <Button fx:id="btnPrev" layoutX="8" layoutY="80" style="-fx-background-color: rgba(255,255,255,0.7); -fx-background-radius:50%;" text="◀" />
+                <Button fx:id="btnNext" layoutX="260" layoutY="80" style="-fx-background-color: rgba(255,255,255,0.7); -fx-background-radius:50%;" text="▶" />
+            </StackPane>
+
+            <!-- Product Info -->
+            <Label fx:id="lblName" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #666;" text="Nom du produit" />
+            <Label fx:id="lblCategory" style="-fx-font-size: 12px; -fx-text-fill: #666;" text="Catégorie" />
+
+            <Text fx:id="txtDescription" style="-fx-font-size: 12px; -fx-fill: #333;" text="Description du produit..." wrappingWidth="276" />
+
+            <HBox spacing="10">
+                <Label style="-fx-font-size: 14px;" text="Prix:" />
+                <Label fx:id="lblPrice" style="-fx-font-size: 14px; -fx-text-fill: #2a8fbd;" text="0.00 DT" />
+            </HBox>
+
+            <HBox spacing="10">
+                <Label style="-fx-font-size: 14px;" text="État:" />
+                <Label fx:id="lblEtat" style="-fx-font-size: 14px; -fx-text-fill: #28a745;" text="Disponible" />
+            </HBox>
+
+            <!-- Add to Cart Button -->
+            <Button fx:id="btnAddToCart" mnemonicParsing="false" onAction="#onAddToCart" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius:8px; -fx-padding:8 16;" text="Add to Cart">
+            </Button>
+
+        </VBox>
+    </children>
+</AnchorPane>
