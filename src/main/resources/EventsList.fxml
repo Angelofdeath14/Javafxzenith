@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.ViewEventsController"
+            prefHeight="600.0" prefWidth="900.0"
+            stylesheets="@style.css">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Liste des Événements" styleClass="page-title">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher un événement..." HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="categoryFilter" promptText="Catégorie"/>
+                <DatePicker fx:id="dateFilter" promptText="Date"/>
+                <Button text="Rechercher" onAction="#handleSearch" styleClass="button-primary"/>
+                <Button text="Réinitialiser" onAction="#handleReset" styleClass="button-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <TableView fx:id="eventsTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colTitle" text="Titre" prefWidth="200" />
+                    <TableColumn fx:id="colCategory" text="Catégorie" prefWidth="100" />
+                    <TableColumn fx:id="colDate" text="Date" prefWidth="150" />
+                    <TableColumn fx:id="colLocation" text="Lieu" prefWidth="120" />
+                    <TableColumn fx:id="colCapacity" text="Places" prefWidth="80" />
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="180" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Retour" onAction="#handleBack" styleClass="button-secondary"/>
+            <Button text="Voir les Sessions" onAction="#handleViewSessions" styleClass="button-primary"/>
+        </HBox>
+    </bottom>
+</BorderPane> 

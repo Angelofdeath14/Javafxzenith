@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.EventStatsController"
+            prefHeight="600.0" prefWidth="900.0"
+            stylesheets="@style.css">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Statistiques des Événements" styleClass="page-title">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="eventSelector" promptText="Sélectionner un événement" HBox.hgrow="ALWAYS"/>
+                <DatePicker fx:id="startDatePicker" promptText="Date de début"/>
+                <DatePicker fx:id="endDatePicker" promptText="Date de fin"/>
+                <Button text="Appliquer" onAction="#handleApplyFilter" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <GridPane hgap="20" vgap="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <!-- Statistiques générales -->
+            <HBox spacing="15" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Événements" styleClass="stat-title"/>
+                    <Label fx:id="lblTotalEvents" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Sessions" styleClass="stat-title"/>
+                    <Label fx:id="lblTotalSessions" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Réservations" styleClass="stat-title"/>
+                    <Label fx:id="lblTotalReservations" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Taux de réservation" styleClass="stat-title"/>
+                    <Label fx:id="lblReservationRate" text="0%" styleClass="stat-value"/>
+                </VBox>
+            </HBox>
+            
+            <!-- Graphique camembert des catégories -->
+            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="chart-container">
+                <Label text="Répartition par catégorie" styleClass="chart-title"/>
+                <PieChart fx:id="categoryChart" />
+            </VBox>
+            
+            <!-- Graphique à barres des réservations -->
+            <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="chart-container">
+                <Label text="Réservations par événement" styleClass="chart-title"/>
+                <BarChart fx:id="reservationChart">
+                    <xAxis>
+                        <CategoryAxis fx:id="eventAxis" label="Événements"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="reservationAxis" label="Réservations"/>
+                    </yAxis>
+                </BarChart>
+            </VBox>
+            
+            <!-- Tableau des événements récents -->
+            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" styleClass="table-container">
+                <Label text="Événements récents" styleClass="section-title"/>
+                <TableView fx:id="eventsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colTitle" text="Titre"/>
+                        <TableColumn fx:id="colCategory" text="Catégorie"/>
+                        <TableColumn fx:id="colDate" text="Date"/>
+                        <TableColumn fx:id="colSessions" text="Sessions"/>
+                        <TableColumn fx:id="colReservations" text="Réservations"/>
+                    </columns>
+                </TableView>
+            </VBox>
+            
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="20"/>
+                <RowConstraints percentHeight="40"/>
+                <RowConstraints percentHeight="40"/>
+            </rowConstraints>
+        </GridPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Fermer" onAction="#handleClose" styleClass="button-secondary"/>
+            <Button text="Exporter PDF" onAction="#handleExportPDF" styleClass="button-primary"/>
+        </HBox>
+    </bottom>
+</BorderPane> 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.UserInterfaceController"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Menu latéral -->
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+            <Button text="Événements" 
+                    style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-min-width: 150;"
+                    onAction="#showEvents"/>
+            <Button text="Mes Réservations" 
+                    style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-min-width: 150;"
+                    onAction="#showReservations"/>
+        </VBox>
+    </left>
+
+    <!-- Zone de contenu principale -->
+    <center>
+        <StackPane fx:id="contentArea">
+            <!-- Le contenu sera chargé dynamiquement ici -->
+        </StackPane>
+    </center>
+
+</BorderPane> 

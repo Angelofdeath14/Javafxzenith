@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.AffichageSessionsController"
+            style="-fx-background-color: white;">
+
+    <!-- Barre de titre personnalisée -->
+    <HBox alignment="CENTER" styleClass="window-header" 
+          AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          prefHeight="30.0">
+        <Label text="Gestion des Sessions" styleClass="window-title"/>
+    </HBox>
+
+    <!-- Sidebar -->
+    <VBox layoutY="60.0" prefHeight="2100.0" prefWidth="400" styleClass="sidebar"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="60.0">
+        
+        <Button onAction="#goToUsers" styleClass="button-route" text="Utilisateurs"/>
+        <Button onAction="#goToAffichageEvent" styleClass="button-route" text="Événements"/>
+        <Button onAction="#addEvent" styleClass="button-route" text="Ajouter un événement"/>
+    </VBox>
+
+    <!-- Main Content -->
+    <VBox spacing="15" layoutX="420.0" layoutY="100.0" styleClass="main-content"
+          AnchorPane.leftAnchor="420.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0" AnchorPane.bottomAnchor="20.0">
+        
+        <Label text="Liste des Sessions" styleClass="header-title"/>
+
+        <!-- Filtres -->
+        <HBox spacing="10" styleClass="search-container">
+            <ComboBox fx:id="eventFilter" promptText="Filtrer par événement" 
+                     styleClass="filter-combo" HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Rechercher une session..." 
+                      styleClass="search-field" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Sessions Table -->
+        <TableView fx:id="sessionsTableView" VBox.vgrow="ALWAYS" styleClass="custom-table">
+            <columns>
+                <TableColumn fx:id="colTitre" text="Titre" prefWidth="150"/>
+                <TableColumn fx:id="colDescription" text="Description" prefWidth="200"/>
+                <TableColumn fx:id="colDateDebut" text="Date de début" prefWidth="150"/>
+                <TableColumn fx:id="colDateFin" text="Date de fin" prefWidth="150"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="200"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+
+        <!-- Boutons d'action -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Ajouter une session" onAction="#handleAjouterSession" 
+                    styleClass="button-primary"/>
+        </HBox>
+    </VBox>
+</AnchorPane> 

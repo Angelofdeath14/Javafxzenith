@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.AffichageEventController"
+            style="-fx-background-color: white;">
+
+    <!-- Barre de titre personnalisée -->
+    <HBox alignment="CENTER" styleClass="window-header" 
+          AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          prefHeight="30.0">
+        <Label text="Gestion des Événements" styleClass="window-title"/>
+    </HBox>
+
+    <!-- Sidebar -->
+    <VBox layoutY="30.0" prefHeight="770.0" prefWidth="200" styleClass="sidebar"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
+        <Button fx:id="btnDashboard" onAction="#goToDash" styleClass="button-route" text="Tableau de bord"/>
+        <Button fx:id="btnUsers" onAction="#goToUsers" styleClass="button-route" text="Utilisateurs"/>
+        <Button fx:id="btnAddEvent" onAction="#addEvent" styleClass="button-route" text="Ajouter un événement"/>
+        <Button fx:id="btnFront" onAction="#goToFrontView" styleClass="button-route" text="Front"/>
+        <Button fx:id="btnLogout" onAction="#Logout" styleClass="button-route" text="Déconnexion"/>
+    </VBox>
+
+    <!-- Main Content -->
+    <ScrollPane fx:id="scrollPane" layoutX="220.0" layoutY="50.0" 
+                AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="20.0" 
+                AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="20.0">
+        <VBox fx:id="mainContainer" spacing="15" styleClass="main-content">
+            <!-- Le contenu sera ajouté dynamiquement par le contrôleur -->
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

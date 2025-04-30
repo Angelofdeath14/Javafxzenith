@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.AjouterSessionController"
+            prefHeight="500.0" prefWidth="600.0">
+    
+    <VBox spacing="15" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" 
+          AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+        
+        <Label text="Ajouter une session" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        
+        <GridPane vgap="15" hgap="10">
+            <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            
+            <Label text="Événement :" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="evenementComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0" 
+                      maxWidth="Infinity"/>
+            
+            <Label text="Description :" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextArea fx:id="descriptionField" prefRowCount="3" wrapText="true" 
+                     GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            
+            <Label text="Date de début :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <DatePicker fx:id="startTimePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" 
+                       maxWidth="Infinity"/>
+            
+            <Label text="Date de fin :" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="endTimePicker" GridPane.columnIndex="1" GridPane.rowIndex="3" 
+                       maxWidth="Infinity"/>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS"/>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="Annuler" onAction="#handleAnnuler" 
+                    style="-fx-min-width: 100;"/>
+            <Button text="Enregistrer" onAction="#handleEnregistrer" 
+                    style="-fx-min-width: 100; -fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
+</AnchorPane> 
