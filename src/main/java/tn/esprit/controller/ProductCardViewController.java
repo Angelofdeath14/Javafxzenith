@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import tn.esprit.entities.Produit;
+import tn.esprit.utils.QRCodeGenerator;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -15,7 +17,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ProductCardViewController {
-
     @FXML private ImageView imageView;
     @FXML private Button btnPrev;
     @FXML private Button btnNext;
@@ -25,21 +26,12 @@ public class ProductCardViewController {
     @FXML private Text txtDescription;
     @FXML private Label lblPrice;
     @FXML private Label lblEtat;
-
-    private Produit produit;
-    private List<String> imageFiles;
+    @FXML private ImageView qrcode;
     private int currentIndex = 0;
     private Consumer<Produit> addToCartHandler;
 
-    @FXML
-    public void initialize() {
-        btnPrev.setOnAction(e -> showPreviousImage());
-        btnNext.setOnAction(e -> showNextImage());
-    }
-
-    /**
-     * FXML handler for Add to Cart button click.
-     */
+    private Produit produit;
+    private List<String> imageFiles = new ArrayList<>();
     @FXML
     private void onAddToCart(ActionEvent event) {
         if (addToCartHandler != null && produit != null) {
@@ -49,9 +41,12 @@ public class ProductCardViewController {
         }
     }
 
-    /**
-     * Populates the card with product data and images.
-     */
+    @FXML
+    public void initialize() {
+        btnPrev.setOnAction(e -> showPreviousImage());
+        btnNext.setOnAction(e -> showNextImage());
+    }
+
     public void fillCard(Produit produit) {
         this.produit = produit;
         lblName.setText(produit.getNom());
@@ -59,56 +54,57 @@ public class ProductCardViewController {
         txtDescription.setText(produit.getDescription());
         lblPrice.setText(String.format("%.2f DT", produit.getPrix()));
         lblEtat.setText(produit.getEtat());
-
-        imageFiles = new ArrayList<>();
-        if (produit.getFront_image() != null && !produit.getFront_image().isBlank()) {
+        try {
+            qrcode.setImage(
+                    QRCodeGenerator.generateQRCodeImage(
+                            QRCodeGenerator.formatProductData(produit),
+                            150, 150
+                    )
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (produit.getFront_image() != null && !produit.getFront_image().isBlank())
             imageFiles.add(produit.getFront_image());
-        }
-        if (produit.getBack_image() != null && !produit.getBack_image().isBlank()) {
+        if (produit.getBack_image() != null && !produit.getBack_image().isBlank())
             imageFiles.add(produit.getBack_image());
-        }
-        if (produit.getTop_image() != null && !produit.getTop_image().isBlank()) {
+        if (produit.getTop_image() != null && !produit.getTop_image().isBlank())
             imageFiles.add(produit.getTop_image());
-        }
-
         if (!imageFiles.isEmpty()) {
             currentIndex = 0;
-            loadImage(imageFiles.get(currentIndex));
+            loadImage(imageFiles.get(0));
         }
-    }
-
-    /**
-     * Registers a callback to be invoked when the user clicks "Add to Cart".
-     */
-    public void setOnAddToCart(Consumer<Produit> handler) {
-        this.addToCartHandler = handler;
     }
 
     private void loadImage(String fileName) {
         try {
-            File file = new File("C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\" + fileName);
-            if (file.exists()) {
-                try (FileInputStream fis = new FileInputStream(file)) {
-                    Image img = new Image(fis);
-                    imageView.setImage(img);
+            File f = new File("C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\" + fileName);
+            if (f.exists()) {
+                try (FileInputStream fis = new FileInputStream(f)) {
+                    imageView.setImage(new Image(fis));
                 }
             } else {
                 imageView.setImage(null);
             }
         } catch (Exception ex) {
-            System.err.println("Error loading image: " + ex.getMessage());
+            System.err.println(ex.getMessage());
         }
     }
-
+    public void setOnAddToCart(Consumer<Produit> handler) {
+        this.addToCartHandler = handler;
+    }
     private void showNextImage() {
-        if (imageFiles == null || imageFiles.isEmpty()) return;
+        if (imageFiles.isEmpty()) return;
         currentIndex = (currentIndex + 1) % imageFiles.size();
         loadImage(imageFiles.get(currentIndex));
     }
 
     private void showPreviousImage() {
-        if (imageFiles == null || imageFiles.isEmpty()) return;
+        if (imageFiles.isEmpty()) return;
         currentIndex = (currentIndex - 1 + imageFiles.size()) % imageFiles.size();
         loadImage(imageFiles.get(currentIndex));
+    }
+    public Button getBtnAddToCart() {
+        return btnAddToCart;
     }
 }

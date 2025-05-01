@@ -5,18 +5,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.entities.Command;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceCommand;
 import tn.esprit.service.ServiceProduit;
+import tn.esprit.utils.EmailSender;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +33,9 @@ public class AjouterCommandUserController {
     private List<Produit> cart;
     private final ServiceProduit serviceProduit = new ServiceProduit();
     private final ServiceCommand serviceCommand = new ServiceCommand();
+    @FXML private RadioButton rbCash, rbCard;
+    @FXML
+    private Label ltotal;
 
     /**
      * Called by previous screen to pass in the cart products.
@@ -43,9 +46,11 @@ public class AjouterCommandUserController {
     }
 
     private void loadCartItems() {
+        double total=0.0;
         cartContainer.getChildren().clear();
         for (Produit p : cart) {
             try {
+                total+=p.getPrix();
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/product-cart-card-view.fxml"));
                 Node itemNode = loader.load();
@@ -59,6 +64,7 @@ public class AjouterCommandUserController {
                 System.err.println("Error loading cart item: " + e.getMessage());
             }
         }
+        ltotal.setText("Total: "+total);
     }
 
     public void setCommand(Command command) {
@@ -80,11 +86,24 @@ public class AjouterCommandUserController {
                     "Le panier est vide.").showAndWait();
             return;
         }
+        boolean payByCard = rbCard.isSelected();
+        boolean success = true;
+        String status = "Pending";
+
+        if (payByCard) {
+            success = showPaymentDialog();
+            status = success ? "Accepted" : null;
+
+        }
+
+        if (!success) {
+            return;
+        }
         if (currentCommand == null) {
             Command cmd = new Command();
             cmd.setId_user(1);
             cmd.setCreate_at(LocalDateTime.now());
-            cmd.setStatus("Pending");
+            cmd.setStatus(status);
             cmd.setTotal_amount(
                     cart.stream().mapToDouble(Produit::getPrix).sum());
             cmd.setDelivery_address(deliveryAddressField.getText());
@@ -92,14 +111,34 @@ public class AjouterCommandUserController {
 
             int cmdId = serviceCommand.ajouterWithReturningId(cmd);
             if (cmdId != -1) {
+                if(status.equals("Accepted")){
+                    try {
+                        EmailSender.sendInvoiceEmail("lisa.fx370c@gmail.com",cmd,serviceProduit.getByCommandId(cmdId));
+                    } catch (MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 // update each product
                 for (Produit p : cart) {
-                    p.setEtat("Non disponible");
+                    p.setEtat("Vendus");
                     p.setCommand_id(cmdId);
                     serviceProduit.modifier(p);
                 }
                 new Alert(Alert.AlertType.INFORMATION,
                         "Commande ajoutée avec succès !").showAndWait();
+                try {
+                    Parent root = FXMLLoader.load(
+                            getClass().getResource("/afficher-produit-user.fxml"));
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Produits");
+                    stage.show();
+
+                    Stage old = (Stage) cartScrollPane.getScene().getWindow();
+                    old.close();
+                } catch (IOException ex) {
+                    System.err.println(ex.getMessage());
+                }
             }
         } else {
             currentCommand.setDelivery_address(deliveryAddressField.getText());
@@ -107,9 +146,46 @@ public class AjouterCommandUserController {
             serviceCommand.modifier(currentCommand);
             new Alert(Alert.AlertType.INFORMATION,
                     "Commande modifiée avec succès !").showAndWait();
+            try {
+                Parent root = FXMLLoader.load(
+                        getClass().getResource("/afficher-produit-user.fxml"));
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Produits");
+                stage.show();
+
+                Stage old = (Stage) cartScrollPane.getScene().getWindow();
+                old.close();
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
         }
     }
+    private boolean showPaymentDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/payment-form.fxml"));
+            Parent form = loader.load();
+            PaymentFormController ctrl = loader.getController();
 
+
+            double total = cart.stream().mapToDouble(Produit::getPrix).sum();
+            ctrl.setPaymentDetails((long)(total * 100), "usd");
+
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.setTitle("Paiement par carte");
+            dialog.setScene(new Scene(form));
+            dialog.showAndWait();
+
+            return ctrl.isPaymentSuccessful();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Impossible d'ouvrir le formulaire de paiement.")
+                    .showAndWait();
+            return false;
+        }
+    }
     @FXML
     void retour(ActionEvent event) {
         try {
