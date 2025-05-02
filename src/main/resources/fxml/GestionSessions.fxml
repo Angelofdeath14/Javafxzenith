@@ -11,9 +11,20 @@
       style="-fx-background-color: #f5f6fa;"
       padding="20">
     
-    <Label text="Sessions disponibles"
-           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <!-- En-tête avec titre et bouton retour -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Button fx:id="btnRetour" text="← Retour" onAction="#handleRetour"
+               style="-fx-background-color: #555555; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Label fx:id="eventTitleLabel" text="Sessions de l'événement"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    </HBox>
+
+    <!-- Détails de l'événement -->
+    <VBox style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 15;">
+        <Label fx:id="eventDetailsLabel" style="-fx-font-size: 14px;"/>
+    </VBox>
     
+    <!-- Conteneur principal pour les sessions -->
     <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
         <VBox fx:id="sessionsContainer" spacing="20"/>
     </ScrollPane>

@@ -14,11 +14,13 @@ public class Evenement {
     private LocalDateTime dateF;
     private String image;
     private int nbPlace;
+    private Double prix;
     private List<Session> sessions;
 
     // Constructeur par défaut
     public Evenement() {
         this.sessions = new ArrayList<>();
+        this.prix = 0.0;
     }
 
     // Constructeur avec paramètres
@@ -32,6 +34,22 @@ public class Evenement {
         this.dateF = dateF;
         this.image = image;
         this.nbPlace = nbPlace;
+        this.prix = 0.0;
+        this.sessions = new ArrayList<>();
+    }
+    
+    // Constructeur avec paramètres incluant le prix
+    public Evenement(String titre, String description, String type, String location, 
+                    LocalDateTime dateD, LocalDateTime dateF, String image, int nbPlace, Double prix) {
+        this.titre = titre;
+        this.description = description;
+        this.type = type;
+        this.location = location;
+        this.dateD = dateD;
+        this.dateF = dateF;
+        this.image = image;
+        this.nbPlace = nbPlace;
+        this.prix = prix;
         this.sessions = new ArrayList<>();
     }
 
@@ -117,6 +135,14 @@ public class Evenement {
     public void setNbPlace(int nbPlace) {
         this.nbPlace = nbPlace;
     }
+    
+    public Double getPrix() {
+        return prix;
+    }
+    
+    public void setPrix(Double prix) {
+        this.prix = prix;
+    }
 
     public List<Session> getSessions() {
         return sessions;
@@ -151,6 +177,7 @@ public class Evenement {
                 ", dateF=" + dateF +
                 ", image='" + image + '\'' +
                 ", nbPlace=" + nbPlace +
+                ", prix=" + prix +
                 ", sessions=" + sessions +
                 '}';
     }

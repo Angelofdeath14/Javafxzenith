@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Tooltip?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.EventDetailsController"
+            prefHeight="320.0" prefWidth="400.0"
+            styleClass="event-detail-container">
+    
+    <!-- Header de l'événement avec image et informations principales -->
+    <top>
+        <VBox spacing="0">
+            <!-- Barre de titre avec bouton fermer -->
+            <HBox alignment="CENTER_LEFT" styleClass="event-title-bar">
+                <padding>
+                    <Insets top="1" right="2" bottom="1" left="2" />
+                </padding>
+                <Label text="Détails" styleClass="event-window-title">
+                    <font>
+                        <Font name="System Bold" size="6"/>
+                    </font>
+                </Label>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnFullScreen" text="🔍" styleClass="window-fullscreen-button">
+                    <tooltip>
+                        <Tooltip text="Plein écran" />
+                    </tooltip>
+                </Button>
+                <Button fx:id="btnClose" text="×" styleClass="window-close-button" />
+            </HBox>
+            
+            <!-- Section principale avec l'image et les informations -->
+            <StackPane styleClass="event-detail-hero" prefHeight="60">
+                <!-- Fond avec effet de dégradé -->
+                <Rectangle styleClass="event-hero-background" width="400" height="60" />
+                
+                <HBox styleClass="event-detail-header">
+                    <padding>
+                        <Insets top="2" right="2" bottom="2" left="2" />
+                    </padding>
+                    
+                    <!-- Image de l'événement avec effet d'ombre -->
+                    <VBox alignment="CENTER" HBox.hgrow="NEVER">
+                        <StackPane styleClass="event-detail-image-container" effect="dropshadow(gaussian, rgba(0,0,0,0.2), 1, 0, 0, 1)">
+                            <Rectangle styleClass="image-clip" width="70" height="45" arcWidth="2" arcHeight="2" />
+                            <ImageView fx:id="eventImage" fitWidth="70" fitHeight="45" 
+                                      preserveRatio="true" styleClass="event-detail-image"/>
+                            
+                            <!-- Badge de disponibilité avec animation fade-in -->
+                            <Label fx:id="availabilityBadge" text="PLACES" 
+                                   styleClass="event-badge, fade-in" StackPane.alignment="TOP_RIGHT">
+                                <StackPane.margin>
+                                    <Insets top="1" right="1" />
+                                </StackPane.margin>
+                                <font>
+                                    <Font name="System Bold" size="4"/>
+                                </font>
+                            </Label>
+                        </StackPane>
+                    </VBox>
+                    
+                    <!-- Informations de l'événement -->
+                    <VBox spacing="1" HBox.hgrow="ALWAYS" styleClass="slide-in-right">
+                        <padding>
+                            <Insets left="2" />
+                        </padding>
+                        
+                        <!-- Titre avec animation -->
+                        <Label fx:id="eventTitle" text="Titre de l'événement" 
+                               styleClass="event-detail-title" wrapText="true">
+                            <font>
+                                <Font name="System Bold" size="7"/>
+                            </font>
+                        </Label>
+                        
+                        <!-- Type d'événement avec tag stylisé -->
+                        <HBox spacing="1" alignment="CENTER_LEFT">
+                            <Label fx:id="eventType" text="Type" styleClass="event-type-tag">
+                                <font>
+                                    <Font size="6"/>
+                                </font>
+                            </Label>
+                        </HBox>
+                        
+                        <!-- Informations sur l'événement avec des icônes -->
+                        <HBox spacing="3" alignment="CENTER_LEFT">
+                            <Label text="📅" style="-fx-font-size: 6pt;" />
+                            <Label fx:id="eventDate" text="Date" styleClass="event-detail-info-text">
+                                <font>
+                                    <Font size="6"/>
+                                </font>
+                            </Label>
+                            
+                            <Label text="📍" style="-fx-font-size: 6pt;" />
+                            <Label fx:id="eventLocation" text="Lieu" styleClass="event-detail-info-text">
+                                <font>
+                                    <Font size="6"/>
+                                </font>
+                            </Label>
+                            
+                            <Label text="🎟️" style="-fx-font-size: 6pt;" />
+                            <Label text="Taux:" styleClass="event-detail-label">
+                                <font>
+                                    <Font size="6"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="fillRateLabel" text="0%" styleClass="event-detail-fill-rate">
+                                <font>
+                                    <Font size="6"/>
+                                </font>
+                            </Label>
+                        </HBox>
+                        
+                        <!-- Prix et réservation -->
+                        <HBox spacing="3" alignment="CENTER_LEFT">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Prix:" styleClass="price-label">
+                                    <font>
+                                        <Font size="6"/>
+                                    </font>
+                                </Label>
+                                <Label fx:id="eventPrice" text="0,00 DT" styleClass="price-value">
+                                    <font>
+                                        <Font size="6"/>
+                                    </font>
+                                </Label>
+                            </HBox>
+                            
+                            <Button fx:id="btnReserve" text="🎟️" styleClass="reserve-button, compact-button">
+                                <tooltip>
+                                    <Tooltip text="Réserver" />
+                                </tooltip>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </StackPane>
+        </VBox>
+    </top>
+    
+    <!-- Contenu principal -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll" vbarPolicy="NEVER" hbarPolicy="NEVER">
+            <VBox spacing="1" styleClass="content-container, fade-in">
+                <padding>
+                    <Insets top="1" right="1" bottom="1" left="1" />
+                </padding>
+                
+                <!-- Description -->
+                <VBox styleClass="event-detail-section">
+                    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+                        <Label text="Description" styleClass="event-detail-section-title">
+                            <font>
+                                <Font name="System Bold" size="7"/>
+                            </font>
+                        </Label>
+                        <Button fx:id="btnTTS" text="" styleClass="tts-button" prefWidth="8" prefHeight="8">
+                            <graphic>
+                                <Label text="🔊" style="-fx-font-size: 4px;" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="Lire" />
+                            </tooltip>
+                        </Button>
+                        <Rectangle styleClass="section-line" HBox.hgrow="ALWAYS" height="1" />
+                    </HBox>
+                    <TextArea fx:id="eventDescription" wrapText="true" editable="false" 
+                              prefHeight="25" maxHeight="50" styleClass="event-detail-description" style="-fx-font-size: 6pt;" />
+                </VBox>
+                
+                <!-- Sessions disponibles -->
+                <VBox styleClass="event-detail-section">
+                    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+                        <Label text="Sessions" styleClass="event-detail-section-title">
+                            <font>
+                                <Font name="System Bold" size="7"/>
+                            </font>
+                        </Label>
+                        <Rectangle styleClass="section-line" HBox.hgrow="ALWAYS" height="1" />
+                    </HBox>
+                    <VBox fx:id="sessionsContainer" spacing="1" styleClass="sessions-container" maxHeight="60" />
+                </VBox>
+                
+                <!-- Statistiques -->
+                <VBox styleClass="event-detail-section">
+                    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+                        <Label text="Stats" styleClass="event-detail-section-title">
+                            <font>
+                                <Font name="System Bold" size="7"/>
+                            </font>
+                        </Label>
+                        <Rectangle styleClass="section-line" HBox.hgrow="ALWAYS" height="1" />
+                    </HBox>
+                    <VBox fx:id="statsContainer" spacing="1" styleClass="stats-container" maxHeight="60" />
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <!-- Barre d'actions en bas de l'écran -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="2" styleClass="action-bar">
+            <padding>
+                <Insets top="1" right="2" bottom="1" left="2" />
+            </padding>
+            
+            <Button fx:id="btnMap" styleClass="action-button" text="🗺️" minWidth="18" minHeight="18" prefHeight="18" prefWidth="18">
+                <tooltip>
+                    <Tooltip text="Carte" />
+                </tooltip>
+            </Button>
+            
+            <Button fx:id="btnWeather" styleClass="action-button" text="🌤️" minWidth="18" minHeight="18" prefHeight="18" prefWidth="18">
+                <tooltip>
+                    <Tooltip text="Météo" />
+                </tooltip>
+            </Button>
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <Button fx:id="btnToggleFullScreen" styleClass="action-button" text="🔍" minWidth="18" minHeight="18" prefHeight="18" prefWidth="18">
+                <tooltip>
+                    <Tooltip text="Plein écran" />
+                </tooltip>
+            </Button>
+            
+            <HBox fx:id="adminActions" styleClass="admin-action" spacing="2">
+                <Button fx:id="btnEdit" styleClass="action-button" text="✏️" minWidth="18" minHeight="18" prefHeight="18" prefWidth="18">
+                    <tooltip>
+                        <Tooltip text="Modifier" />
+                    </tooltip>
+                </Button>
+                
+                <Button fx:id="btnDelete" styleClass="action-button, delete-button" text="🗑️" minWidth="18" minHeight="18" prefHeight="18" prefWidth="18">
+                    <tooltip>
+                        <Tooltip text="Supprimer" />
+                    </tooltip>
+                </Button>
+            </HBox>
+        </HBox>
+    </bottom>
+</BorderPane> 

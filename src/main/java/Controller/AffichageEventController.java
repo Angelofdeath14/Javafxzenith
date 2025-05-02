@@ -154,8 +154,8 @@ public class AffichageEventController implements Initializable {
             colActions.setCellFactory(param -> {
                 return new TableCell<>() {
                     private final Button viewButton = new Button("Voir");
-                    private final Button editButton = new Button("Modifier");
-                    private final Button deleteButton = new Button("Supprimer");
+            private final Button editButton = new Button("Modifier");
+            private final Button deleteButton = new Button("Supprimer");
                     private final HBox pane = new HBox(5, viewButton, editButton, deleteButton);
                     
                     {
@@ -167,21 +167,21 @@ public class AffichageEventController implements Initializable {
                             Evenement evenement = getTableView().getItems().get(getIndex());
                             goToSessions(evenement);
                         });
-                        
-                        editButton.setOnAction(event -> {
-                            Evenement evenement = getTableView().getItems().get(getIndex());
-                            handleEdit(evenement);
-                        });
-                        
-                        deleteButton.setOnAction(event -> {
-                            Evenement evenement = getTableView().getItems().get(getIndex());
-                            handleDelete(evenement);
-                        });
-                    }
-                    
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
+
+                editButton.setOnAction(event -> {
+                    Evenement evenement = getTableView().getItems().get(getIndex());
+                    handleEdit(evenement);
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Evenement evenement = getTableView().getItems().get(getIndex());
+                    handleDelete(evenement);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
                         setGraphic(empty ? null : pane);
                     }
                 };

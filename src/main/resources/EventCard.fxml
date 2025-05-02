@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:id="eventCard" styleClass="event-card" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.EventCardController" 
+      spacing="5" prefWidth="280" maxWidth="280" prefHeight="300" maxHeight="300">
+    
+    <!-- Section Image -->
+    <StackPane>
+        <ImageView fx:id="eventImage" fitWidth="280" fitHeight="160" preserveRatio="true" />
+        <Label fx:id="availabilityBadge" styleClass="event-badge" 
+               StackPane.alignment="TOP_RIGHT" text="PLACES">
+            <StackPane.margin>
+                <Insets top="5" right="5" />
+            </StackPane.margin>
+        </Label>
+    </StackPane>
+    
+    <!-- Section Contenu -->
+    <VBox spacing="3" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets left="10" right="10" top="5" bottom="5" />
+        </padding>
+        
+        <!-- Type d'événement -->
+        <Label fx:id="eventType" styleClass="event-type" text="Type d'événement" />
+        
+        <!-- Titre de l'événement -->
+        <Label fx:id="eventTitle" styleClass="event-title" text="Titre de l'événement" wrapText="true" />
+        
+        <!-- Date de l'événement -->
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="📅" style="-fx-font-size: 14pt;" />
+            <Label fx:id="eventDate" styleClass="event-date" text="00/00/0000" />
+        </HBox>
+        
+        <!-- Lieu de l'événement -->
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="📍" style="-fx-font-size: 14pt;" />
+            <Label fx:id="eventLocation" styleClass="event-location" text="Lieu" />
+        </HBox>
+        
+        <!-- Prix -->
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="💰" style="-fx-font-size: 14pt;" />
+            <Label fx:id="eventPrice" styleClass="event-price" text="00 €" />
+        </HBox>
+        
+        <Pane VBox.vgrow="ALWAYS" /> <!-- Spacer -->
+        
+        <!-- Boutons d'action -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="btnDetails" text="🔍" minWidth="60" minHeight="40" tooltip="Détails" />
+            <Button fx:id="btnReserver" text="🎟️" defaultButton="true" minWidth="60" minHeight="40" tooltip="Réserver" />
+        </HBox>
+    </VBox>
+</VBox> 

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.effect.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.SessionStatsController"
+      prefWidth="1000"
+      prefHeight="800">
+      
+    <!-- Arrière-plan avec dégradé -->
+    <Rectangle width="1000" height="800" styleClass="background-gradient" opacity="0.2" />
+    
+    <!-- Contenu principal -->
+    <VBox spacing="25" styleClass="stats-container">
+        <padding>
+            <Insets top="25" right="30" bottom="25" left="30"/>
+        </padding>
+        
+        <effect>
+            <DropShadow color="rgba(0,0,0,0.1)" radius="10" spread="0.05" />
+        </effect>
+
+        <!-- En-tête de la page -->
+        <HBox fx:id="statsHeader" styleClass="stats-header" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="18" right="25" bottom="18" left="25"/>
+            </padding>
+            <Label fx:id="pageTitle" text="Statistiques des sessions" styleClass="title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnBack" text="Retour" onAction="#handleBack" styleClass="button, neutral"/>
+        </HBox>
+
+        <!-- Informations sur l'événement -->
+        <VBox styleClass="stats-card" spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label fx:id="eventName" styleClass="title" text="Nom de l'événement"/>
+            <Label fx:id="eventDetails" text="Détails de l'événement"/>
+        </VBox>
+
+        <!-- Conteneur des cartes de statistiques -->
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Carte 1: Nombre de sessions -->
+            <VBox fx:id="sessionsCard" styleClass="stats-card" alignment="CENTER" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+            
+            <!-- Carte 2: Capacité totale -->
+            <VBox fx:id="capacityCard" styleClass="stats-card" alignment="CENTER" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+            
+            <!-- Carte 3: Places réservées -->
+            <VBox fx:id="reservedCard" styleClass="stats-card" alignment="CENTER" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+        </HBox>
+
+        <!-- Carte 4: Taux de remplissage avec graphique -->
+        <VBox fx:id="fillRateCard" styleClass="stats-card">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+        </VBox>
+
+        <!-- Graphiques de tendance -->
+        <HBox spacing="20">
+            <!-- Graphique de tendance: Évolution des réservations -->
+            <VBox fx:id="trendChartContainer" styleClass="stats-card" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+        </HBox>
+        
+        <!-- Graphiques -->
+        <HBox spacing="20">
+            <!-- Graphique circulaire: Répartition des places -->
+            <VBox fx:id="pieChartContainer" styleClass="stats-card" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+            
+            <!-- Histogramme: Nombre de places par session -->
+            <VBox fx:id="barChartContainer" styleClass="stats-card" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+        </HBox>
+
+        <!-- Tableau des sessions -->
+        <VBox fx:id="tableContainer" styleClass="stats-card">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Détail des sessions" styleClass="stats-title" style="-fx-font-size: 16px;"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <TextField promptText="Rechercher..." prefWidth="200" styleClass="search-field"/>
+            </HBox>
+            <Separator>
+                <padding>
+                    <Insets top="10" bottom="10"/>
+                </padding>
+            </Separator>
+            <TableView fx:id="sessionsTable" styleClass="session-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="sessionIdColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="sessionNameColumn" text="Nom" prefWidth="200"/>
+                    <TableColumn fx:id="sessionDateColumn" text="Date" prefWidth="150"/>
+                    <TableColumn fx:id="sessionCapacityColumn" text="Capacité" prefWidth="100"/>
+                    <TableColumn fx:id="sessionReservedColumn" text="Réservées" prefWidth="100"/>
+                    <TableColumn fx:id="sessionFillRateColumn" text="Taux" prefWidth="80"/>
+                    <TableColumn fx:id="sessionActionsColumn" text="Actions" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</StackPane> 

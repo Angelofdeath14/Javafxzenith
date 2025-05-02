@@ -100,7 +100,7 @@
                 <Label text="Événements récents" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
                 <TableView fx:id="recentEventsTable" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colTitle" text="Titre" prefWidth="200"/>
+                        <TableColumn fx:id="colTitre" text="Titre" prefWidth="200"/>
                         <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
                         <TableColumn fx:id="colDate" text="Date" prefWidth="150"/>
                         <TableColumn fx:id="colCapacity" text="Places" prefWidth="80"/>

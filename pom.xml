@@ -18,9 +18,11 @@
     <properties>
         <java.version>17</java.version>
         <mysql.version>8.0.33</mysql.version>
-        <javafx.version>21.0.2</javafx.version>
+        <javafx.version>17</javafx.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <server.port>8082</server.port>
     </properties>
 
     <dependencies>
@@ -86,6 +88,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.artphoria.ArtphoriaApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -111,11 +114,18 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.artistphoria.Main</mainClass>
+                            <mainClass>com.artphoria.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+        
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
     </build>
 </project>

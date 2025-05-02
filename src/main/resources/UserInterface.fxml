@@ -18,6 +18,10 @@
             <Button text="Mes Réservations" 
                     style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-min-width: 150;"
                     onAction="#showReservations"/>
+            <Separator style="-fx-background-color: #455a64;"/>
+            <Button text="Administration" 
+                    style="-fx-background-color: #3f51b5; -fx-text-fill: white; -fx-min-width: 150;"
+                    onAction="#goToAdministration"/>
         </VBox>
     </left>
 

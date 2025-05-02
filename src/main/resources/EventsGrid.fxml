@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.EventsGridController"
+            prefHeight="700.0" prefWidth="1000.0"
+            styleClass="event-grid-container">
+    
+    <!-- Panneau d'administration à gauche -->
+    <left>
+        <VBox styleClass="admin-panel" prefWidth="220" spacing="10">
+            <padding>
+                <Insets top="15" right="10" bottom="15" left="10" />
+            </padding>
+            
+            <Label text="Administration" styleClass="admin-panel-title" />
+            
+            <Separator />
+            
+            <Label text="ÉVÉNEMENTS" styleClass="admin-section-label" />
+            <Button fx:id="btnAjouterEvent" text="Ajouter un événement" styleClass="admin-button" maxWidth="Infinity" />
+            <Button fx:id="btnGestionEvents" text="Gérer les événements" styleClass="admin-button" maxWidth="Infinity" />
+            
+            <Separator>
+                <VBox.margin>
+                    <Insets top="10" bottom="10" />
+                </VBox.margin>
+            </Separator>
+            
+            <Label text="SESSIONS" styleClass="admin-section-label" />
+            <Button fx:id="btnAjouterSession" text="Ajouter une session" styleClass="admin-button" maxWidth="Infinity" />
+            <Button fx:id="btnGestionSessions" text="Gérer les sessions" styleClass="admin-button" maxWidth="Infinity" />
+            
+            <Separator>
+                <VBox.margin>
+                    <Insets top="10" bottom="10" />
+                </VBox.margin>
+            </Separator>
+            
+            <Label text="STATISTIQUES" styleClass="admin-section-label" />
+            <Button fx:id="btnStatsEvents" text="Stats événements" styleClass="admin-button" maxWidth="Infinity" />
+            <Button fx:id="btnStatsSessions" text="Stats sessions" styleClass="admin-button" maxWidth="Infinity" />
+            
+            <Pane VBox.vgrow="ALWAYS" />
+            
+            <Separator />
+            <Button fx:id="btnDeconnexion" text="Déconnexion" styleClass="admin-button, admin-logout-button" maxWidth="Infinity" />
+        </VBox>
+    </left>
+    
+    <top>
+        <VBox spacing="0">
+            <!-- Barre de titre -->
+            <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets left="25" right="25" top="20" bottom="20" />
+                </padding>
+                
+                <VBox spacing="3">
+                    <Label text="Événements Artistiques" styleClass="header-title" />
+                    <Label text="Découvrez et réservez des événements exceptionnels" styleClass="header-subtitle" />
+                </VBox>
+                
+                <Pane HBox.hgrow="ALWAYS" />
+                
+                <ToggleButton fx:id="btnAdminMode" text="Mode Admin" styleClass="admin-toggle-button" />
+            </HBox>
+            
+            <!-- Barre de filtre -->
+            <HBox styleClass="filter-bar" spacing="15" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets left="25" right="25" top="15" bottom="15" />
+                </padding>
+                
+                <HBox styleClass="search-container" spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="Rechercher un événement..." styleClass="search-box" />
+                </HBox>
+                
+                <Label text="Type:" />
+                <ComboBox fx:id="typeFilter" promptText="Type d'événement" styleClass="filter-combo" />
+                
+                <Label text="Trier par:" />
+                <ComboBox fx:id="sortFilter" promptText="Trier par" styleClass="filter-combo" />
+                
+                <Pane HBox.hgrow="ALWAYS" />
+                
+                <HBox alignment="CENTER" spacing="8">
+                    <Label fx:id="totalEvents" text="0 événement(s) trouvé(s)" styleClass="total-events-count" />
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <StackPane>
+            <!-- Fond stylisé -->
+            <Rectangle width="1000" height="600" styleClass="background-rect" />
+            
+            <VBox spacing="0" styleClass="fade-in">
+                <!-- Conteneur d'événements avec scroll -->
+                <ScrollPane fx:id="scrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="transparent-scroll">
+                    <FlowPane fx:id="eventsContainer" hgap="25" vgap="25" styleClass="events-grid">
+                        <padding>
+                            <Insets top="25" right="25" bottom="25" left="25" />
+                        </padding>
+                    </FlowPane>
+                </ScrollPane>
+                
+                <!-- Pagination -->
+                <Pagination fx:id="pagination" pageCount="1" maxPageIndicatorCount="7" styleClass="pagination" />
+                
+                <!-- État vide -->
+                <StackPane fx:id="emptyState" visible="false" managed="false">
+                    <VBox alignment="CENTER" spacing="20" styleClass="empty-state">
+                        <padding>
+                            <Insets top="50" right="20" bottom="50" left="20" />
+                        </padding>
+                        <Label text="Aucun événement trouvé" styleClass="empty-title" />
+                        <Label text="Modifiez vos critères de recherche ou essayez plus tard" styleClass="empty-subtitle" />
+                        <Button text="Réinitialiser les filtres" fx:id="btnResetFilters" styleClass="button-secondary" />
+                    </VBox>
+                </StackPane>
+            </VBox>
+        </StackPane>
+    </center>
+    
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20" />
+            </padding>
+            <Label text="© 2025 Artphoria" />
+        </HBox>
+    </bottom>
+</BorderPane> 

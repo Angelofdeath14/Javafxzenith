@@ -26,6 +26,12 @@ public class DatabaseInitializer {
             // Exécution du script pour la table sessions
             executeScript(conn, "/sessions.sql");
             
+            // Exécution du script pour ajouter la colonne prix
+            executeScript(conn, "/add_prix_column.sql");
+            
+            // Exécution du script pour la table de réservation
+            executeScript(conn, "/reservation.sql");
+            
             // Affichage des tables créées
             printDatabaseTables(conn);
         } catch (Exception e) {
@@ -51,6 +57,9 @@ public class DatabaseInitializer {
             // Exécuter le script
             stmt.execute(script);
             System.out.println("Script SQL exécuté avec succès: " + scriptPath);
+        } catch (Exception e) {
+            // Si le script échoue, afficher l'erreur mais continuer l'exécution
+            System.err.println("Erreur lors de l'exécution du script " + scriptPath + ": " + e.getMessage());
         }
     }
     

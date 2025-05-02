@@ -23,7 +23,11 @@
             <!-- Champs du formulaire -->
             <VBox spacing="10" alignment="CENTER" maxWidth="500" styleClass="form-container">
                 <TextField fx:id="nomEventField" promptText="Nom de l'événement" styleClass="form-field"/>
-                <TextArea fx:id="descriptionField" promptText="Description" wrapText="true" prefRowCount="2" styleClass="form-field"/>
+                <VBox spacing="5">
+                    <TextArea fx:id="descriptionField" promptText="Description" wrapText="true" prefRowCount="3" styleClass="form-field"/>
+                    <Button fx:id="genererDescriptionBtn" text="Générer une description" 
+                            style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                </VBox>
                 <TextField fx:id="typeField" promptText="Type" styleClass="form-field"/>
                 <TextField fx:id="lieuField" promptText="Lieu" styleClass="form-field"/>
                 <TextField fx:id="nbPlaceField" promptText="Nombre de places" styleClass="form-field"/>

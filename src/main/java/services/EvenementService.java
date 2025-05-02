@@ -7,7 +7,10 @@ import java.time.format.DateTimeFormatter;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EvenementService {
     private final Connection connection;
@@ -45,6 +48,15 @@ public class EvenementService {
                 
                 evenement.setImage(resultSet.getString("image"));
                 evenement.setNbPlace(resultSet.getInt("nbPlace"));
+                
+                // Récupérer le prix s'il existe
+                try {
+                    evenement.setPrix(resultSet.getDouble("prix"));
+                } catch (SQLException e) {
+                    // La colonne prix n'existe peut-être pas encore, utiliser la valeur par défaut
+                    evenement.setPrix(0.0);
+                }
+                
                 events.add(evenement);
             }
         } catch (SQLException e) {
@@ -88,6 +100,15 @@ public class EvenementService {
                 
                 evenement.setImage(resultSet.getString("image"));
                 evenement.setNbPlace(resultSet.getInt("nbPlace"));
+                
+                // Récupérer le prix s'il existe
+                try {
+                    evenement.setPrix(resultSet.getDouble("prix"));
+                } catch (SQLException e) {
+                    // La colonne prix n'existe peut-être pas encore, utiliser la valeur par défaut
+                    evenement.setPrix(0.0);
+                }
+                
                 return evenement;
             }
         } catch (SQLException e) {
@@ -98,39 +119,79 @@ public class EvenementService {
     }
 
     public void ajouter(Evenement evenement) {
-        String query = "INSERT INTO evenement (titre, description, type, location, dateD, dateF, image, nbPlace) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, evenement.getTitre());
-            statement.setString(2, evenement.getDescription());
-            statement.setString(3, evenement.getType());
-            statement.setString(4, evenement.getLocation());
-            statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            statement.setString(7, evenement.getImage());
-            statement.setInt(8, evenement.getNbPlace());
-            statement.executeUpdate();
+        try {
+            // Vérifier si la colonne prix existe
+            boolean prixExists = columnExists("evenement", "prix");
+            
+            String query;
+            if (prixExists) {
+                query = "INSERT INTO evenement (titre, description, type, location, dateD, dateF, image, nbPlace, prix) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            } else {
+                query = "INSERT INTO evenement (titre, description, type, location, dateD, dateF, image, nbPlace) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            }
+            
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, evenement.getTitre());
+                statement.setString(2, evenement.getDescription());
+                statement.setString(3, evenement.getType());
+                statement.setString(4, evenement.getLocation());
+                statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                statement.setString(7, evenement.getImage());
+                statement.setInt(8, evenement.getNbPlace());
+                
+                if (prixExists) {
+                    statement.setDouble(9, evenement.getPrix() != null ? evenement.getPrix() : 0.0);
+                }
+                
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void modifier(Evenement evenement) {
-        String query = "UPDATE evenement SET titre = ?, description = ?, type = ?, location = ?, dateD = ?, dateF = ?, image = ?, nbPlace = ? WHERE id = ?";
-        
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, evenement.getTitre());
-            statement.setString(2, evenement.getDescription());
-            statement.setString(3, evenement.getType());
-            statement.setString(4, evenement.getLocation());
-            statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            statement.setString(7, evenement.getImage());
-            statement.setInt(8, evenement.getNbPlace());
-            statement.setInt(9, evenement.getId());
-            statement.executeUpdate();
+        try {
+            // Vérifier si la colonne prix existe
+            boolean prixExists = columnExists("evenement", "prix");
+            
+            String query;
+            if (prixExists) {
+                query = "UPDATE evenement SET titre = ?, description = ?, type = ?, location = ?, dateD = ?, dateF = ?, image = ?, nbPlace = ?, prix = ? WHERE id = ?";
+            } else {
+                query = "UPDATE evenement SET titre = ?, description = ?, type = ?, location = ?, dateD = ?, dateF = ?, image = ?, nbPlace = ? WHERE id = ?";
+            }
+            
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, evenement.getTitre());
+                statement.setString(2, evenement.getDescription());
+                statement.setString(3, evenement.getType());
+                statement.setString(4, evenement.getLocation());
+                statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                statement.setString(7, evenement.getImage());
+                statement.setInt(8, evenement.getNbPlace());
+                
+                if (prixExists) {
+                    statement.setDouble(9, evenement.getPrix() != null ? evenement.getPrix() : 0.0);
+                    statement.setInt(10, evenement.getId());
+                } else {
+                    statement.setInt(9, evenement.getId());
+                }
+                
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Méthode utilitaire pour vérifier si une colonne existe dans une table
+    private boolean columnExists(String tableName, String columnName) throws SQLException {
+        DatabaseMetaData meta = connection.getMetaData();
+        try (ResultSet rs = meta.getColumns(null, null, tableName, columnName)) {
+            return rs.next();
         }
     }
 
@@ -176,6 +237,31 @@ public class EvenementService {
         }
         
         return count;
+    }
+    
+    /**
+     * Récupère tous les types d'événements distincts de la base de données
+     * @return Une liste des types d'événements
+     */
+    public List<String> getAllEventTypes() {
+        List<String> types = new ArrayList<>();
+        Set<String> uniqueTypes = new HashSet<>();
+        
+        // Récupérer tous les événements
+        List<Evenement> events = getAllEvents();
+        
+        // Extraire les types uniques
+        for (Evenement event : events) {
+            if (event.getType() != null && !event.getType().isEmpty()) {
+                uniqueTypes.add(event.getType());
+            }
+        }
+        
+        // Convertir en liste et trier
+        types.addAll(uniqueTypes);
+        Collections.sort(types);
+        
+        return types;
     }
 }
 

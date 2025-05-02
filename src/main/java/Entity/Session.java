@@ -8,8 +8,11 @@ public class Session {
     private int id;
     private String titre;
     private String description;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
+    // Ces champs stockent les dates de début et fin de session
+    // Ils sont accessibles via getDateDebut/setDateDebut pour la compatibilité
+    // Mais aussi via getStartTime/setStartTime pour correspondre aux noms de colonnes dans la BD
+    private LocalDateTime dateDebut;  // Correspond à start_time dans la BD
+    private LocalDateTime dateFin;    // Correspond à end_time dans la BD
     private int evenementId;
     private Evenement evenement;
     private String image;
@@ -103,18 +106,22 @@ public class Session {
         return descriptionProperty;
     }
 
+    // Alias de getDateDebut pour correspondre au nom de colonne de la BD
     public LocalDateTime getStartTime() {
         return dateDebut;
     }
 
+    // Alias de setDateDebut pour correspondre au nom de colonne de la BD
     public void setStartTime(LocalDateTime startTime) {
         this.dateDebut = startTime;
     }
 
+    // Alias de getDateFin pour correspondre au nom de colonne de la BD
     public LocalDateTime getEndTime() {
         return dateFin;
     }
 
+    // Alias de setDateFin pour correspondre au nom de colonne de la BD
     public void setEndTime(LocalDateTime endTime) {
         this.dateFin = endTime;
     }

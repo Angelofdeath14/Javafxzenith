@@ -72,6 +72,9 @@ public class AjouterSessionController implements Initializable {
                     session.setImage(sessionToEdit.getImage());
                 }
                 session.setDescription(descriptionField.getText().trim());
+                
+                // Utiliser setStartTime et setEndTime au lieu de setDateDebut et setDateFin
+                // pour correspondre aux colonnes start_time et end_time de la table session
                 session.setStartTime(LocalDateTime.of(startTimePicker.getValue(), LocalTime.MIDNIGHT));
                 session.setEndTime(LocalDateTime.of(endTimePicker.getValue(), LocalTime.MIDNIGHT));
                 session.setEvenementId(evenementComboBox.getValue().getId());

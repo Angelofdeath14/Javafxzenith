@@ -14,6 +14,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.EvenementService;
+import Utils.DescriptionGenerator;
+import Utils.MainStyleFixer;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,10 +41,12 @@ public class AjouterEventController implements Initializable {
     @FXML private Button ajouterEvents;
     @FXML private TextField nbPlaceField;
     @FXML private AnchorPane root;
+    @FXML private Button genererDescriptionBtn;
 
     private File selectedImageFile;
     private EvenementService evenementService;
     private Evenement eventToEdit = null;
+    private Runnable onEventAdded;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,6 +62,12 @@ public class AjouterEventController implements Initializable {
         imageView.setFitHeight(100);
         imageView.setPreserveRatio(true);
         imageView.setStyle("-fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-style: dashed;");
+        
+        // Configuration du bouton de génération de description
+        if (genererDescriptionBtn != null) {
+            genererDescriptionBtn.setOnAction(e -> genererDescription());
+        }
+        
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, 
                      "Erreur de connexion", 
@@ -131,6 +141,9 @@ public class AjouterEventController implements Initializable {
                         goToAffichageEvent();
                     }
                 }
+
+                // Après l'ajout réussi
+                notifyEventAdded();
 
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR,
@@ -370,5 +383,104 @@ public class AjouterEventController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == buttonTypeOui;
+    }
+
+    /**
+     * Génère automatiquement une description pour l'événement
+     * en utilisant le titre, le type, le lieu et les dates
+     */
+    @FXML
+    private void genererDescription() {
+        try {
+            // Vérifier que les champs nécessaires sont remplis
+            if (nomEventField.getText().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Champs manquants", 
+                        "Titre manquant", "Veuillez d'abord saisir un nom pour l'événement.");
+                return;
+            }
+            
+            if (dateDebutPicker.getValue() == null || dateFinPicker.getValue() == null) {
+                showAlert(Alert.AlertType.WARNING, "Champs manquants", 
+                        "Dates manquantes", "Veuillez d'abord sélectionner les dates de début et de fin.");
+                return;
+            }
+            
+            String nom = nomEventField.getText();
+            String type = typeField.getText();
+            String lieu = lieuField.getText();
+            
+            // Si le lieu est vide, utiliser une valeur par défaut
+            if (lieu.isEmpty()) {
+                lieu = "notre espace culturel";
+            }
+            
+            // Créer les dates
+            LocalDateTime dateDebut = LocalDateTime.of(dateDebutPicker.getValue(), LocalTime.MIDNIGHT);
+            LocalDateTime dateFin = LocalDateTime.of(dateFinPicker.getValue(), LocalTime.MIDNIGHT);
+            
+            // Demander si l'utilisateur veut une description courte ou détaillée
+            Alert formatAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            formatAlert.setTitle("Format de description");
+            formatAlert.setHeaderText("Quel format de description souhaitez-vous ?");
+            
+            ButtonType btnCourt = new ButtonType("Format court");
+            ButtonType btnDetaille = new ButtonType("Format détaillé");
+            formatAlert.getButtonTypes().setAll(btnCourt, btnDetaille);
+            
+            // Générer la description selon le choix
+            String description;
+            if (formatAlert.showAndWait().get() == btnCourt) {
+                // Format court par défaut
+                description = DescriptionGenerator.generateShortEventDescription(nom, lieu, dateDebut, dateFin);
+            } else {
+                // Format détaillé
+                if (type.isEmpty()) {
+                    description = DescriptionGenerator.generateEventDescription(nom, lieu, dateDebut, dateFin);
+                } else {
+                    description = DescriptionGenerator.generateDetailedEventDescription(nom, type, lieu, dateDebut, dateFin);
+                }
+            }
+            
+            // Demander confirmation avant de remplacer la description existante
+            if (!descriptionField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Remplacer la description");
+                alert.setHeaderText("Voulez-vous remplacer la description actuelle ?");
+                alert.setContentText("La description existante sera remplacée par celle générée automatiquement.");
+                
+                ButtonType buttonTypeOui = new ButtonType("Oui");
+                ButtonType buttonTypeNon = new ButtonType("Non");
+                
+                alert.getButtonTypes().setAll(buttonTypeOui, buttonTypeNon);
+                
+                if (alert.showAndWait().get() == buttonTypeOui) {
+                    descriptionField.setText(description);
+                }
+            } else {
+                descriptionField.setText(description);
+            }
+            
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de génération", 
+                    "Une erreur est survenue lors de la génération de la description: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Définit l'action à exécuter après l'ajout d'un événement
+     * @param callback Action à exécuter
+     */
+    public void setOnEventAdded(Runnable callback) {
+        this.onEventAdded = callback;
+    }
+    
+    /**
+     * Appelé après l'ajout réussi d'un événement
+     */
+    private void notifyEventAdded() {
+        if (onEventAdded != null) {
+            onEventAdded.run();
+        }
     }
 }
