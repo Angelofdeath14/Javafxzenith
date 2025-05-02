@@ -12,7 +12,7 @@ import org.json.JSONArray;
  */
 public class LocationAPI {
     
-    private static final String API_KEY = "votre_clé_api"; // À remplacer par une vraie clé API
+    private static final String API_KEY = "49e9e45473ea48adb8c130830250403"; // À remplacer par une vraie clé API
     private static final String BASE_URL = "https://api.weatherapi.com/v1";
     
     /**

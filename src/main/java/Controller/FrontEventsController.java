@@ -233,10 +233,10 @@ public class FrontEventsController implements Initializable {
         eventsContainer.getChildren().add(headerBox);
         
         // Ajouter les cartes d'événements
-        for (Evenement event : events) {
-            VBox eventCard = createEventCard(event);
-            eventsContainer.getChildren().add(eventCard);
-        }
+            for (Evenement event : events) {
+                VBox eventCard = createEventCard(event);
+                eventsContainer.getChildren().add(eventCard);
+            }
     }
     
     private void populateThisWeekEventsContainer(List<Evenement> events) {
@@ -403,7 +403,7 @@ public class FrontEventsController implements Initializable {
         }
         
         // Création de l'ImageView pour afficher l'image de l'événement
-        ImageView imageView = new ImageView();
+            ImageView imageView = new ImageView();
         imageView.setFitWidth(270);
         imageView.setFitHeight(150);
         imageView.setPreserveRatio(true);
@@ -417,7 +417,7 @@ public class FrontEventsController implements Initializable {
                 if (imagePath.toLowerCase().startsWith("http")) {
                     // Image à partir d'une URL
                     Image image = new Image(imagePath, true);
-                    imageView.setImage(image);
+                        imageView.setImage(image);
                 } else {
                     // Image locale - vérifier d'abord si c'est un chemin complet
                     File imageFile = new File(imagePath);
@@ -467,10 +467,10 @@ public class FrontEventsController implements Initializable {
                 } else {
                     System.err.println("Image par défaut introuvable: /images/default-session.png");
                 }
-            }
-        } catch (Exception e) {
+                    }
+                } catch (Exception e) {
             System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-            e.printStackTrace();
+                    e.printStackTrace();
             // Fallback à l'emoji en cas d'erreur avec l'image
             String emoji;
             switch (eventType) {
@@ -529,8 +529,8 @@ public class FrontEventsController implements Initializable {
         // Titre de l'événement
         Label titleLabel = new Label(event.getTitre() != null ? event.getTitre() : "Événement sans titre");
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-        titleLabel.setWrapText(true);
-        
+            titleLabel.setWrapText(true);
+            
         // Lieu de l'événement avec icône
         HBox locationBox = new HBox(5);
         locationBox.setAlignment(Pos.CENTER_LEFT);
@@ -597,12 +597,12 @@ public class FrontEventsController implements Initializable {
         // Séparateur
         Separator separator = new Separator();
         separator.setOpacity(0.3);
-        
-        // Boutons d'action
+            
+            // Boutons d'action
         HBox actionButtons = new HBox(10);
         actionButtons.setAlignment(Pos.CENTER);
-        
-        Button reserveButton = new Button("Réserver");
+            
+            Button reserveButton = new Button("Réserver");
         reserveButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;");
         reserveButton.setPrefWidth(120);
         
@@ -631,8 +631,8 @@ public class FrontEventsController implements Initializable {
         
         // Ajouter tous les éléments à la carte
         card.getChildren().addAll(imageContainer, titleLabel, locationBox, dateBox, priceBox, starsBox, separator, actionButtons);
-        
-        return card;
+            
+            return card;
     }
     
     private void filterEvents() {
@@ -949,17 +949,17 @@ public class FrontEventsController implements Initializable {
             Optional<Integer> result = dialog.showAndWait();
             result.ifPresent(places -> {
                 try {
-                    if (places > 0 && places <= event.getNbPlace()) {
-                        // Effectuer la réservation
-                        boolean success = evenementService.reserverPlace(event.getId(), places);
+                if (places > 0 && places <= event.getNbPlace()) {
+                    // Effectuer la réservation
+                    boolean success = evenementService.reserverPlace(event.getId(), places);
+                    
+                    if (success) {
+                        // Mettre à jour l'affichage
+                        event.setNbPlace(event.getNbPlace() - places);
                         
-                        if (success) {
-                            // Mettre à jour l'affichage
-                            event.setNbPlace(event.getNbPlace() - places);
-                            
-                            // Rafraîchir l'affichage
-                            filterEvents();
-                            
+                        // Rafraîchir l'affichage
+                        filterEvents();
+                        
                             // Confirmation colorée et détaillée
                             Dialog<Void> confirmationDialog = new Dialog<>();
                             confirmationDialog.setTitle("Réservation confirmée");
@@ -1009,20 +1009,20 @@ public class FrontEventsController implements Initializable {
                             }
                             
                             confirmationDialog.showAndWait();
-                        } else {
-                            showAlert(Alert.AlertType.ERROR, 
-                                     "Erreur de réservation", 
-                                     "La réservation a échoué", 
-                                     "Une erreur est survenue lors de la réservation.");
-                        }
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, 
+                                 "Erreur de réservation", 
+                                 "La réservation a échoué", 
+                                 "Une erreur est survenue lors de la réservation.");
                     }
-                } catch (Exception e) {
+                }
+        } catch (Exception e) {
                     System.err.println("Erreur lors de la réservation: " + e.getMessage());
                     e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, 
-                             "Erreur", 
-                             "Erreur lors de la réservation", 
-                             "Une erreur est survenue : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, 
+                     "Erreur", 
+                     "Erreur lors de la réservation", 
+                     "Une erreur est survenue : " + e.getMessage());
                 }
             });
         } catch (Exception e) {
@@ -1103,24 +1103,24 @@ public class FrontEventsController implements Initializable {
         try {
             System.out.println("Affichage des informations météo pour " + location);
             
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setTitle("Météo pour " + location);
-            dialog.setHeaderText("Informations météorologiques");
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Météo pour " + location);
+        dialog.setHeaderText("Informations météorologiques");
             
             // Augmenter la taille de la boîte de dialogue
             DialogPane dialogPane = dialog.getDialogPane();
             dialogPane.setPrefWidth(700);
             dialogPane.setPrefHeight(500);
             dialogPane.setStyle("-fx-background-color: white;");
-            
-            VBox content = new VBox(15);
-            content.setPadding(new javafx.geometry.Insets(20));
-            content.setStyle("-fx-background-color: linear-gradient(to bottom, #87CEFA, #1E90FF);");
-            
-            Label loadingLabel = new Label("Chargement des données météo...");
+        
+        VBox content = new VBox(15);
+        content.setPadding(new javafx.geometry.Insets(20));
+        content.setStyle("-fx-background-color: linear-gradient(to bottom, #87CEFA, #1E90FF);");
+        
+        Label loadingLabel = new Label("Chargement des données météo...");
             loadingLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;");
-            ProgressIndicator progressIndicator = new ProgressIndicator();
-            progressIndicator.setStyle("-fx-progress-color: white;");
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setStyle("-fx-progress-color: white;");
             progressIndicator.setPrefSize(80, 80);
             
             VBox loadingBox = new VBox(20, loadingLabel, progressIndicator);
@@ -1128,9 +1128,9 @@ public class FrontEventsController implements Initializable {
             loadingBox.setPrefHeight(300);
             
             content.getChildren().add(loadingBox);
-            
-            dialog.getDialogPane().setContent(content);
-            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
             
             // Appliquer le style professionnel
             MainStyleFixer.styleProfessionalDialog(dialog.getDialogPane());
@@ -1138,110 +1138,110 @@ public class FrontEventsController implements Initializable {
             // Afficher le dialogue immédiatement
             dialog.show();
         
-            // Charger les données météo réelles via l'API OpenWeatherMap
-            new Thread(() -> {
-                try {
+        // Charger les données météo réelles via l'API OpenWeatherMap
+        new Thread(() -> {
+            try {
                     // Nouvelle clé API valide (API gratuite d'OpenWeatherMap)
                     String apiKey = "4d8fb5b93d4af21d66a2948710284366";
-                    String encodedLocation = java.net.URLEncoder.encode(location, "UTF-8");
-                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + encodedLocation + "&units=metric&lang=fr&appid=" + apiKey;
+                String encodedLocation = java.net.URLEncoder.encode(location, "UTF-8");
+                String url = "https://api.openweathermap.org/data/2.5/weather?q=" + encodedLocation + "&units=metric&lang=fr&appid=" + apiKey;
                     
                     System.out.println("URL API météo: " + url);
                 
-                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
-                    connection.setRequestMethod("GET");
+                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+                connection.setRequestMethod("GET");
                     connection.setConnectTimeout(10000); // Augmenter le délai à 10 secondes
                     connection.setReadTimeout(10000); // Augmenter le délai à 10 secondes
                 
-                    int responseCode = connection.getResponseCode();
+                int responseCode = connection.getResponseCode();
                     System.out.println("Code de réponse API météo: " + responseCode);
                 
-                    if (responseCode == 200) {
-                        java.io.BufferedReader reader = new java.io.BufferedReader(
-                                new java.io.InputStreamReader(connection.getInputStream()));
-                        StringBuilder response = new StringBuilder();
-                        String line;
-                        
-                        while ((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
-                        reader.close();
-                        
-                        // Parser la réponse JSON
-                        org.json.JSONObject jsonResponse = new org.json.JSONObject(response.toString());
+                if (responseCode == 200) {
+                    java.io.BufferedReader reader = new java.io.BufferedReader(
+                            new java.io.InputStreamReader(connection.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+                    
+                    // Parser la réponse JSON
+                    org.json.JSONObject jsonResponse = new org.json.JSONObject(response.toString());
                         System.out.println("Réponse JSON reçue: " + jsonResponse.toString().substring(0, Math.min(100, jsonResponse.toString().length())) + "...");
-                        
-                        // Extraire les données météo
-                        double temperature = jsonResponse.getJSONObject("main").getDouble("temp");
-                        int humidity = jsonResponse.getJSONObject("main").getInt("humidity");
-                        double pressure = jsonResponse.getJSONObject("main").getDouble("pressure");
-                        double windSpeed = jsonResponse.getJSONObject("wind").getDouble("speed");
-                        String weatherDescription = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("description");
-                        String weatherIcon = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("icon");
+                    
+                    // Extraire les données météo
+                    double temperature = jsonResponse.getJSONObject("main").getDouble("temp");
+                    int humidity = jsonResponse.getJSONObject("main").getInt("humidity");
+                    double pressure = jsonResponse.getJSONObject("main").getDouble("pressure");
+                    double windSpeed = jsonResponse.getJSONObject("wind").getDouble("speed");
+                    String weatherDescription = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("description");
+                    String weatherIcon = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("icon");
                         double feelsLike = jsonResponse.getJSONObject("main").getDouble("feels_like");
                         double minTemp = jsonResponse.getJSONObject("main").getDouble("temp_min");
                         double maxTemp = jsonResponse.getJSONObject("main").getDouble("temp_max");
                         long sunrise = jsonResponse.getJSONObject("sys").getLong("sunrise");
                         long sunset = jsonResponse.getJSONObject("sys").getLong("sunset");
+                    
+                    // Obtenir le nom de la ville à partir de la réponse
+                    String cityName = jsonResponse.getString("name");
+                    String country = jsonResponse.getJSONObject("sys").getString("country");
+                    
+                    // Mettre à jour l'interface utilisateur
+                    javafx.application.Platform.runLater(() -> {
+                        content.getChildren().clear();
                         
-                        // Obtenir le nom de la ville à partir de la réponse
-                        String cityName = jsonResponse.getString("name");
-                        String country = jsonResponse.getJSONObject("sys").getString("country");
-                        
-                        // Mettre à jour l'interface utilisateur
-                        javafx.application.Platform.runLater(() -> {
-                            content.getChildren().clear();
-                            
                             // En-tête avec la ville et le pays
-                            Label locationLabel = new Label(cityName + ", " + country);
+                        Label locationLabel = new Label(cityName + ", " + country);
                             locationLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);");
                             
                             // Section principale: température et icône
                             HBox mainWeatherInfo = new HBox(30);
                             mainWeatherInfo.setAlignment(javafx.geometry.Pos.CENTER);
                             mainWeatherInfo.setPadding(new Insets(20));
-                            
-                            // Ajouter une icône météo
-                            ImageView weatherIconView = new ImageView();
-                            try {
-                                // Utiliser l'icône réelle d'OpenWeatherMap
+                        
+                        // Ajouter une icône météo
+                        ImageView weatherIconView = new ImageView();
+                        try {
+                            // Utiliser l'icône réelle d'OpenWeatherMap
                                 String iconUrl = "http://openweathermap.org/img/wn/" + weatherIcon + "@4x.png";
                                 System.out.println("URL icône météo: " + iconUrl);
                                 Image image = new Image(iconUrl, true); // true pour chargement en arrière-plan
-                                weatherIconView.setImage(image);
+                            weatherIconView.setImage(image);
                                 weatherIconView.setFitWidth(150);
                                 weatherIconView.setFitHeight(150);
-                            } catch (Exception e) {
+                        } catch (Exception e) {
                                 System.err.println("Erreur lors du chargement de l'icône météo: " + e.getMessage());
-                                e.printStackTrace();
+                            e.printStackTrace();
                                 // Utiliser un texte à la place de l'icône en cas d'erreur
                                 Label iconPlaceholder = new Label("☁️");
                                 iconPlaceholder.setStyle("-fx-font-size: 80px;");
                                 mainWeatherInfo.getChildren().add(iconPlaceholder);
-                            }
+                        }
                             
                             // Zone de température principale
                             VBox tempBox = new VBox(10);
                             tempBox.setAlignment(Pos.CENTER);
-                            
-                            Label temperatureLabel = new Label(String.format("%.1f°C", temperature));
+                        
+                        Label temperatureLabel = new Label(String.format("%.1f°C", temperature));
                             temperatureLabel.setStyle("-fx-font-size: 60px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);");
-                            
+                        
                             Label feelsLikeLabel = new Label("Ressenti: " + String.format("%.1f°C", feelsLike));
                             feelsLikeLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);");
-                            
-                            Label conditionLabel = new Label(weatherDescription);
+                        
+                        Label conditionLabel = new Label(weatherDescription);
                             conditionLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);");
                             
                             tempBox.getChildren().addAll(temperatureLabel, feelsLikeLabel, conditionLabel);
                             
                             mainWeatherInfo.getChildren().addAll(weatherIconView, tempBox);
-                            
-                            Separator separator = new Separator();
+                        
+                        Separator separator = new Separator();
                             separator.setStyle("-fx-background-color: white; -fx-opacity: 0.7;");
-                            
+                        
                             // Panneau pour les détails météo supplémentaires
-                            GridPane weatherDetails = new GridPane();
+                        GridPane weatherDetails = new GridPane();
                             weatherDetails.setHgap(50);
                             weatherDetails.setVgap(30);
                             weatherDetails.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 15; -fx-padding: 20;");
@@ -1264,45 +1264,45 @@ public class FrontEventsController implements Initializable {
                             createWeatherDetailItem(weatherDetails, 1, 2, "Coucher du soleil", sunsetTime, "🌇");
                             
                             // Assembler tous les éléments
-                            content.getChildren().addAll(
-                                locationLabel,
-                                mainWeatherInfo,
-                                separator,
-                                weatherDetails
-                            );
-                        });
-                    } else {
+                        content.getChildren().addAll(
+                            locationLabel,
+                            mainWeatherInfo,
+                            separator,
+                            weatherDetails
+                        );
+                    });
+                } else {
                         System.err.println("Erreur API météo: code " + responseCode);
-                        javafx.application.Platform.runLater(() -> {
-                            content.getChildren().clear();
-                            
-                            Label errorLabel = new Label("Impossible de récupérer les données météo");
-                            errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
-                            
-                            Label detailsLabel = new Label("Erreur " + responseCode + " : Vérifiez le nom de la ville ou votre connexion internet");
-                            detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-                            detailsLabel.setWrapText(true);
-                            
-                            content.getChildren().addAll(errorLabel, detailsLabel);
-                        });
-                    }
-                } catch (Exception e) {
-                    System.err.println("Erreur lors de la récupération des données météo: " + e.getMessage());
-                    e.printStackTrace();
                     javafx.application.Platform.runLater(() -> {
                         content.getChildren().clear();
                         
-                        Label errorLabel = new Label("Erreur de connexion");
-                        errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
+                        Label errorLabel = new Label("Impossible de récupérer les données météo");
+                            errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
                         
-                        Label detailsLabel = new Label("Vérifiez votre connexion internet. Détail: " + e.getMessage());
-                        detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-                        detailsLabel.setWrapText(true);
+                            Label detailsLabel = new Label("Erreur " + responseCode + " : Vérifiez le nom de la ville ou votre connexion internet");
+                            detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+                            detailsLabel.setWrapText(true);
                         
                         content.getChildren().addAll(errorLabel, detailsLabel);
                     });
                 }
-            }).start();
+            } catch (Exception e) {
+                    System.err.println("Erreur lors de la récupération des données météo: " + e.getMessage());
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    content.getChildren().clear();
+                    
+                    Label errorLabel = new Label("Erreur de connexion");
+                        errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
+                    
+                        Label detailsLabel = new Label("Vérifiez votre connexion internet. Détail: " + e.getMessage());
+                        detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+                        detailsLabel.setWrapText(true);
+                    
+                    content.getChildren().addAll(errorLabel, detailsLabel);
+                });
+            }
+        }).start();
         
         } catch (Exception e) {
             System.err.println("Erreur lors de l'affichage du dialogue météo: " + e.getMessage());
@@ -1945,7 +1945,7 @@ public class FrontEventsController implements Initializable {
                                 Thread.currentThread().interrupt();
                             }
                         }).start();
-                    } catch (Exception ex) {
+                } catch (Exception ex) {
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de lecture vocale", 
                                  "Impossible de lire la description: " + ex.getMessage());
                         ttsButton.setGraphic(new Label("🔊"));
@@ -2022,13 +2022,13 @@ public class FrontEventsController implements Initializable {
             
             // Configurer la boîte de dialogue
             dialog.getDialogPane().setContent(contentPane);
-            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-            
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        
             // Appliquer le style professionnel
             MainStyleFixer.styleProfessionalDialog(dialog.getDialogPane());
             
             // Afficher la boîte de dialogue
-            dialog.showAndWait();
+        dialog.showAndWait();
             
         } catch (Exception e) {
             e.printStackTrace();

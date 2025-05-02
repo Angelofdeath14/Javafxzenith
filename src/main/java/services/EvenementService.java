@@ -129,22 +129,22 @@ public class EvenementService {
             } else {
                 query = "INSERT INTO evenement (titre, description, type, location, dateD, dateF, image, nbPlace) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             }
-            
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, evenement.getTitre());
-                statement.setString(2, evenement.getDescription());
-                statement.setString(3, evenement.getType());
-                statement.setString(4, evenement.getLocation());
-                statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                statement.setString(7, evenement.getImage());
-                statement.setInt(8, evenement.getNbPlace());
+        
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, evenement.getTitre());
+            statement.setString(2, evenement.getDescription());
+            statement.setString(3, evenement.getType());
+            statement.setString(4, evenement.getLocation());
+            statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            statement.setString(7, evenement.getImage());
+            statement.setInt(8, evenement.getNbPlace());
                 
                 if (prixExists) {
                     statement.setDouble(9, evenement.getPrix() != null ? evenement.getPrix() : 0.0);
                 }
                 
-                statement.executeUpdate();
+            statement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,25 +162,25 @@ public class EvenementService {
             } else {
                 query = "UPDATE evenement SET titre = ?, description = ?, type = ?, location = ?, dateD = ?, dateF = ?, image = ?, nbPlace = ? WHERE id = ?";
             }
-            
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, evenement.getTitre());
-                statement.setString(2, evenement.getDescription());
-                statement.setString(3, evenement.getType());
-                statement.setString(4, evenement.getLocation());
-                statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                statement.setString(7, evenement.getImage());
-                statement.setInt(8, evenement.getNbPlace());
+        
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, evenement.getTitre());
+            statement.setString(2, evenement.getDescription());
+            statement.setString(3, evenement.getType());
+            statement.setString(4, evenement.getLocation());
+            statement.setString(5, evenement.getDateD().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            statement.setString(6, evenement.getDateF().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            statement.setString(7, evenement.getImage());
+            statement.setInt(8, evenement.getNbPlace());
                 
                 if (prixExists) {
                     statement.setDouble(9, evenement.getPrix() != null ? evenement.getPrix() : 0.0);
                     statement.setInt(10, evenement.getId());
                 } else {
-                    statement.setInt(9, evenement.getId());
+            statement.setInt(9, evenement.getId());
                 }
                 
-                statement.executeUpdate();
+            statement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -262,7 +262,7 @@ public class EventStatsController implements Initializable {
             for (int i = 0; i < 6; i++) {
                 double growthFactor = 0.7 + (i * 0.06); // Croissance progressive
                 trendData.add(baseValue * growthFactor);
-            }
+    }
             trendData.add((double) totalReservations); // Valeur actuelle
             
             // Données pour le camembert des catégories
@@ -381,7 +381,7 @@ public class EventStatsController implements Initializable {
             for (int i = 0; i < 6; i++) {
                 double growthFactor = 0.6 + (i * 0.07);
                 trendData.add(baseValue * growthFactor);
-            }
+        }
             trendData.add((double) totalReservations);
             
             // Mettre à jour les cartes avec les données de l'événement
@@ -438,7 +438,7 @@ public class EventStatsController implements Initializable {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de chargement", 
                     "Impossible de charger les données pour l'événement sélectionné: " + e.getMessage());
-        }
+    }
     }
     
     private void loadPieChart(List<StatsUtils.PieChartData> data) {
