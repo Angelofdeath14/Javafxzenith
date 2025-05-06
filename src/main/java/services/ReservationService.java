@@ -17,7 +17,7 @@ public class ReservationService implements IService<Reservation> {
 
     @Override
     public void add(Reservation reservation) throws SQLException {
-        String query = "INSERT INTO reservation (user_id, event_id, session_id, nombre_places, date_reservation, prix_total, statut) " +
+        String query = "INSERT INTO reservation (user_id, event_id, session_id, nombre_places, date_reservation, statut, prix_total) " +
                       "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement pst = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -26,8 +26,8 @@ public class ReservationService implements IService<Reservation> {
             pst.setInt(3, reservation.getSessionId());
             pst.setInt(4, reservation.getNombrePlaces());
             pst.setTimestamp(5, Timestamp.valueOf(reservation.getDateReservation()));
-            pst.setDouble(6, reservation.getPrixTotal());
-            pst.setString(7, reservation.getStatut());
+            pst.setString(6, reservation.getStatut());
+            pst.setDouble(7, reservation.getPrixTotal());
             
             pst.executeUpdate();
             
@@ -42,7 +42,7 @@ public class ReservationService implements IService<Reservation> {
     @Override
     public void update(Reservation reservation) throws SQLException {
         String query = "UPDATE reservation SET user_id = ?, event_id = ?, session_id = ?, " +
-                      "nombre_places = ?, date_reservation = ?, prix_total = ?, statut = ? " +
+                      "nombre_places = ?, date_reservation = ?, statut = ?, prix_total = ? " +
                       "WHERE id = ?";
         
         try (PreparedStatement pst = conn.prepareStatement(query)) {
@@ -51,8 +51,8 @@ public class ReservationService implements IService<Reservation> {
             pst.setInt(3, reservation.getSessionId());
             pst.setInt(4, reservation.getNombrePlaces());
             pst.setTimestamp(5, Timestamp.valueOf(reservation.getDateReservation()));
-            pst.setDouble(6, reservation.getPrixTotal());
-            pst.setString(7, reservation.getStatut());
+            pst.setString(6, reservation.getStatut());
+            pst.setDouble(7, reservation.getPrixTotal());
             pst.setInt(8, reservation.getId());
             
             pst.executeUpdate();
@@ -209,9 +209,18 @@ public class ReservationService implements IService<Reservation> {
         int sessionId = rs.getInt("session_id");
         int nombrePlaces = rs.getInt("nombre_places");
         LocalDateTime dateReservation = rs.getTimestamp("date_reservation").toLocalDateTime();
-        double prixTotal = rs.getDouble("prix_total");
         String statut = rs.getString("statut");
         
-        return new Reservation(id, userId, eventId, sessionId, nombrePlaces, dateReservation, prixTotal, statut);
+        Reservation reservation = new Reservation(id, userId, eventId, sessionId, nombrePlaces, dateReservation, statut);
+        
+        try {
+            double prixTotal = rs.getDouble("prix_total");
+            reservation.setPrixTotal(prixTotal);
+        } catch (SQLException e) {
+            // Si la colonne n'existe pas encore, on met la valeur par défaut
+            reservation.setPrixTotal(0.0);
+        }
+        
+        return reservation;
     }
 } 

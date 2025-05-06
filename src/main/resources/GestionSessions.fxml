@@ -98,6 +98,14 @@
                            -fx-min-height: 35px; 
                            -fx-background-radius: 5px;
                            -fx-cursor: hand;"/>
+            <Button fx:id="btnAddSession" text="+ Ajouter une session" onAction="#handleAddSession"
+                    style="-fx-background-color: #2ecc71; 
+                           -fx-text-fill: white; 
+                           -fx-font-weight: bold; 
+                           -fx-min-width: 180px; 
+                           -fx-min-height: 35px; 
+                           -fx-background-radius: 5px;
+                           -fx-cursor: hand;"/>
             <Button fx:id="btnViewEvents" text="Voir événements" onAction="#handleViewEvents"
                     style="-fx-background-color: #3498db; 
                            -fx-text-fill: white; 

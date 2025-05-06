@@ -1,129 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controller.ReservationController"
-            prefHeight="400.0" prefWidth="500.0"
-            styleClass="reservation-container">
-    
-    <!-- En-tête de la réservation -->
+            prefHeight="700.0" prefWidth="1000.0"
+            style="-fx-background-color: white;">
+
+    <!-- En-tête -->
     <top>
-        <VBox styleClass="reservation-header">
-            <HBox spacing="5" alignment="CENTER_LEFT">
-                <ImageView fx:id="eventImage" fitWidth="50" fitHeight="30" preserveRatio="true" />
-                
-                <VBox spacing="2">
-                    <Label text="Réservation" styleClass="reservation-title" />
-                    <Label fx:id="eventName" text="Nom de l'événement" styleClass="reservation-event-info" />
-                    <Label fx:id="eventDate" text="Date" styleClass="reservation-event-info" />
-                </VBox>
-            </HBox>
+        <VBox style="-fx-background-color: #3f51b5; -fx-padding: 20px;">
+            <Label text="Réservation" 
+                   style="-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Label text="Réservez votre place pour cet événement" 
+                   style="-fx-font-size: 14px; -fx-text-fill: white;"/>
         </VBox>
     </top>
     
-    <!-- Corps de la réservation -->
+    <!-- Contenu principal -->
     <center>
-        <ScrollPane fitToWidth="true" styleClass="transparent-scroll" vbarPolicy="NEVER" hbarPolicy="NEVER">
-            <VBox styleClass="reservation-body">
-                <!-- Étape 1: Sélection de session -->
-                <VBox styleClass="reservation-step">
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <Label text="1" styleClass="reservation-step-number" />
-                        <Label text="Session" styleClass="reservation-step-title" />
-                    </HBox>
-                    
-                    <Separator>
-                        <VBox.margin>
-                            <Insets top="2" bottom="5" />
-                        </VBox.margin>
-                    </Separator>
-                    
-                    <VBox fx:id="sessionsContainer" spacing="3" />
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox fx:id="mainContainer" spacing="20" style="-fx-padding: 20px;">
+                <!-- Détails de l'événement -->
+                <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 15px; -fx-background-radius: 8px;">
+                    <Label text="Détails de l'événement" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Label fx:id="eventTitle" text="Titre de l'événement" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                    <Label fx:id="eventDate" text="Date: --/--/----" />
+                    <Label fx:id="eventLocation" text="Lieu: ----" />
                 </VBox>
                 
-                <!-- Étape 2: Informations de contact -->
-                <VBox styleClass="reservation-step">
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <Label text="2" styleClass="reservation-step-number" />
-                        <Label text="Informations" styleClass="reservation-step-title" />
-                    </HBox>
-                    
-                    <Separator>
-                        <VBox.margin>
-                            <Insets top="2" bottom="5" />
-                        </VBox.margin>
-                    </Separator>
-                    
-                    <GridPane hgap="5" vgap="5">
-                        <columnConstraints>
-                            <ColumnConstraints minWidth="60" />
-                            <ColumnConstraints hgrow="ALWAYS" />
-                        </columnConstraints>
-                        
-                        <Label text="Nom:" styleClass="reservation-form-label" 
-                               GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                        <TextField fx:id="nomField" promptText="Nom"
-                                  GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                        
-                        <Label text="Prénom:" styleClass="reservation-form-label" 
-                               GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                        <TextField fx:id="prenomField" promptText="Prénom"
-                                  GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                        
-                        <Label text="Email:" styleClass="reservation-form-label" 
-                               GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                        <TextField fx:id="emailField" promptText="Email"
-                                  GridPane.rowIndex="2" GridPane.columnIndex="1" />
-                        
-                        <Label text="Tél:" styleClass="reservation-form-label" 
-                               GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                        <TextField fx:id="telephoneField" promptText="Téléphone"
-                                  GridPane.rowIndex="3" GridPane.columnIndex="1" />
-                    </GridPane>
+                <!-- Sélection de la session -->
+                <VBox spacing="10">
+                    <Label text="Sélectionnez une session" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <ScrollPane style="-fx-background-color: transparent; -fx-padding: 0;" fitToWidth="true" prefHeight="250">
+                        <VBox fx:id="sessionsContainer" spacing="10">
+                            <!-- Les sessions seront ajoutées dynamiquement ici -->
+                        </VBox>
+                    </ScrollPane>
                 </VBox>
                 
-                <!-- Étape 3: Nombre de places -->
-                <VBox styleClass="reservation-step">
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <Label text="3" styleClass="reservation-step-number" />
-                        <Label text="Places" styleClass="reservation-step-title" />
-                    </HBox>
-                    
-                    <Separator>
-                        <VBox.margin>
-                            <Insets top="2" bottom="5" />
-                        </VBox.margin>
-                    </Separator>
-                    
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <Label text="Nombre:" styleClass="reservation-form-label" />
-                        <Spinner fx:id="placesSpinner" min="1" max="10" initialValue="1" editable="true" prefWidth="70" />
-                    </HBox>
-                    
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <Label text="Disponibles:" />
-                        <Label fx:id="placesDisponibles" text="0" />
-                    </HBox>
-                    
-                    <HBox spacing="5" alignment="CENTER_LEFT">
-                        <Label text="Total:" />
-                        <Label fx:id="prixTotal" text="0 €" styleClass="reservation-prix-total" />
+                <!-- Sélection du nombre de places -->
+                <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 15px; -fx-background-radius: 8px;">
+                    <Label text="Nombre de places" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Nombre de places:" />
+                        <TextField fx:id="nbPlacesField" prefWidth="100" text="1" />
                     </HBox>
                 </VBox>
             </VBox>
         </ScrollPane>
     </center>
     
-    <!-- Pied de page avec boutons d'action -->
+    <!-- Pied de page avec les boutons -->
     <bottom>
-        <HBox styleClass="reservation-footer" alignment="CENTER_RIGHT" spacing="5">
-            <Button fx:id="btnCancel" text="Annuler" styleClass="reservation-cancel-button" cancelButton="true" />
-            <Button fx:id="btnConfirm" text="Confirmer" styleClass="reservation-confirm-button" defaultButton="true" />
+        <HBox spacing="15" alignment="CENTER_RIGHT" 
+              style="-fx-padding: 20px; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-width: 1 0 0 0;">
+            <Button fx:id="btnCancel" text="Annuler" 
+                    onAction="#handleCancel"
+                    style="-fx-background-color: #e0e0e0; -fx-text-fill: #333333; -fx-min-width: 100px;"/>
+            <Button fx:id="btnConfirm" text="Confirmer" 
+                    onAction="#handleConfirmation"
+                    style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-min-width: 120px;"/>
         </HBox>
     </bottom>
 </BorderPane> 

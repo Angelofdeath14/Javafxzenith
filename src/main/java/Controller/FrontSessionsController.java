@@ -1,9 +1,7 @@
 package Controller;
 
-import Controller.ReservationController;
 import Entity.Evenement;
 import Entity.Session;
-import Controller.AjouterSessionController2;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.geometry.Pos;
@@ -24,14 +23,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.geometry.Insets;
 import java.util.List;
-import java.util.Optional;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import services.SessionService;
@@ -40,19 +37,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import Utils.MainStyleFixer;
 import Utils.AnimationUtils;
+import java.util.Optional;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import Utils.DatabaseConnection;
 
-public class GestionSessionsController implements Initializable {
+public class FrontSessionsController implements Initializable {
     @FXML private Label eventTitleLabel;
     @FXML private Label eventDetailsLabel;
     @FXML private Button btnRetour;
+    @FXML private Button btnViewEvents;
     @FXML private VBox sessionsContainer;
-    @FXML private VBox statsContainer;
-    @FXML private Label lblTotalSessions;
-    @FXML private Label lblTotalCapacity;
-    @FXML private Label lblReservedPlaces;
-    @FXML private Label lblReservationRate;
-    @FXML private Label lblStatIndicator;
-    @FXML private ProgressBar progressReservationRate;
 
     private Evenement evenement;
     private final SessionService sessionService = new SessionService();
@@ -66,26 +61,11 @@ public class GestionSessionsController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        // Style du bouton retour
-        btnRetour.setStyle(
-            "-fx-background-color: #555555; " +
-            "-fx-text-fill: white; " +
-            "-fx-font-weight: bold; " +
-            "-fx-min-width: 100px; " +
-            "-fx-min-height: 30px; " +
-            "-fx-background-radius: 5px; " +
-            "-fx-cursor: hand;"
-        );
-        
-        // Masquer les statistiques
-        statsContainer.setVisible(false);
-        statsContainer.setManaged(false);
     }
 
     public void setEvenement(Evenement evenement) {
         this.evenement = evenement;
-        eventTitleLabel.setText("Sessions de l'événement : " + evenement.getNom());
+        eventTitleLabel.setText("Sessions de l'événement : " + evenement.getTitre());
         updateEventDetails();
         loadSessions();
     }
@@ -97,11 +77,13 @@ public class GestionSessionsController implements Initializable {
                 "Type: %s\n" +
                 "Lieu: %s\n" +
                 "Date de début: %s\n" +
-                "Date de fin: %s",
+                "Date de fin: %s\n" +
+                "Places disponibles: %d",
                 evenement.getType(),
                 evenement.getLocation(),
                 evenement.getDateD().format(formatter),
-                evenement.getDateF().format(formatter)
+                evenement.getDateF().format(formatter),
+                evenement.getNbPlace()
             );
             
             eventDetailsLabel.setText(details);
@@ -120,12 +102,6 @@ public class GestionSessionsController implements Initializable {
             
             // Récupérer les sessions de l'événement
             List<Session> sessions = sessionService.getSessionsByEvent(evenement.getId());
-            
-            // Débogage pour vérifier les sessions récupérées
-            System.out.println("Sessions récupérées pour l'événement ID " + evenement.getId() + ": " + sessions.size());
-            for (Session s : sessions) {
-                System.out.println(" - Session ID: " + s.getId() + ", Titre: " + s.getTitre());
-            }
             
             // Conteneur principal pour les sessions
             VBox mainSessionsContainer = new VBox(15);
@@ -181,7 +157,7 @@ public class GestionSessionsController implements Initializable {
     @FXML
     private void handleRetour() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvent.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontEvents.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage stage = (Stage) btnRetour.getScene().getWindow();
@@ -191,6 +167,22 @@ public class GestionSessionsController implements Initializable {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de navigation", 
                      "Impossible de retourner à la liste des événements: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleViewEvents() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontEvents.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) btnViewEvents.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de navigation", 
+                     "Impossible d'afficher la vue des événements: " + e.getMessage());
         }
     }
 
@@ -359,34 +351,30 @@ public class GestionSessionsController implements Initializable {
         // Regrouper les informations
         infoBox.getChildren().addAll(dateBox, locationBox, capacityBox);
         
-        // Boutons d'action pour l'administration
-        HBox actionsBox = new HBox(10);
-        actionsBox.setAlignment(Pos.CENTER);
-        
-        Button editButton = new Button("Modifier");
-        editButton.setPrefWidth(110);
-        editButton.setStyle(
-            "-fx-background-color: #f39c12; " +
+        // Bouton de réservation
+        Button reserveButton = new Button("Réserver");
+        reserveButton.setPrefWidth(Double.MAX_VALUE);
+        reserveButton.setStyle(
+            "-fx-background-color: #2ecc71; " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
             "-fx-padding: 10; " +
             "-fx-background-radius: 5;"
         );
         
-        Button deleteButton = new Button("Supprimer");
-        deleteButton.setPrefWidth(110);
-        deleteButton.setStyle(
-            "-fx-background-color: #e74c3c; " +
-            "-fx-text-fill: white; " +
-            "-fx-font-weight: bold; " +
-            "-fx-padding: 10; " +
-            "-fx-background-radius: 5;"
-        );
+        // Désactiver le bouton si la session est complète
+        if (session.getCapacity() <= 0) {
+            reserveButton.setDisable(true);
+            reserveButton.setStyle(
+                "-fx-background-color: #bdc3c7; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-weight: bold; " +
+                "-fx-padding: 10; " +
+                "-fx-background-radius: 5;"
+            );
+        }
         
-        editButton.setOnAction(e -> handleEditSession(session));
-        deleteButton.setOnAction(e -> handleDeleteSession(session));
-        
-        actionsBox.getChildren().addAll(editButton, deleteButton);
+        reserveButton.setOnAction(e -> handleReservation(session));
         
         // Animation au survol
         card.setOnMouseEntered(e -> {
@@ -406,7 +394,7 @@ public class GestionSessionsController implements Initializable {
         });
         
         // Ajouter tous les éléments à la carte
-        card.getChildren().addAll(imageContainer, titleLabel, typeLabel, starsContainer, popularityLabel, infoBox, actionsBox);
+        card.getChildren().addAll(imageContainer, titleLabel, typeLabel, starsContainer, popularityLabel, infoBox, reserveButton);
         
         return card;
     }
@@ -422,115 +410,93 @@ public class GestionSessionsController implements Initializable {
             default: return "Popularité inconnue";
         }
     }
-
-    @FXML
-    private void handleAddSession() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterSession.fxml"));
-            Parent root = loader.load();
-            
-            AjouterSessionController2 controller = loader.getController();
-            controller.preSelectEvent(evenement);
-            
-            Stage stage = new Stage();
-            stage.setTitle("Ajouter une session");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.showAndWait();
-            
-            // Recharger les sessions après l'ajout
-            loadSessions();
-            
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, 
-                     "Erreur", 
-                     "Erreur d'ouverture", 
-                     "Impossible d'ouvrir la fenêtre d'ajout de session: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
     
-    private void handleEditSession(Session session) {
+    private void handleReservation(Session session) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterSession.fxml"));
-            Parent root = loader.load();
-            
-            AjouterSessionController2 controller = loader.getController();
-            controller.initializeForEdit(session);
-            
-            Stage stage = new Stage();
-            stage.setTitle("Modifier la session");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.showAndWait();
-            
-            // Recharger les sessions après la modification
-            loadSessions();
-            
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, 
-                     "Erreur", 
-                     "Erreur d'ouverture", 
-                     "Impossible d'ouvrir la fenêtre de modification: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
-    private void handleDeleteSession(Session session) {
-        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDialog.setTitle("Confirmation de suppression");
-        confirmDialog.setHeaderText("Supprimer la session");
-        confirmDialog.setContentText("Êtes-vous sûr de vouloir supprimer cette session ?");
-        
-        Optional<ButtonType> result = confirmDialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                // Supprimer la session
-                boolean success = sessionService.deleteSession(session.getId());
-                
-                if (success) {
-                    showAlert(Alert.AlertType.INFORMATION, 
-                             "Succès", 
-                             "Session supprimée", 
-                             "La session a été supprimée avec succès.");
-                    
-                    // Recharger les sessions
-                    loadSessions();
-                } else {
-                    showAlert(Alert.AlertType.ERROR, 
-                             "Erreur", 
-                             "Erreur de suppression", 
-                             "La session n'a pas pu être supprimée.");
-                }
-            } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, 
-                         "Erreur", 
-                         "Erreur de suppression", 
-                         "Une erreur est survenue lors de la suppression: " + e.getMessage());
+            if (session.getCapacity() <= 0) {
+                showAlert(Alert.AlertType.WARNING, "Session complète", "Aucune place disponible", 
+                          "Toutes les places pour cette session ont été réservées.");
+                return;
             }
-        }
-    }
-
-    @FXML
-    private void handleViewEvents() {
-        try {
-            // Charger la vue d'administration des événements
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvent.fxml"));
-            Parent root = loader.load();
             
-            Stage stage = (Stage) btnRetour.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setTitle("Gestion des Événements");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Créer un dialogue personnalisé pour la réservation
+            Dialog<Integer> dialog = new Dialog<>();
+            dialog.setTitle("Réservation");
+            dialog.setHeaderText("Réserver pour: " + session.getTitre());
+            
+            // Configuration du dialogue
+            ButtonType reserverType = new ButtonType("Réserver", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(reserverType, ButtonType.CANCEL);
+            
+            // Créer la mise en page
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+            
+            // Champ pour le nombre de places
+            Spinner<Integer> placesSpinner = new Spinner<>(1, session.getCapacity(), 1);
+            placesSpinner.setEditable(true);
+            placesSpinner.setPrefWidth(100);
+            
+            grid.add(new Label("Nombre de places:"), 0, 0);
+            grid.add(placesSpinner, 1, 0);
+            
+            dialog.getDialogPane().setContent(grid);
+            
+            // Convertir le résultat en nombre de places
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == reserverType) {
+                    return placesSpinner.getValue();
+                }
+                return null;
+            });
+            
+            // Afficher le dialogue et traiter le résultat
+            Optional<Integer> result = dialog.showAndWait();
+            
+            result.ifPresent(nbPlaces -> {
+                try {
+                    // Mise à jour des places directement dans la session
+                    int newCapacity = session.getCapacity() - nbPlaces;
+                    
+                    // Créer une requête directe pour mettre à jour capacity spécifiquement
+                    String query = "UPDATE sessions SET capacity = ? WHERE id = ?";
+                    
+                    try (Connection conn = DatabaseConnection.getConnection();
+                         PreparedStatement pstmt = conn.prepareStatement(query)) {
+                        
+                        pstmt.setInt(1, newCapacity);
+                        pstmt.setInt(2, session.getId());
+                        
+                        int updatedRows = pstmt.executeUpdate();
+                        
+                        if (updatedRows > 0) {
+                            // Mise à jour réussie en base de données
+                            // Mettre également à jour l'objet local
+                            session.setCapacity(newCapacity);
+                            
+                            showAlert(Alert.AlertType.INFORMATION, "Succès", "Réservation confirmée", 
+                                    "Vous avez réservé " + nbPlaces + " place(s) pour cette session.");
+                            
+                            // Recharger les sessions pour rafraîchir l'affichage
+                            loadSessions();
+                        } else {
+                            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de réservation", 
+                                    "Impossible de réserver les places demandées.");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de réservation", 
+                            "Une erreur est survenue: " + e.getMessage());
+                }
+            });
+            
+        } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de navigation", 
-                     "Impossible d'afficher la vue d'administration des événements: " + e.getMessage());
+                    "Impossible de traiter la réservation: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 } 

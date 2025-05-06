@@ -1,445 +1,381 @@
 package Controller;
 
 import Entity.Evenement;
+import Entity.Reservation;
 import Entity.Session;
-import Service.EvenementService;
-import Service.SessionService;
+import Utils.LogUtils;
 import Utils.MainStyleFixer;
-import Utils.AnimationUtils;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
+import services.EvenementService;
+import services.ReservationService;
+import services.SessionService;
 
-import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Contrôleur pour la fenêtre de réservation améliorée
+ * Contrôleur pour la gestion des réservations
+ * Permet aux utilisateurs de créer, modifier et annuler des réservations
  */
 public class ReservationController implements Initializable {
-    @FXML private ImageView eventImage;
-    @FXML private Label eventName;
+
+    @FXML private VBox mainContainer;
+    @FXML private Label eventTitle;
     @FXML private Label eventDate;
+    @FXML private Label eventLocation;
     @FXML private VBox sessionsContainer;
-    @FXML private TextField nomField;
-    @FXML private TextField prenomField;
-    @FXML private TextField emailField;
-    @FXML private TextField telephoneField;
-    @FXML private Spinner<Integer> placesSpinner;
-    @FXML private Label placesDisponibles;
-    @FXML private Label prixTotal;
-    @FXML private Button btnCancel;
+    @FXML private TextField nbPlacesField;
     @FXML private Button btnConfirm;
+    @FXML private Button btnCancel;
     
     private Evenement event;
     private Session selectedSession;
+    private int userId = 1; // Utilisateur simulé pour la démonstration
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+    
+    private EvenementService evenementService;
     private SessionService sessionService;
-    private EvenementService eventService;
-    private Runnable onReservationComplete;
-    private SimpleObjectProperty<Session> selectedSessionProperty = new SimpleObjectProperty<>();
-    private double prix = 0.0;
+    private ReservationService reservationService;
+    
+    // Callback pour notifier le contrôleur parent que la réservation est terminée
+    private Runnable onReservationCompleteCallback;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialiser les services
         try {
+            // Initialisation des services
+            evenementService = new EvenementService();
             sessionService = new SessionService();
-            eventService = new EvenementService();
+            reservationService = new ReservationService();
             
-            // Configurer l'interface utilisateur de base
-            setupUI();
-            setupListeners();
-            
-            // Attendre que tous les composants soient chargés puis configurer les boutons du spinner
-            Platform.runLater(() -> {
-                try {
-                    setupCustomSpinnerButtons();
-                } catch (Exception e) {
-                    System.err.println("Erreur lors de la configuration des boutons du spinner: " + e.getMessage());
-                    e.printStackTrace();
+            // Configurer le champ de nombre de places
+            nbPlacesField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("\\d*")) {
+                    nbPlacesField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             });
-        } catch (Exception e) {
-            showError("Erreur d'initialisation", "Impossible d'initialiser les services: " + e.getMessage());
+            
+            // Par défaut, nous commençons avec 1 place
+            nbPlacesField.setText("1");
+            
+            // Désactiver le bouton de confirmation jusqu'à ce qu'une session soit sélectionnée
+            btnConfirm.setDisable(true);
+            
+        } catch (SQLException e) {
+            showError("Erreur d'initialisation", "Impossible de charger les services de réservation: " + e.getMessage());
         }
     }
     
     /**
-     * Configure l'événement à réserver
-     * @param event L'événement à réserver
+     * Définit l'événement pour cette réservation
      */
     public void setEvent(Evenement event) {
         this.event = event;
-        if (event != null) {
-            updateUI();
-            loadSessions();
-        }
+        
+        // Mettre à jour l'interface avec les détails de l'événement
+        eventTitle.setText(event.getTitre());
+        eventDate.setText("Date: " + event.getDateD().format(formatter));
+        eventLocation.setText("Lieu: " + event.getLocation());
+        
+        // Charger les sessions disponibles
+        loadSessions();
     }
     
     /**
-     * Configure le callback à exécuter après une réservation réussie
-     * @param onComplete Action à exécuter
-     */
-    public void setOnReservationComplete(Runnable onComplete) {
-        this.onReservationComplete = onComplete;
-    }
-    
-    /**
-     * Configure l'interface utilisateur de base
-     */
-    private void setupUI() {
-        // Configuration du Spinner
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
-        placesSpinner.setValueFactory(valueFactory);
-        
-        // Ajouter des écouteurs pour les actions des boutons
-        btnCancel.setOnAction(e -> closeWindow());
-        btnConfirm.setOnAction(e -> handleReservation());
-        
-        // Appliquer des effets d'animation
-        AnimationUtils.addHoverEffect(btnConfirm);
-        AnimationUtils.addHoverEffect(btnCancel);
-    }
-    
-    /**
-     * Configure les boutons personnalisés pour le spinner
-     */
-    private void setupCustomSpinnerButtons() {
-        // Créer les boutons + et -
-        Button plusButton = new Button("+");
-        plusButton.setPrefWidth(40);
-        plusButton.setPrefHeight(30);
-        plusButton.getStyleClass().add("spinner-button");
-        
-        Button minusButton = new Button("-");
-        minusButton.setPrefWidth(40);
-        minusButton.setPrefHeight(30);
-        minusButton.getStyleClass().add("spinner-button");
-        
-        // Configurer les actions des boutons
-        plusButton.setOnAction(e -> {
-            int currentValue = placesSpinner.getValue();
-            if (currentValue < 10) {
-                placesSpinner.getValueFactory().setValue(currentValue + 1);
-            }
-        });
-        
-        minusButton.setOnAction(e -> {
-            int currentValue = placesSpinner.getValue();
-            if (currentValue > 1) {
-                placesSpinner.getValueFactory().setValue(currentValue - 1);
-            }
-        });
-        
-        // Appliquer des effets d'animation
-        AnimationUtils.addHoverEffect(plusButton);
-        AnimationUtils.addHoverEffect(minusButton);
-        
-        // Créer un conteneur pour les boutons et le spinner
-        HBox spinnerControls = new HBox(10, minusButton, placesSpinner, plusButton);
-        spinnerControls.setAlignment(Pos.CENTER_LEFT);
-        
-        // Remplacer le spinner par notre conteneur personnalisé
-        VBox parent = (VBox) placesSpinner.getParent();
-        if (parent != null) {
-            int index = parent.getChildren().indexOf(placesSpinner);
-            if (index >= 0) {
-                parent.getChildren().remove(placesSpinner);
-                parent.getChildren().add(index, spinnerControls);
-                System.out.println("Spinner remplacé avec succès par les contrôles personnalisés");
-            } else {
-                System.err.println("Impossible de trouver le spinner dans son parent");
-            }
-        } else {
-            System.err.println("Le parent du spinner est null");
-        }
-    }
-    
-    /**
-     * Configure les écouteurs pour les changements
-     */
-    private void setupListeners() {
-        // Écouteur pour le changement de session sélectionnée
-        selectedSessionProperty.addListener((obs, oldVal, newVal) -> {
-            selectedSession = newVal;
-            updatePlacesInfo();
-            updateTotalPrice();
-        });
-        
-        // Écouteur pour le changement du nombre de places
-        placesSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
-            updateTotalPrice();
-        });
-    }
-    
-    /**
-     * Met à jour l'interface utilisateur avec les détails de l'événement
-     */
-    private void updateUI() {
-        // Mettre à jour le nom et la date de l'événement
-        eventName.setText(event.getTitre());
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-        String dateStr = event.getDateD() != null ? event.getDateD().format(formatter) : "";
-        eventDate.setText(dateStr);
-        
-        // Charger l'image de l'événement
-        loadEventImage();
-        
-        // Mettre à jour le prix
-        prix = event.getPrix() != null ? event.getPrix() : 0.0;
-    }
-    
-    /**
-     * Charge l'image de l'événement
-     */
-    private void loadEventImage() {
-        try {
-            String imagePath = event.getImage();
-            
-            if (imagePath != null && !imagePath.isEmpty()) {
-                Image image;
-                
-                // Vérifier si c'est une URL ou un chemin local
-                if (imagePath.startsWith("http") || imagePath.startsWith("www")) {
-                    image = new Image(imagePath, true);
-                } else {
-                    // Image locale
-                    File file = new File(imagePath);
-                    if (file.exists()) {
-                        image = new Image(file.toURI().toString());
-                    } else {
-                        // Image par défaut si le fichier n'existe pas
-                        image = new Image(getClass().getResourceAsStream("/images/default_event.jpg"));
-                    }
-                }
-                
-                eventImage.setImage(image);
-            } else {
-                // Image par défaut
-                eventImage.setImage(new Image(getClass().getResourceAsStream("/images/default_event.jpg")));
-            }
-        } catch (Exception e) {
-            // En cas d'erreur, utiliser une image par défaut
-            try {
-                eventImage.setImage(new Image(getClass().getResourceAsStream("/images/default_event.jpg")));
-            } catch (Exception ex) {
-                // Ignorer
-            }
-        }
-    }
-    
-    /**
-     * Charge les sessions disponibles pour l'événement
+     * Charge les sessions disponibles pour cet événement
      */
     private void loadSessions() {
+        LogUtils.info("ReservationController", "Chargement des sessions pour l'événement: " + 
+                    (event != null ? event.getId() + " - " + event.getTitre() : "null"));
+        
         try {
-            // Vider le conteneur de sessions
-            sessionsContainer.getChildren().clear();
-            
-            // Récupérer les sessions pour cet événement
+            if (event == null) {
+                LogUtils.error("ReservationController", "L'événement est null, impossible de charger les sessions", null);
+                showNoSessionsMessage();
+                return;
+            }
+
+            // Récupérer toutes les sessions pour cet événement
             List<Session> sessions = sessionService.getSessionsByEvent(event.getId());
+            if (sessions == null) {
+                LogUtils.error("ReservationController", "La liste des sessions est null", null);
+                sessions = new ArrayList<>();
+            }
+            
+            LogUtils.info("ReservationController", "Nombre de sessions récupérées: " + sessions.size());
             
             if (sessions.isEmpty()) {
-                Label noSessionsLabel = new Label("Aucune session disponible pour cet événement.");
-                noSessionsLabel.getStyleClass().add("empty-message");
-                sessionsContainer.getChildren().add(noSessionsLabel);
+                LogUtils.info("ReservationController", "Aucune session disponible pour cet événement");
+                showNoSessionsMessage();
                 return;
             }
             
-            // Créer des cartes pour chaque session
-            ToggleGroup sessionGroup = new ToggleGroup();
-            
-            for (Session session : sessions) {
-                HBox sessionCard = createSessionCard(session);
-                RadioButton radioButton = new RadioButton();
-                radioButton.setToggleGroup(sessionGroup);
-                radioButton.setUserData(session);
-                
-                HBox container = new HBox(10, radioButton, sessionCard);
-                container.setAlignment(Pos.CENTER_LEFT);
-                container.getStyleClass().add("reservation-session-container");
-                
-                // Ajouter un effet de clic sur toute la boîte
-                container.setOnMouseClicked(e -> {
-                    radioButton.setSelected(true);
-                });
-                
-                sessionsContainer.getChildren().add(container);
+            // Vider le conteneur de sessions
+            if (sessionsContainer != null) {
+                sessionsContainer.getChildren().clear();
+            } else {
+                LogUtils.error("ReservationController", "Le conteneur de sessions est null", null);
+                return;
             }
             
-            // Écouter les changements de sélection
-            sessionGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal != null) {
-                    selectedSessionProperty.set((Session) newVal.getUserData());
-                } else {
-                    selectedSessionProperty.set(null);
-                }
-            });
+            // Nombre de sessions avec des places disponibles
+            int availableSessions = 0;
             
-            // Sélectionner la première session par défaut
-            if (!sessions.isEmpty() && sessionGroup.getToggles().size() > 0) {
-                sessionGroup.selectToggle(sessionGroup.getToggles().get(0));
+            // Ajouter une carte pour chaque session disponible
+            for (Session session : sessions) {
+                if (session == null) {
+                    LogUtils.error("ReservationController", "Session null trouvée dans la liste", null);
+                    continue;
+                }
+                
+                LogUtils.info("ReservationController", "Traitement de la session: " + session.getId() + 
+                             ", Titre: " + (session.getTitre() != null ? session.getTitre() : "Sans titre") + 
+                             ", Capacité: " + session.getCapacity());
+                
+                // Ne montrer que les sessions qui ont encore des places disponibles
+                if (session.getCapacity() > 0) {
+                    VBox sessionCard = createSessionCard(session);
+                    if (sessionCard != null) {
+                        sessionsContainer.getChildren().add(sessionCard);
+                        availableSessions++;
+                    }
+                } else {
+                    LogUtils.info("ReservationController", "Session " + session.getId() + " ignorée (aucune place disponible)");
+                }
+            }
+            
+            LogUtils.info("ReservationController", "Nombre de sessions affichées: " + availableSessions);
+            
+            // Si aucune session n'a de places disponibles, afficher un message
+            if (availableSessions == 0) {
+                LogUtils.info("ReservationController", "Aucune session avec des places disponibles");
+                showNoSessionsMessage();
             }
             
         } catch (SQLException e) {
-            showError("Erreur", "Impossible de charger les sessions: " + e.getMessage());
+            LogUtils.error("ReservationController", "Erreur SQL lors du chargement des sessions", e);
+            showError("Erreur de chargement", "Impossible de charger les sessions: " + e.getMessage());
+        } catch (Exception e) {
+            LogUtils.error("ReservationController", "Erreur inattendue lors du chargement des sessions", e);
+            showError("Erreur", "Une erreur inattendue est survenue: " + e.getMessage());
         }
     }
     
     /**
-     * Crée une carte pour une session
-     * @param session La session à afficher
-     * @return Le composant de la carte de session
+     * Crée une carte visuelle pour afficher une session
      */
-    private HBox createSessionCard(Session session) {
-        VBox infoContainer = new VBox(5);
-        
-        // Titre et date
-        Label titleLabel = new Label(session.getTitre());
-        titleLabel.getStyleClass().add("reservation-session-title");
-        
-        // Date et heure
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy à HH:mm");
-        String dateStr = session.getDateDebut() != null ? session.getDateDebut().format(formatter) : "";
-        Label dateLabel = new Label(dateStr);
-        dateLabel.getStyleClass().add("reservation-session-date");
-        
-        // Places disponibles
-        int placesDisponibles = session.getAvailableSeats();
-        String placesText = placesDisponibles + " places disponibles";
-        Label placesLabel = new Label(placesText);
-        placesLabel.getStyleClass().add("reservation-session-places");
-        
-        // Ajouter au conteneur
-        infoContainer.getChildren().addAll(titleLabel, dateLabel, placesLabel);
-        
-        // Créer la carte complète
-        HBox sessionCard = new HBox(15);
-        sessionCard.getStyleClass().add("reservation-session-card");
-        sessionCard.setPadding(new Insets(10));
-        sessionCard.getChildren().add(infoContainer);
-        
-        return sessionCard;
-    }
-    
-    /**
-     * Met à jour les informations sur les places disponibles
-     */
-    private void updatePlacesInfo() {
-        if (selectedSession != null) {
-            placesDisponibles.setText(selectedSession.getAvailableSeats() + " places");
+    private VBox createSessionCard(Session session) {
+        try {
+            LogUtils.info("ReservationController", "Création d'une carte pour la session: " + session.getId() + " - " + 
+                        (session.getTitre() != null ? session.getTitre() : "Sans titre"));
             
-            // Mettre à jour le spinner
-            SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = 
-                    (SpinnerValueFactory.IntegerSpinnerValueFactory) placesSpinner.getValueFactory();
-            valueFactory.setMax(Math.min(10, selectedSession.getAvailableSeats()));
+            VBox card = new VBox(10);
+            card.getStyleClass().add("reservation-session-card");
+            card.setPadding(new Insets(15));
+            card.setUserData(session);
             
-            // Désactiver le bouton si aucune place n'est disponible
-            btnConfirm.setDisable(selectedSession.getAvailableSeats() <= 0);
-        } else {
-            placesDisponibles.setText("0 place");
-            btnConfirm.setDisable(true);
+            // Titre de la session
+            Label title = new Label(session.getTitre() != null ? session.getTitre() : "Sans titre");
+            title.setFont(Font.font("System", FontWeight.BOLD, 16));
+            
+            // Date et heure
+            String formattedDateTime = "Date non définie";
+            if (session.getStartTime() != null) {
+                formattedDateTime = session.getStartTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            }
+            Label datetime = new Label("Date: " + formattedDateTime);
+            
+            // Lieu
+            Label location = new Label("Lieu: " + (session.getLocation() != null ? session.getLocation() : "Non défini"));
+            
+            // Capacité
+            int capacityValue = session.getCapacity();
+            Label capacityLabel = new Label("Places disponibles: " + capacityValue);
+            
+            // Ajouter tous les éléments à la carte
+            card.getChildren().addAll(title, datetime, location, capacityLabel);
+            
+            // Gestionnaire d'événements pour la sélection
+            card.setOnMouseClicked(e -> {
+                try {
+                    // Déselectionner toutes les autres cartes
+                    sessionsContainer.getChildren().forEach(node -> {
+                        if (node instanceof VBox) {
+                            node.getStyleClass().remove("selected");
+                        }
+                    });
+                    
+                    // Sélectionner cette carte
+                    card.getStyleClass().add("selected");
+                    
+                    // Mémoriser la session sélectionnée
+                    selectedSession = (Session) card.getUserData();
+                    
+                    // Activer le bouton de confirmation
+                    btnConfirm.setDisable(false);
+                    
+                    LogUtils.info("ReservationController", "Session sélectionnée: " + selectedSession.getId() + " - " + 
+                            (selectedSession.getTitre() != null ? selectedSession.getTitre() : "Sans titre"));
+                } catch (Exception ex) {
+                    LogUtils.error("ReservationController", "Erreur lors de la sélection de la session", ex);
+                }
+            });
+            
+            return card;
+        } catch (Exception e) {
+            LogUtils.error("ReservationController", "Erreur lors de la création de la carte pour la session " + 
+                         (session != null ? session.getId() : "null"), e);
+            
+            // Renvoyer une carte par défaut en cas d'erreur
+            VBox errorCard = new VBox(10);
+            errorCard.setPadding(new Insets(15));
+            errorCard.setStyle("-fx-background-color: #ffeeee; -fx-border-color: #ffcccc; -fx-border-width: 1;");
+            
+            Label errorLabel = new Label("Erreur: Impossible d'afficher cette session");
+            errorLabel.setTextFill(Color.RED);
+            
+            errorCard.getChildren().add(errorLabel);
+            return errorCard;
         }
     }
     
     /**
-     * Met à jour le prix total
+     * Affiche un message quand aucune session n'est disponible
      */
-    private void updateTotalPrice() {
-        if (selectedSession != null && placesSpinner.getValue() != null) {
-            double totalPrice = prix * placesSpinner.getValue();
-            prixTotal.setText(String.format("%.2f €", totalPrice));
-        } else {
-            prixTotal.setText("0.00 €");
-        }
+    private void showNoSessionsMessage() {
+        sessionsContainer.getChildren().clear();
+        
+        Label message = new Label("Aucune session disponible pour cet événement.");
+        message.setStyle("-fx-font-size: 16px; -fx-text-fill: #7f8c8d;");
+        
+        sessionsContainer.getChildren().add(message);
+        btnConfirm.setDisable(true);
     }
     
     /**
-     * Gère la validation du formulaire
-     * @return true si le formulaire est valide
+     * Gère la confirmation de la réservation
      */
-    private boolean validateForm() {
-        // Vérifier que tous les champs sont remplis
-        if (nomField.getText().isEmpty() || 
-            prenomField.getText().isEmpty() ||
-            emailField.getText().isEmpty() ||
-            telephoneField.getText().isEmpty()) {
-            showError("Formulaire incomplet", "Veuillez remplir tous les champs d'information.");
-            return false;
-        }
+    @FXML
+    private void handleConfirmation() {
+        LogUtils.info("ReservationController", "Début du processus de confirmation de réservation");
         
-        // Vérifier que l'email est valide
-        if (!emailField.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showError("Email invalide", "Veuillez entrer une adresse email valide.");
-            return false;
-        }
-        
-        // Vérifier qu'une session est sélectionnée
         if (selectedSession == null) {
-            showError("Aucune session sélectionnée", "Veuillez sélectionner une session.");
-            return false;
-        }
-        
-        // Vérifier que le nombre de places est valide
-        if (placesSpinner.getValue() <= 0 || placesSpinner.getValue() > selectedSession.getAvailableSeats()) {
-            showError("Nombre de places invalide", "Le nombre de places demandé n'est pas valide.");
-            return false;
-        }
-        
-        return true;
-    }
-    
-    /**
-     * Gère la réservation
-     */
-    private void handleReservation() {
-        if (!validateForm()) {
+            LogUtils.error("ReservationController", "Aucune session sélectionnée", null);
+            showError("Sélection requise", "Veuillez sélectionner une session");
             return;
         }
         
         try {
-            // Simuler une réservation réussie
-            Alert confirmAlert = new Alert(Alert.AlertType.INFORMATION);
-            confirmAlert.setTitle("Réservation confirmée");
-            confirmAlert.setHeaderText(null);
-            confirmAlert.setContentText("Votre réservation a été confirmée avec succès!\n\n" +
-                    "Un email de confirmation a été envoyé à " + emailField.getText());
+            int nbPlaces = Integer.parseInt(nbPlacesField.getText());
+            LogUtils.info("ReservationController", "Nombre de places demandées: " + nbPlaces);
             
-            // Appliquer le style professionnel
-            DialogPane dialogPane = confirmAlert.getDialogPane();
-            dialogPane.getStylesheets().add(getClass().getResource("/professional_style.css").toExternalForm());
-            
-            confirmAlert.showAndWait();
-            
-            // Appeler le callback si nécessaire
-            if (onReservationComplete != null) {
-                onReservationComplete.run();
+            if (nbPlaces <= 0) {
+                LogUtils.error("ReservationController", "Nombre de places invalide: " + nbPlaces, null);
+                showError("Nombre de places invalide", "Le nombre de places doit être supérieur à 0");
+                return;
             }
             
-            // Fermer la fenêtre
-            closeWindow();
+            if (nbPlaces > selectedSession.getCapacity()) {
+                LogUtils.error("ReservationController", "Capacité insuffisante. Demandé: " + nbPlaces + 
+                              ", Disponible: " + selectedSession.getCapacity(), null);
+                showError("Nombre de places insuffisant", 
+                         "Il n'y a pas assez de places disponibles pour cette session");
+                return;
+            }
+            
+            // Calculer le prix total
+            double prixUnitaire = 0.0;
+            if (event != null && event.getPrix() != null) {
+                prixUnitaire = event.getPrix();
+            }
+            double prixTotal = prixUnitaire * nbPlaces;
+            LogUtils.info("ReservationController", "Prix unitaire: " + prixUnitaire + ", Prix total: " + prixTotal);
+            
+            // Créer l'objet réservation
+            Reservation reservation = new Reservation(
+                userId,
+                event != null ? event.getId() : 0,
+                selectedSession.getId(),
+                nbPlaces
+            );
+            
+            // Définir le prix total et le statut
+            reservation.setPrixTotal(prixTotal);
+            reservation.setStatut("Confirmée");
+            
+            LogUtils.info("ReservationController", "Tentative d'ajout de réservation: " + reservation);
+            
+            try {
+                // Enregistrer la réservation
+                reservationService.add(reservation);
+                LogUtils.info("ReservationController", "Réservation ajoutée avec succès. ID: " + reservation.getId());
+                
+                // Mettre à jour la capacité de la session
+                selectedSession.setCapacity(selectedSession.getCapacity() - nbPlaces);
+                sessionService.updateSession(selectedSession);
+                LogUtils.info("ReservationController", "Capacité de la session mise à jour. Nouvelle capacité: " + 
+                             selectedSession.getCapacity());
+                
+                // Afficher une confirmation
+                showSuccess("Réservation confirmée", 
+                          "Votre réservation a été enregistrée avec succès!\n" +
+                          "Nombre de places: " + nbPlaces + "\n" +
+                          "Prix total: " + prixTotal + " €");
+                
+                // Fermer la fenêtre
+                closeWindow();
+                
+                // Appeler le callback si défini
+                if (onReservationCompleteCallback != null) {
+                    LogUtils.info("ReservationController", "Exécution du callback de fin de réservation");
+                    onReservationCompleteCallback.run();
+                }
+            } catch (SQLException ex) {
+                LogUtils.error("ReservationController", "Erreur SQL lors de la réservation", ex);
+                showError("Erreur de base de données", 
+                         "Impossible de finaliser la réservation.\nDétails: " + ex.getMessage());
+            }
+            
+        } catch (NumberFormatException e) {
+            LogUtils.error("ReservationController", "Format de nombre invalide", e);
+            showError("Entrée invalide", "Veuillez entrer un nombre valide de places");
         } catch (Exception e) {
-            showError("Erreur de réservation", "Une erreur est survenue lors de la réservation: " + e.getMessage());
+            LogUtils.error("ReservationController", "Erreur inattendue lors de la réservation", e);
+            showError("Erreur inattendue", "Une erreur s'est produite: " + e.getMessage());
         }
     }
     
     /**
-     * Ferme la fenêtre
+     * Gère l'annulation de la réservation
+     */
+    @FXML
+    private void handleCancel() {
+        closeWindow();
+    }
+    
+    /**
+     * Définit le callback à exécuter lorsque la réservation est terminée
+     */
+    public void setOnReservationComplete(Runnable callback) {
+        this.onReservationCompleteCallback = callback;
+    }
+    
+    /**
+     * Ferme la fenêtre actuelle
      */
     private void closeWindow() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
@@ -447,15 +383,31 @@ public class ReservationController implements Initializable {
     }
     
     /**
-     * Affiche une boîte de dialogue d'erreur
+     * Affiche une alerte d'erreur
      */
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(title);
         alert.setContentText(message);
         
-        // Appliquer le style professionnel
+        // Appliquer le style
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/professional_style.css").toExternalForm());
+        
+        alert.showAndWait();
+    }
+    
+    /**
+     * Affiche une alerte de succès
+     */
+    private void showSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        
+        // Appliquer le style
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/professional_style.css").toExternalForm());
         

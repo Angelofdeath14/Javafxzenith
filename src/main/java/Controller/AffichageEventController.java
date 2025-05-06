@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.List;
 
 public class AffichageEventController implements Initializable {
     @FXML private ScrollPane scrollPane;
@@ -74,6 +75,7 @@ public class AffichageEventController implements Initializable {
 
     public void loadEvents() {
         try {
+            System.out.println("Début du chargement des événements dans l'interface administrateur");
             // Vider le conteneur
             mainContainer.getChildren().clear();
             
@@ -109,43 +111,93 @@ public class AffichageEventController implements Initializable {
             });
             
             // Récupérer tous les événements
-            eventList = FXCollections.observableArrayList(evenementService.getAllEvents());
+            System.out.println("Appel au service pour récupérer tous les événements");
+            eventList = FXCollections.observableArrayList();
+            
+            try {
+                List<Evenement> events = evenementService.getAllEvents();
+                if (events == null) {
+                    System.err.println("Liste des événements renvoyée null par le service");
+                    showAlert(Alert.AlertType.WARNING, 
+                             "Avertissement", 
+                             "Aucun événement", 
+                             "Aucun événement n'a été trouvé dans la base de données.");
+                    return;
+                }
+                
+                System.out.println("Nombre d'événements récupérés: " + events.size());
+                
+                // Vérifier chaque événement pour éviter les nulls
+                for (Evenement event : events) {
+                    if (event != null) {
+                        System.out.println("Ajout de l'événement: " + event.getId() + " - " + event.getTitre());
+                        eventList.add(event);
+                    } else {
+                        System.err.println("Événement null ignoré");
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Erreur lors de la récupération des événements: " + e.getMessage());
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, 
+                         "Erreur", 
+                         "Erreur de chargement", 
+                         "Erreur lors de la récupération des événements: " + e.getMessage());
+                return;
+            }
+            
             filteredEvents = new FilteredList<>(eventList, p -> true);
             
+            // Si aucun événement n'est disponible, afficher un message et sortir
+            if (eventList.isEmpty()) {
+                System.out.println("Aucun événement à afficher");
+                Label emptyLabel = new Label("Aucun événement disponible");
+                emptyLabel.getStyleClass().add("empty-message");
+                mainContainer.getChildren().add(emptyLabel);
+                return;
+            }
+            
+            System.out.println("Création du tableau d'événements");
             // Création du tableau d'événements
             TableView<Evenement> eventsTable = new TableView<>();
-            eventsTable.setItems(eventList);
+            eventsTable.setItems(filteredEvents);
             VBox.setVgrow(eventsTable, javafx.scene.layout.Priority.ALWAYS);
             
             // Configuration des colonnes
             TableColumn<Evenement, Integer> colId = new TableColumn<>("ID");
-            colId.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("id"));
+            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
             colId.setPrefWidth(50);
             
             TableColumn<Evenement, String> colTitle = new TableColumn<>("Titre");
-            colTitle.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("titre"));
+            colTitle.setCellValueFactory(new PropertyValueFactory<>("titre"));
             colTitle.setPrefWidth(200);
             
             TableColumn<Evenement, String> colType = new TableColumn<>("Type");
-            colType.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("type"));
+            colType.setCellValueFactory(new PropertyValueFactory<>("type"));
             colType.setPrefWidth(100);
             
             TableColumn<Evenement, String> colDates = new TableColumn<>("Dates");
             colDates.setCellValueFactory(cellData -> {
                 Evenement event = cellData.getValue();
-                return new javafx.beans.property.SimpleStringProperty(
-                    event.getDateD().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " au " +
-                    event.getDateF().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                );
+                try {
+                    String dateDebut = event.getDateD() != null ? 
+                        event.getDateD().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A";
+                    String dateFin = event.getDateF() != null ? 
+                        event.getDateF().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A";
+                    return new javafx.beans.property.SimpleStringProperty(dateDebut + " au " + dateFin);
+                } catch (Exception e) {
+                    System.err.println("Erreur de formatage de date pour l'événement " + event.getId() + ": " + e.getMessage());
+                    return new javafx.beans.property.SimpleStringProperty("N/A");
+                }
             });
             colDates.setPrefWidth(150);
             
             TableColumn<Evenement, String> colLocation = new TableColumn<>("Lieu");
-            colLocation.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("location"));
+            colLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
             colLocation.setPrefWidth(120);
             
             TableColumn<Evenement, Integer> colCapacity = new TableColumn<>("Places");
-            colCapacity.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("nbPlace"));
+            colCapacity.setCellValueFactory(new PropertyValueFactory<>("nbPlace"));
             colCapacity.setPrefWidth(80);
             
             // Colonne d'actions
@@ -154,8 +206,8 @@ public class AffichageEventController implements Initializable {
             colActions.setCellFactory(param -> {
                 return new TableCell<>() {
                     private final Button viewButton = new Button("Voir");
-            private final Button editButton = new Button("Modifier");
-            private final Button deleteButton = new Button("Supprimer");
+                    private final Button editButton = new Button("Modifier");
+                    private final Button deleteButton = new Button("Supprimer");
                     private final HBox pane = new HBox(5, viewButton, editButton, deleteButton);
                     
                     {
@@ -167,21 +219,21 @@ public class AffichageEventController implements Initializable {
                             Evenement evenement = getTableView().getItems().get(getIndex());
                             goToSessions(evenement);
                         });
-
-                editButton.setOnAction(event -> {
-                    Evenement evenement = getTableView().getItems().get(getIndex());
-                    handleEdit(evenement);
-                });
-
-                deleteButton.setOnAction(event -> {
-                    Evenement evenement = getTableView().getItems().get(getIndex());
-                    handleDelete(evenement);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
+                        
+                        editButton.setOnAction(event -> {
+                            Evenement evenement = getTableView().getItems().get(getIndex());
+                            handleEdit(evenement);
+                        });
+                        
+                        deleteButton.setOnAction(event -> {
+                            Evenement evenement = getTableView().getItems().get(getIndex());
+                            handleDelete(evenement);
+                        });
+                    }
+                    
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
                         setGraphic(empty ? null : pane);
                     }
                 };
@@ -190,7 +242,11 @@ public class AffichageEventController implements Initializable {
             eventsTable.getColumns().addAll(colId, colTitle, colType, colDates, colLocation, colCapacity, colActions);
             mainContainer.getChildren().add(eventsTable);
             
+            System.out.println("Chargement des événements terminé avec succès");
+            
         } catch (Exception e) {
+            System.err.println("Erreur globale lors du chargement des événements: " + e.getMessage());
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, 
                      "Erreur", 
                      "Erreur de chargement", 

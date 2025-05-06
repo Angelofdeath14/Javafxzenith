@@ -2,27 +2,25 @@ package Controller;
 
 import Entity.Evenement;
 import Entity.Reservation;
+import Entity.Session;
+import Utils.MainStyleFixer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
-import javafx.geometry.Pos;
-import javafx.geometry.Insets;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import services.ReservationService;
 import services.EvenementService;
-import Utils.MainStyleFixer;
+import services.ReservationService;
+import services.SessionService;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,14 +29,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Contrôleur pour la gestion des réservations d'un utilisateur
+ * Permet de visualiser, modifier et annuler ses réservations
+ */
 public class MyReservationsController implements Initializable {
-    
-    @FXML private VBox reservationsContainer;
+
     @FXML private Button btnBack;
+    @FXML private VBox reservationsContainer;
+    
+    private int userId = 1; // Utilisateur simulé pour la démonstration
     
     private ReservationService reservationService;
     private EvenementService evenementService;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private SessionService sessionService;
+    
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -46,294 +52,474 @@ public class MyReservationsController implements Initializable {
             // Initialisation des services
             reservationService = new ReservationService();
             evenementService = new EvenementService();
+            sessionService = new SessionService();
+            
+            // Appliquer les styles modernes
+            setupSceneListener();
             
             // Chargement des réservations
             loadReservations();
             
         } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur de connexion", 
-                     "Impossible de se connecter à la base de données", 
-                     e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                     "Une erreur est survenue lors de l'initialisation", 
-                     e.getMessage());
+            showError("Erreur d'initialisation", "Impossible de charger les services: " + e.getMessage());
         }
     }
     
+    /**
+     * Configure un listener pour la scène pour appliquer les styles modernes
+     */
+    private void setupSceneListener() {
+        if (reservationsContainer != null) {
+            reservationsContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null) {
+                    // Appliquer les styles modernes et colorés
+                    MainStyleFixer.applyProfessionalStyle(newScene);
+                    MainStyleFixer.applyColorfulButtonsStyle(newScene);
+                    MainStyleFixer.styleButtonsByText(newScene.getRoot());
+                    
+                    // Ajouter un fond dégradé pour un meilleur aspect visuel
+                    newScene.getRoot().setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, #f5f7fa, #e4e7eb);"
+                    );
+                }
+            });
+        }
+    }
+    
+    /**
+     * Charge les réservations de l'utilisateur
+     */
     private void loadReservations() {
         try {
-            // Vider le conteneur
-            reservationsContainer.getChildren().clear();
-            
-            // Récupérer les réservations de l'utilisateur (à adapter selon votre système d'authentification)
-            int userId = 1; // ID utilisateur fictif, à remplacer par l'ID réel
+            // Récupérer les réservations de l'utilisateur
             List<Reservation> reservations = reservationService.getReservationsByUser(userId);
             
             if (reservations.isEmpty()) {
-                // Message si aucune réservation
-                Label emptyLabel = new Label("Vous n'avez aucune réservation.");
-                emptyLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #7f8c8d;");
-                
-                VBox emptyBox = new VBox(20, emptyLabel);
-                emptyBox.setAlignment(Pos.CENTER);
-                emptyBox.setPadding(new Insets(50));
-                emptyBox.setStyle("-fx-background-color: #f5f5f5; -fx-background-radius: 10;");
-                
-                reservationsContainer.getChildren().add(emptyBox);
-            } else {
-                // Titre des sections
-                Label upcomingTitle = new Label("Réservations à venir");
-                upcomingTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-                reservationsContainer.getChildren().add(upcomingTitle);
-                
-                // Parcourir les réservations et créer une carte pour chacune
-                for (Reservation reservation : reservations) {
-                    // Récupérer l'événement associé
+                showNoReservationsMessage();
+                return;
+            }
+            
+            // Vider le conteneur
+            reservationsContainer.getChildren().clear();
+            
+            // Ajouter chaque réservation
+            for (Reservation reservation : reservations) {
+                try {
+                    // Récupérer les informations associées
                     Evenement event = evenementService.getOne(reservation.getEventId());
-                    if (event != null) {
-                        VBox reservationCard = createReservationCard(reservation, event);
+                    Session session = sessionService.getOneById(reservation.getSessionId());
+                    
+                    if (event != null && session != null) {
+                        VBox reservationCard = createReservationCard(reservation, event, session);
                         reservationsContainer.getChildren().add(reservationCard);
                     }
+                } catch (Exception e) {
+                    System.err.println("Erreur lors du chargement de la réservation " + 
+                                      reservation.getId() + ": " + e.getMessage());
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                     "Impossible de charger les réservations", 
-                     e.getMessage());
+            
+        } catch (SQLException e) {
+            showError("Erreur de chargement", "Impossible de charger vos réservations: " + e.getMessage());
         }
     }
     
-    private VBox createReservationCard(Reservation reservation, Evenement event) {
-        // Création de la carte
+    /**
+     * Affiche un message quand l'utilisateur n'a pas de réservations
+     */
+    private void showNoReservationsMessage() {
+        reservationsContainer.getChildren().clear();
+        
+        VBox messageBox = new VBox(15);
+        messageBox.setAlignment(Pos.CENTER);
+        messageBox.setPadding(new Insets(50, 0, 0, 0));
+        
+        Label message = new Label("Vous n'avez pas encore de réservations.");
+        message.setStyle("-fx-font-size: 18px; -fx-text-fill: #7f8c8d;");
+        
+        Button btnExplore = new Button("Découvrir les événements");
+        btnExplore.getStyleClass().add("primary-button");
+        btnExplore.setOnAction(e -> navigateToEvents());
+        
+        messageBox.getChildren().addAll(message, btnExplore);
+        reservationsContainer.getChildren().add(messageBox);
+    }
+    
+    /**
+     * Crée une carte visuelle pour afficher une réservation
+     */
+    private VBox createReservationCard(Reservation reservation, Evenement event, Session session) {
         VBox card = new VBox(15);
+        card.getStyleClass().add("card");
+        card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10); "
+                     + "-fx-background-radius: 10; -fx-padding: 15;");
         card.setPadding(new Insets(20));
-        card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); -fx-background-radius: 10;");
         
-        // Conteneur pour l'en-tête : titre et date
-        HBox headerBox = new HBox(20);
-        headerBox.setAlignment(Pos.CENTER_LEFT);
-        
-        // Image de l'événement
-        ImageView eventImage = new ImageView();
-        eventImage.setFitWidth(80);
-        eventImage.setFitHeight(80);
-        eventImage.setPreserveRatio(true);
-        
-        // Charger l'image
-        try {
-            String imagePath = event.getImage();
-            if (imagePath != null && !imagePath.isEmpty()) {
-                File imageFile = new File(imagePath);
-                if (imageFile.exists()) {
-                    eventImage.setImage(new Image(imageFile.toURI().toString()));
-                } else {
-                    // Image par défaut
-                    URL defaultImageUrl = getClass().getResource("/images/default-session.png");
-                    if (defaultImageUrl != null) {
-                        eventImage.setImage(new Image(defaultImageUrl.toExternalForm()));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-        }
-        
-        // Appliquer un clip arrondi à l'image
-        Rectangle clip = new Rectangle(eventImage.getFitWidth(), eventImage.getFitHeight());
-        clip.setArcWidth(15);
-        clip.setArcHeight(15);
-        eventImage.setClip(clip);
-        
-        // Informations de l'événement
-        VBox eventInfoBox = new VBox(5);
-        eventInfoBox.setAlignment(Pos.CENTER_LEFT);
-        
+        // En-tête avec le titre de l'événement
         Label eventTitle = new Label(event.getTitre());
+        eventTitle.getStyleClass().add("card-title");
         eventTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         
-        Label eventDate = new Label(event.getDateD() != null ? event.getDateD().format(formatter) : "Date non spécifiée");
-        eventDate.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d;");
+        // Ajouter un effet de survol
+        card.setOnMouseEntered(e -> {
+            card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 12, 0, 0, 12); "
+                        + "-fx-background-radius: 10; -fx-padding: 15;");
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10); "
+                        + "-fx-background-radius: 10; -fx-padding: 15;");
+        });
         
-        Label eventLocation = new Label(event.getLocation() != null ? event.getLocation() : "Lieu non spécifié");
-        eventLocation.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d;");
+        // Informations sur la session
+        Label sessionInfo = new Label("Session: " + session.getTitre());
+        sessionInfo.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3498db;");
         
-        eventInfoBox.getChildren().addAll(eventTitle, eventDate, eventLocation);
+        // Date et heure
+        Label datetime = new Label("Date: " + session.getStartTime().format(dateFormatter));
+        datetime.setStyle("-fx-text-fill: #7f8c8d;");
         
-        headerBox.getChildren().addAll(eventImage, eventInfoBox);
+        // Lieu
+        Label location = new Label("Lieu: " + session.getLocation());
+        location.setStyle("-fx-text-fill: #7f8c8d;");
         
-        // Détails de la réservation
-        VBox detailsBox = new VBox(10);
-        detailsBox.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
+        // Nombre de places
+        HBox detailsBox = new HBox(30);
+        detailsBox.setAlignment(Pos.CENTER_LEFT);
         
-        Label placesLabel = new Label("Nombre de places : " + reservation.getNombrePlaces());
-        placesLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+        Label places = new Label("Places: " + reservation.getNombrePlaces());
+        places.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         
-        Label reservationDateLabel = new Label("Réservé le : " + reservation.getDateReservation().format(formatter));
-        reservationDateLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+        detailsBox.getChildren().addAll(places);
         
-        detailsBox.getChildren().addAll(placesLabel, reservationDateLabel);
+        // Statut de la réservation avec badge
+        HBox statusBox = new HBox(10);
+        statusBox.setAlignment(Pos.CENTER_LEFT);
+        
+        Label statusLabel = new Label("Statut:");
+        statusLabel.setStyle("-fx-text-fill: #7f8c8d;");
+        
+        Label statusValue = new Label(reservation.getStatut());
+        statusValue.setStyle("-fx-padding: 3 10; -fx-background-radius: 10; -fx-font-weight: bold;");
+        
+        if ("Confirmée".equals(reservation.getStatut())) {
+            statusValue.getStyleClass().add("badge-success");
+            statusValue.setStyle(statusValue.getStyle() + "-fx-background-color: #2ecc71; -fx-text-fill: white;");
+        } else if ("Annulée".equals(reservation.getStatut())) {
+            statusValue.getStyleClass().add("badge-danger");
+            statusValue.setStyle(statusValue.getStyle() + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
+        } else {
+            statusValue.getStyleClass().add("badge-warning");
+            statusValue.setStyle(statusValue.getStyle() + "-fx-background-color: #f39c12; -fx-text-fill: white;");
+        }
+        
+        statusBox.getChildren().addAll(statusLabel, statusValue);
+        
+        // Date de réservation
+        Label reservationDate = new Label("Réservé le: " + 
+                                        reservation.getDateReservation().format(dateFormatter));
+        reservationDate.setStyle("-fx-font-size: 12px; -fx-text-fill: #95a5a6;");
+        
+        // Séparateur
+        Separator separator = new Separator();
+        separator.setStyle("-fx-background-color: #ecf0f1;");
         
         // Boutons d'action
         HBox actionsBox = new HBox(10);
         actionsBox.setAlignment(Pos.CENTER_RIGHT);
         
-        Button modifyButton = new Button("Modifier");
-        modifyButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
-        modifyButton.setOnAction(e -> modifyReservation(reservation, event));
+        Button btnDetails = new Button("Détails");
+        btnDetails.getStyleClass().add("button-info");
+        btnDetails.setOnAction(e -> showEventDetails(event.getId()));
         
-        Button cancelButton = new Button("Annuler");
-        cancelButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
-        cancelButton.setOnAction(e -> cancelReservation(reservation, event));
+        Button btnModify = new Button("Modifier");
+        btnModify.getStyleClass().add("button-warning");
+        btnModify.setOnAction(e -> modifyReservation(reservation, event, session));
         
-        actionsBox.getChildren().addAll(modifyButton, cancelButton);
+        Button btnCancel = new Button("Annuler");
+        btnCancel.getStyleClass().add("button-danger");
+        btnCancel.setOnAction(e -> cancelReservation(reservation));
         
-        // Assembler tous les éléments
-        card.getChildren().addAll(headerBox, detailsBox, actionsBox);
+        // Désactiver les boutons si la réservation est déjà annulée
+        if ("Annulée".equals(reservation.getStatut())) {
+            btnModify.setDisable(true);
+            btnCancel.setDisable(true);
+        }
+        
+        actionsBox.getChildren().addAll(btnDetails, btnModify, btnCancel);
+        
+        // Ajouter tous les éléments à la carte
+        card.getChildren().addAll(
+            eventTitle, sessionInfo, datetime, location, 
+            detailsBox, statusBox, reservationDate, separator, actionsBox
+        );
         
         return card;
     }
     
-    private void modifyReservation(Reservation reservation, Evenement event) {
+    /**
+     * Ouvre la fenêtre de détails d'un événement
+     */
+    private void showEventDetails(int eventId) {
         try {
-            // Créer une boîte de dialogue pour modifier le nombre de places
-            Dialog<Integer> dialog = new Dialog<>();
-            dialog.setTitle("Modifier la réservation");
-            dialog.setHeaderText("Modifier le nombre de places pour : " + event.getTitre());
+            // Récupérer l'événement pour le passer au contrôleur
+            Evenement event = evenementService.getOne(eventId);
+            if (event == null) {
+                showError("Erreur", "Événement non trouvé");
+                return;
+            }
             
-            // Configurer les boutons
-            ButtonType saveButtonType = new ButtonType("Enregistrer", ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButtonType = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-            dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventDetails.fxml"));
+            Parent root = loader.load();
             
-            // Créer le contenu
-            VBox content = new VBox(15);
-            content.setPadding(new Insets(20));
+            EventDetailsController controller = loader.getController();
+            controller.setEvent(event);
             
-            Label placesLabel = new Label("Nombre de places :");
+            Stage stage = new Stage();
+            stage.setTitle("Détails de l'événement");
             
-            Spinner<Integer> placesSpinner = new Spinner<>(1, event.getNbPlace() + reservation.getNombrePlaces(), reservation.getNombrePlaces());
-            placesSpinner.setEditable(true);
+            Scene scene = new Scene(root);
+            MainStyleFixer.applyProfessionalStyle(scene);
             
-            content.getChildren().addAll(placesLabel, placesSpinner);
+            stage.setScene(scene);
+            stage.show();
             
-            dialog.getDialogPane().setContent(content);
-            
-            // Convertir le résultat
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == saveButtonType) {
-                    return placesSpinner.getValue();
-                }
-                return null;
-            });
-            
-            // Appliquer des styles
-            MainStyleFixer.styleProfessionalDialog(dialog.getDialogPane());
-            
-            // Afficher la boîte de dialogue et traiter le résultat
-            Optional<Integer> result = dialog.showAndWait();
-            result.ifPresent(places -> {
-                try {
-                    // Mettre à jour la réservation
-                    int difference = places - reservation.getNombrePlaces();
-                    if (difference != 0) {
-                        reservationService.updateReservation(reservation.getId(), places);
-                        
-                        // Mettre à jour le nombre de places disponibles dans l'événement
-                        event.setNbPlace(event.getNbPlace() - difference);
-                        evenementService.modifier(event);
-                        
-                        // Recharger les réservations
-                        loadReservations();
-                        
-                        // Afficher un message de confirmation
-                        showAlert(Alert.AlertType.INFORMATION, "Modification réussie", 
-                                 "Réservation modifiée", 
-                                 "Votre réservation a été modifiée avec succès.");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Erreur", 
-                             "Impossible de modifier la réservation", 
-                             e.getMessage());
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                     "Impossible de modifier la réservation", 
-                     e.getMessage());
+        } catch (IOException e) {
+            showError("Erreur", "Impossible d'afficher les détails de l'événement: " + e.getMessage());
         }
     }
     
-    private void cancelReservation(Reservation reservation, Evenement event) {
-        try {
-            // Demander confirmation
-            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmDialog.setTitle("Confirmer l'annulation");
-            confirmDialog.setHeaderText("Êtes-vous sûr de vouloir annuler cette réservation ?");
-            confirmDialog.setContentText("Cette action est irréversible.");
-            
-            // Appliquer des styles
-            MainStyleFixer.styleProfessionalDialog(confirmDialog.getDialogPane());
-            
-            Optional<ButtonType> result = confirmDialog.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Annuler la réservation
-                reservationService.deleteReservation(reservation.getId());
+    /**
+     * Permet à l'utilisateur de modifier une réservation
+     */
+    private void modifyReservation(Reservation reservation, Evenement event, Session session) {
+        // Créer une boîte de dialogue
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Modifier la réservation");
+        dialog.setHeaderText("Modifier le nombre de places");
+        
+        // Boutons
+        ButtonType confirmButtonType = new ButtonType("Modifier", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+        
+        // Créer le contenu
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20, 10, 10, 10));
+        
+        Label infoLabel = new Label("Réservation pour: " + event.getTitre());
+        infoLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
+        
+        Label sessionLabel = new Label("Session: " + session.getTitre());
+        
+        // Nombre de places
+        HBox placesBox = new HBox(10);
+        placesBox.setAlignment(Pos.CENTER_LEFT);
+        
+        Label placesLabel = new Label("Nombre de places:");
+        Spinner<Integer> placesSpinner = new Spinner<>(1, 
+                                                      session.getCapacity() + reservation.getNombrePlaces(), 
+                                                      reservation.getNombrePlaces());
+        placesSpinner.setEditable(true);
+        placesSpinner.setPrefWidth(100);
+        
+        placesBox.getChildren().addAll(placesLabel, placesSpinner);
+        
+        placesSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
+            // Suppression de la mise à jour du prix total
+        });
+        
+        content.getChildren().addAll(infoLabel, sessionLabel, placesBox);
+        dialog.getDialogPane().setContent(content);
+        
+        // Convertir le résultat
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == confirmButtonType) {
+                return placesSpinner.getValue();
+            }
+            return null;
+        });
+        
+        // Appliquer le style
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(
+            getClass().getResource("/professional_style.css").toExternalForm()
+        );
+        
+        // Afficher la boîte de dialogue
+        Optional<Integer> result = dialog.showAndWait();
+        
+        result.ifPresent(newPlacesCount -> {
+            try {
+                // Si le nombre a changé
+                if (newPlacesCount != reservation.getNombrePlaces()) {
+                    int difference = newPlacesCount - reservation.getNombrePlaces();
+                    
+                    // Mettre à jour la réservation
+                    reservation.setNombrePlaces(newPlacesCount);
+                    reservationService.update(reservation);
+                    
+                    // Mettre à jour la capacité de la session
+                    session.setCapacity(session.getCapacity() - difference);
+                    sessionService.updateSession(session);
+                    
+                    // Recharger les réservations
+                    loadReservations();
+                    
+                    showSuccess("Réservation modifiée", 
+                              "Votre réservation a été modifiée avec succès!");
+                }
+            } catch (SQLException e) {
+                showError("Erreur", "Impossible de modifier la réservation: " + e.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Permet à l'utilisateur d'annuler une réservation
+     */
+    private void cancelReservation(Reservation reservation) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Annuler la réservation");
+        alert.setHeaderText("Êtes-vous sûr de vouloir annuler cette réservation?");
+        alert.setContentText("Cette action ne peut pas être annulée.");
+        
+        // Appliquer le style
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+            getClass().getResource("/professional_style.css").toExternalForm()
+        );
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Récupérer la session
+                Session session = sessionService.getOneById(reservation.getSessionId());
                 
-                // Mettre à jour le nombre de places disponibles dans l'événement
-                event.setNbPlace(event.getNbPlace() + reservation.getNombrePlaces());
-                evenementService.modifier(event);
+                // Mettre à jour le statut de la réservation
+                reservation.setStatut("Annulée");
+                reservationService.update(reservation);
+                
+                // Remettre les places dans la capacité de la session
+                if (session != null) {
+                    session.setCapacity(session.getCapacity() + reservation.getNombrePlaces());
+                    sessionService.updateSession(session);
+                }
                 
                 // Recharger les réservations
                 loadReservations();
                 
-                // Afficher un message de confirmation
-                showAlert(Alert.AlertType.INFORMATION, "Annulation réussie", 
-                         "Réservation annulée", 
-                         "Votre réservation a été annulée avec succès.");
+                showSuccess("Réservation annulée", 
+                          "Votre réservation a été annulée avec succès!");
+                
+            } catch (SQLException e) {
+                showError("Erreur", "Impossible d'annuler la réservation: " + e.getMessage());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                     "Impossible d'annuler la réservation", 
-                     e.getMessage());
         }
     }
     
+    /**
+     * Retourne à la vue des événements
+     */
     @FXML
     private void handleBack() {
         try {
-            // Recharger l'interface utilisateur principale
+            // Charger l'interface utilisateur principale
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserInterface.fxml"));
             Parent root = loader.load();
             
-            Stage stage = (Stage) btnBack.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            UserInterfaceController controller = loader.getController();
             
-            // Appliquer le style professionnel
-            MainStyleFixer.applyProfessionalStyle(scene);
-        } catch (IOException e) {
+            // Obtenir la scène actuelle
+            Scene scene = reservationsContainer.getScene();
+            if (scene != null) {
+                // Appliquer le style moderne
+                Utils.MainStyleFixer.applyModernDesign(scene);
+                
+                // Mettre à jour la scène avec la nouvelle vue
+                scene.setRoot(root);
+                
+                // Charger automatiquement la vue des événements
+                controller.showEvents();
+                
+                System.out.println("Retour à l'interface principale réussi");
+            } else {
+                System.err.println("Erreur: Impossible de récupérer la scène");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Erreur lors du retour à l'interface principale: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                     "Impossible de retourner à l'écran principal", 
-                     e.getMessage());
+            showError("Erreur de navigation", "Impossible de revenir à l'écran d'accueil: " + e.getMessage());
         }
     }
     
-    private void showAlert(Alert.AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+    /**
+     * Navigue vers la vue des événements
+     */
+    private void navigateToEvents() {
+        try {
+            // Charger l'interface utilisateur principale
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserInterface.fxml"));
+            Parent root = loader.load();
+            
+            UserInterfaceController controller = loader.getController();
+            
+            // Obtenir la scène actuelle
+            Scene scene = reservationsContainer.getScene();
+            if (scene != null) {
+                // Appliquer le style moderne
+                Utils.MainStyleFixer.applyModernDesign(scene);
+                
+                // Mettre à jour la scène avec la nouvelle vue
+                scene.setRoot(root);
+                
+                // Charger automatiquement la vue des événements
+                controller.showEvents();
+                
+                System.out.println("Navigation vers les événements réussie");
+            } else {
+                System.err.println("Erreur: Impossible de récupérer la scène");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la navigation vers les événements: " + e.getMessage());
+            e.printStackTrace();
+            showError("Erreur de navigation", "Impossible de naviguer vers les événements: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Affiche une alerte d'erreur
+     */
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(title);
+        alert.setContentText(message);
         
-        // Appliquer le style professionnel à l'alerte
-        MainStyleFixer.styleProfessionalDialog(alert.getDialogPane());
+        // Appliquer le style
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+            getClass().getResource("/professional_style.css").toExternalForm()
+        );
+        
+        alert.showAndWait();
+    }
+    
+    /**
+     * Affiche une alerte de succès
+     */
+    private void showSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        
+        // Appliquer le style
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+            getClass().getResource("/professional_style.css").toExternalForm()
+        );
         
         alert.showAndWait();
     }

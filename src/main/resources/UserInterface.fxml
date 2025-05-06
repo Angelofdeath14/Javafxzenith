@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -11,17 +13,22 @@
 
     <!-- Menu latéral -->
     <left>
-        <VBox spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
-            <Button text="Événements" 
-                    style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-min-width: 150;"
-                    onAction="#showEvents"/>
-            <Button text="Mes Réservations" 
-                    style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-min-width: 150;"
-                    onAction="#showReservations"/>
-            <Separator style="-fx-background-color: #455a64;"/>
-            <Button text="Administration" 
-                    style="-fx-background-color: #3f51b5; -fx-text-fill: white; -fx-min-width: 150;"
-                    onAction="#goToAdministration"/>
+        <VBox spacing="15" style="-fx-background-color: #2c3e50; -fx-padding: 25;">
+            <Label text="Artphoria" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 20 0;"/>
+            
+            <Button text="Événements" styleClass="menu-button, button-primary" onAction="#showEvents">
+                <graphic>
+                    <Label text="🎭" style="-fx-font-size: 18px;"/>
+                </graphic>
+            </Button>
+            
+            <Separator/>
+            
+            <Button text="Administration" styleClass="menu-button, button-warning" onAction="#showAdmin">
+                <graphic>
+                    <Label text="⚙️" style="-fx-font-size: 18px;"/>
+                </graphic>
+            </Button>
         </VBox>
     </left>
 

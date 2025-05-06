@@ -30,7 +30,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.text.Text;
+import javafx.scene.text.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import services.EvenementService;
@@ -42,9 +42,13 @@ import javafx.geometry.Pos;
 import Utils.MainStyleFixer;
 import Utils.AnimationUtils;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.layout.BorderPane;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Dialog;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +71,7 @@ public class FrontEventsController implements Initializable {
     @FXML private ComboBox<String> filterTypeComboBox;
     @FXML private ComboBox<String> filterDate;
     @FXML private Button btnBack;
-    @FXML private Button btnMyReservations;
+    @FXML private Button btnAdmin;
     
     private EvenementService evenementService;
     private SessionService sessionService;
@@ -101,11 +105,17 @@ public class FrontEventsController implements Initializable {
             
             // Configuration du bouton retour
             if (btnBack != null) {
-            btnBack.setOnAction(event -> handleBack());
+                btnBack.setOnAction(event -> handleBack());
                 // Appliquer un style spécial au bouton retour
-                btnBack.getStyleClass().add("neutral");
+                btnBack.getStyleClass().add("button-neutral");
                 // Ajouter un effet de clic
                 AnimationUtils.addClickEffect(btnBack);
+            }
+            
+            // Styliser le bouton d'administration
+            if (btnAdmin != null) {
+                btnAdmin.getStyleClass().add("button-info");
+                AnimationUtils.addClickEffect(btnAdmin);
             }
             
             // Appliquer le style professionnel à la scène après son chargement
@@ -128,19 +138,43 @@ public class FrontEventsController implements Initializable {
         if (eventsContainer != null) {
             eventsContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
                 if (newScene != null) {
+                    // Appliquer les styles modernes et colorés
                     MainStyleFixer.applyProfessionalStyle(newScene);
+                    MainStyleFixer.applyColorfulButtonsStyle(newScene);
+                    MainStyleFixer.styleButtonsByText(newScene.getRoot());
+                    
+                    // Ajouter un fond dégradé pour un meilleur aspect visuel
+                    newScene.getRoot().setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, #f5f7fa, #e4e7eb);"
+                    );
                 }
             });
         } else if (thisWeekEventsContainer != null) {
             thisWeekEventsContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
                 if (newScene != null) {
+                    // Appliquer les styles modernes et colorés
                     MainStyleFixer.applyProfessionalStyle(newScene);
+                    MainStyleFixer.applyColorfulButtonsStyle(newScene);
+                    MainStyleFixer.styleButtonsByText(newScene.getRoot());
+                    
+                    // Ajouter un fond dégradé pour un meilleur aspect visuel
+                    newScene.getRoot().setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, #f5f7fa, #e4e7eb);"
+                    );
                 }
             });
         } else if (upcomingEventsContainer != null) {
             upcomingEventsContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
                 if (newScene != null) {
+                    // Appliquer les styles modernes et colorés
                     MainStyleFixer.applyProfessionalStyle(newScene);
+                    MainStyleFixer.applyColorfulButtonsStyle(newScene);
+                    MainStyleFixer.styleButtonsByText(newScene.getRoot());
+                    
+                    // Ajouter un fond dégradé pour un meilleur aspect visuel
+                    newScene.getRoot().setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, #f5f7fa, #e4e7eb);"
+                    );
                 }
             });
         }
@@ -188,20 +222,44 @@ public class FrontEventsController implements Initializable {
             
             // Vérifier si les services sont initialisés
             if (evenementService == null) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Service non initialisé", 
-                         "Le service d'événements n'est pas initialisé");
-                return;
+                System.err.println("ERREUR: Le service d'événements n'est pas initialisé");
+                evenementService = new EvenementService();
+                System.out.println("Service d'événements initialisé avec succès");
             }
             
             // Récupérer les événements
             List<Evenement> events = evenementService.getAllEvents();
+            System.out.println("Événements récupérés: " + events.size() + " événements");
             
-            // Vider et remplir les conteneurs qui existent
-            populateEventsContainer(events);
-            populateThisWeekEventsContainer(events);
-            populateUpcomingEventsContainer(events);
+            // Afficher les détails des événements pour le débogage
+            for (Evenement event : events) {
+                System.out.println("- Événement ID: " + event.getId() + ", Titre: " + event.getTitre() + 
+                                  ", Type: " + event.getType() + ", Date: " + event.getDateD());
+            }
             
-            System.out.println("Événements chargés avec succès: " + events.size() + " événements");
+            // Vérifier si les conteneurs existent
+            if (eventsContainer == null) {
+                System.err.println("ERREUR: eventsContainer est null");
+            } else {
+                System.out.println("eventsContainer est disponible");
+                populateEventsContainer(events);
+            }
+            
+            if (thisWeekEventsContainer == null) {
+                System.err.println("ERREUR: thisWeekEventsContainer est null");
+            } else {
+                System.out.println("thisWeekEventsContainer est disponible");
+                populateThisWeekEventsContainer(events);
+            }
+            
+            if (upcomingEventsContainer == null) {
+                System.err.println("ERREUR: upcomingEventsContainer est null");
+            } else {
+                System.out.println("upcomingEventsContainer est disponible");
+                populateUpcomingEventsContainer(events);
+            }
+            
+            System.out.println("Événements chargés avec succès");
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement des événements: " + e.getMessage());
             e.printStackTrace();
@@ -246,20 +304,6 @@ public class FrontEventsController implements Initializable {
         }
         
         thisWeekEventsContainer.getChildren().clear();
-        
-        // Ajouter un titre de section
-        VBox headerBox = new VBox(5);
-        headerBox.setPrefWidth(thisWeekEventsContainer.getPrefWidth());
-        headerBox.setStyle("-fx-padding: 10 0 20 10; -fx-background-color: #f5f6fa; -fx-background-radius: 10 10 0 0;");
-        
-        Label sectionTitle = new Label("Cette semaine");
-        sectionTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-        
-        Label sectionSubtitle = new Label("Les événements qui ont lieu cette semaine");
-        sectionSubtitle.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d;");
-        
-        headerBox.getChildren().addAll(sectionTitle, sectionSubtitle);
-        thisWeekEventsContainer.getChildren().add(headerBox);
         
         // Filtrer les événements de cette semaine
         LocalDateTime now = LocalDateTime.now();
@@ -352,287 +396,256 @@ public class FrontEventsController implements Initializable {
     
     // Créer une carte d'événement avec des émojis au lieu d'images
     private VBox createEventCard(Evenement event) {
-        VBox card = new VBox(10);
-        card.getStyleClass().add("event-card");
-        card.setPadding(new Insets(15));
-        card.setPrefWidth(270);
-        card.setCursor(javafx.scene.Cursor.HAND);
-        card.setStyle("-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);");
-        
-        // Ajouter un effet de survol amélioré
-        card.setOnMouseEntered(e -> {
-            card.setStyle("-fx-background-color: #f8f9fa; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 15, 0, 0, 0); -fx-border-color: #dce1e6; -fx-border-width: 1;");
-        });
-        
-        card.setOnMouseExited(e -> {
-            card.setStyle("-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);");
-        });
-        
-        // Ajouter une action de clic
-        card.setOnMouseClicked(e -> {
-            showEventDetails(event);
-        });
-        
-        // Conteneur pour l'image avec badge de statut
-        StackPane imageContainer = new StackPane();
-        imageContainer.setMinHeight(150);
-        
-        // Rectangle coloré comme fond avec bords arrondis
-        Rectangle background = new Rectangle(270, 150);
-        background.setArcWidth(15);
-        background.setArcHeight(15);
-        
-        // Choisir une couleur en fonction du type d'événement pour le fond
-        String eventType = event.getType() != null ? event.getType().toLowerCase() : "";
-        switch (eventType) {
-            case "concert":
-                background.setFill(Color.web("#3498db", 0.2));
-                break;
-            case "théâtre":
-                background.setFill(Color.web("#e74c3c", 0.2));
-                break;
-            case "exposition":
-                background.setFill(Color.web("#2ecc71", 0.2));
-                break;
-            case "sport":
-                background.setFill(Color.web("#f39c12", 0.2));
-                break;
-            default:
-                background.setFill(Color.web("#9b59b6", 0.2));
-                break;
-        }
-        
-        // Création de l'ImageView pour afficher l'image de l'événement
-            ImageView imageView = new ImageView();
-        imageView.setFitWidth(270);
-        imageView.setFitHeight(150);
-        imageView.setPreserveRatio(true);
-        imageView.getStyleClass().add("event-image");
-        
-        // Vérification et chargement de l'image de l'événement
-        String imagePath = event.getImage();
         try {
-            if (imagePath != null && !imagePath.isEmpty()) {
-                // Vérifier si l'image est une URL ou un chemin local
-                if (imagePath.toLowerCase().startsWith("http")) {
-                    // Image à partir d'une URL
-                    Image image = new Image(imagePath, true);
-                        imageView.setImage(image);
-                } else {
-                    // Image locale - vérifier d'abord si c'est un chemin complet
-                    File imageFile = new File(imagePath);
-                    if (imageFile.exists()) {
-                        Image image = new Image(imageFile.toURI().toString());
+            System.out.println("Création de la carte pour l'événement: " + event.getTitre());
+            
+            // Créer la carte d'événement avec de nouveaux styles modernes et encadrement
+            VBox card = new VBox(10);
+            card.getStyleClass().add("card");
+            card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10); "
+                         + "-fx-background-radius: 10; -fx-padding: 15; -fx-pref-width: 260; -fx-pref-height: 320; "
+                         + "-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 10;");
+            
+            // Ajouter un effet de survol avec bordure colorée
+            card.setOnMouseEntered(e -> {
+                card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 15); "
+                             + "-fx-background-radius: 10; -fx-padding: 15; -fx-pref-width: 260; -fx-pref-height: 320; "
+                             + "-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 10;");
+            });
+            
+            card.setOnMouseExited(e -> {
+                card.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10); "
+                             + "-fx-background-radius: 10; -fx-padding: 15; -fx-pref-width: 260; -fx-pref-height: 320; "
+                             + "-fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 10;");
+            });
+            
+            // Image de l'événement avec des coins plus arrondis
+            ImageView imageView = new ImageView();
+            imageView.setFitWidth(230);
+            imageView.setFitHeight(130);
+            
+            try {
+                String imagePath = event.getImage();
+                if (imagePath != null && !imagePath.isEmpty()) {
+                    // Essayer d'abord comme chemin absolu
+                    File file = new File(imagePath);
+                    if (file.exists()) {
+                        Image image = new Image(file.toURI().toString());
                         imageView.setImage(image);
                     } else {
-                        // Essayer avec le chemin relatif dans le dossier de l'application
-                        File relativeFile = new File("src/main/resources/images/" + imagePath);
-                        if (relativeFile.exists()) {
-                            Image image = new Image(relativeFile.toURI().toString());
+                        // Essayer dans le répertoire d'images de XAMPP
+                        String uploadDir = "C:\\xampp\\htdocs\\imageP\\";
+                        File uploadedImage = new File(uploadDir + imagePath);
+                        System.out.println("Tentative de chargement de l'image: " + uploadedImage.getAbsolutePath());
+                        
+                        if (uploadedImage.exists()) {
+                            Image image = new Image(uploadedImage.toURI().toString());
                             imageView.setImage(image);
+                            System.out.println("✅ Image chargée avec succès depuis le répertoire XAMPP");
                         } else {
-                            // Essayer de charger à partir du dossier d'images configuré
-                            String uploadDir = "C:\\xampp\\htdocs\\imageP\\";
-                            File uploadedImage = new File(uploadDir + imagePath);
-                            if (uploadedImage.exists()) {
-                                Image image = new Image(uploadedImage.toURI().toString());
-                                imageView.setImage(image);
-                            } else {
-                                // Essayer le chemin en ressource directe
-                                String resourcePath = "/images/" + imagePath;
-                                URL resourceUrl = getClass().getResource(resourcePath);
-                                if (resourceUrl != null) {
-                                    Image image = new Image(resourceUrl.toExternalForm());
-                                    imageView.setImage(image);
-                                } else {
-                                    // Utiliser l'image par défaut si le fichier n'existe pas
-                                    URL defaultUrl = getClass().getResource("/images/default-session.png");
-                                    if (defaultUrl != null) {
-                                        Image defaultImage = new Image(defaultUrl.toExternalForm());
-                                        imageView.setImage(defaultImage);
-                                    } else {
-                                        System.err.println("Image par défaut introuvable: /images/default-session.png");
-                                    }
-                                }
-                            }
+                            // Couleur rose par défaut si le fichier n'existe pas
+                            System.out.println("❌ Image non trouvée: " + uploadedImage.getAbsolutePath());
+                            createDefaultPinkBackground(imageView);
                         }
                     }
-                }
-            } else {
-                // Utiliser l'image par défaut si aucune image n'est spécifiée
-                URL defaultUrl = getClass().getResource("/images/default-session.png");
-                if (defaultUrl != null) {
-                    Image defaultImage = new Image(defaultUrl.toExternalForm());
-                    imageView.setImage(defaultImage);
                 } else {
-                    System.err.println("Image par défaut introuvable: /images/default-session.png");
+                    // Couleur rose par défaut si pas de chemin spécifié
+                    createDefaultPinkBackground(imageView);
                 }
-                    }
-                } catch (Exception e) {
-            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
-                    e.printStackTrace();
-            // Fallback à l'emoji en cas d'erreur avec l'image
-            String emoji;
-            switch (eventType) {
-                case "concert":
-                    emoji = "🎵";
-                    break;
-                case "théâtre":
-                    emoji = "🎭";
-                    break;
-                case "exposition":
-                    emoji = "🖼️";
-                    break;
-                case "sport":
-                    emoji = "⚽";
-                    break;
-                default:
-                    emoji = "🎪";
-                    break;
+            } catch (Exception e) {
+                System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+                // Utiliser un fond rose en cas d'erreur
+                createDefaultPinkBackground(imageView);
             }
             
-            Label emojiLabel = new Label(emoji);
-            emojiLabel.setStyle("-fx-font-size: 48px;");
-            imageContainer.getChildren().add(emojiLabel);
-        }
-        
-        // Ajouter un effet d'arrondissement aux images
-        Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
-        clip.setArcWidth(15);
-        clip.setArcHeight(15);
-        imageView.setClip(clip);
-        
-        // Badge de statut avec couleurs plus vives et bords arrondis
-        Label statusBadge = new Label();
-        statusBadge.setTextFill(Color.WHITE);
-        statusBadge.setPadding(new Insets(5, 10, 5, 10));
-        statusBadge.setFont(Font.font("System", FontWeight.BOLD, 12));
-        statusBadge.setStyle("-fx-background-radius: 20; -fx-padding: 5 10;");
-        
-        if (event.getNbPlace() <= 0) {
-            statusBadge.setText("COMPLET");
-            statusBadge.setStyle("-fx-background-color: #e74c3c; -fx-background-radius: 20; -fx-padding: 5 10;");
-        } else if (event.getNbPlace() < 5) {
-            statusBadge.setText("DERNIÈRES PLACES");
-            statusBadge.setStyle("-fx-background-color: #f39c12; -fx-background-radius: 20; -fx-padding: 5 10;");
-        } else {
-            statusBadge.setText(event.getNbPlace() + " PLACES");
-            statusBadge.setStyle("-fx-background-color: #2ecc71; -fx-background-radius: 20; -fx-padding: 5 10;");
-        }
-        
-        // Positionnement du badge
-        StackPane.setAlignment(statusBadge, Pos.TOP_RIGHT);
-        StackPane.setMargin(statusBadge, new Insets(10));
-        
-        imageContainer.getChildren().addAll(background, imageView, statusBadge);
-        
-        // Titre de l'événement
-        Label titleLabel = new Label(event.getTitre() != null ? event.getTitre() : "Événement sans titre");
-        titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+            // Coin arrondis pour l'image
+            Rectangle clip = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+            clip.setArcWidth(15);
+            clip.setArcHeight(15);
+            imageView.setClip(clip);
+            imageView.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 0);");
+            
+            // Titre avec style moderne
+            Label titleLabel = new Label(event.getTitre());
+            titleLabel.getStyleClass().add("card-title");
+            titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
             titleLabel.setWrapText(true);
             
-        // Lieu de l'événement avec icône
-        HBox locationBox = new HBox(5);
-        locationBox.setAlignment(Pos.CENTER_LEFT);
-        
-        Label locationIcon = new Label("📍");
-        Label locationText = new Label(event.getLocation() != null ? event.getLocation() : "Lieu non spécifié");
-        locationText.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
-        
-        locationBox.getChildren().addAll(locationIcon, locationText);
-        
-        // Date de l'événement avec icône
-        HBox dateBox = new HBox(5);
-        dateBox.setAlignment(Pos.CENTER_LEFT);
-        
-        Label dateIcon = new Label("📅");
-        
-        String dateText = "Date non spécifiée";
-        if (event.getDateD() != null) {
-            if (event.getDateF() != null && !event.getDateD().equals(event.getDateF())) {
-                dateText = event.getDateD().format(formatter) + " au " + event.getDateF().format(formatter);
-            } else {
-                dateText = event.getDateD().format(formatter);
-            }
-        }
-        
-        Label dateLabel = new Label(dateText);
-        dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
-        
-        dateBox.getChildren().addAll(dateIcon, dateLabel);
-        
-        // Affichage du prix avec icône
-        HBox priceBox = new HBox(5);
-        priceBox.setAlignment(Pos.CENTER_LEFT);
-        
-        Label priceIcon = new Label("💰");
-        double prix = event.getPrix() != null ? event.getPrix() : 0.0;
-        Label priceLabel = new Label(String.format("%.2f DT", prix));
-        priceLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
-        
-        priceBox.getChildren().addAll(priceIcon, priceLabel);
-        
-        // Système d'étoiles basé sur le nombre de réservations
-        HBox starsBox = new HBox(15);
-        starsBox.setAlignment(Pos.CENTER_LEFT);
-        
-        // Icône d'étoile
-        Label starsIcon = new Label("⭐");
-        starsIcon.setStyle("-fx-font-size: 18px;");
-        
-        // Calculer le nombre d'étoiles et générer la chaîne
-        int nbEtoiles = calculerEtoiles(event);
-        String chaineEtoiles = genererChaineEtoiles(nbEtoiles);
-        
-        // Libellé pour les étoiles
-        Label starsLabel = new Label(chaineEtoiles);
-        starsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f39c12;");
-        
-        // Note en texte
-        Label ratingLabel = new Label(nbEtoiles + "/5");
-        ratingLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d; -fx-padding: 0 0 0 10;");
-        
-        starsBox.getChildren().addAll(starsIcon, starsLabel, ratingLabel);
-        
-        // Séparateur
-        Separator separator = new Separator();
-        separator.setOpacity(0.3);
+            // Badge pour le type d'événement
+            Label typeLabel = new Label(event.getType());
+            typeLabel.getStyleClass().addAll("badge", "badge-primary");
+            typeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #3498db; -fx-padding: 3 8; -fx-background-radius: 10;");
             
-            // Boutons d'action
-        HBox actionButtons = new HBox(10);
-        actionButtons.setAlignment(Pos.CENTER);
+            // Système d'étoiles (rating)
+            int nbEtoiles = calculerEtoiles(event);
+            Label ratingLabel = new Label(genererChaineEtoiles(nbEtoiles));
+            ratingLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #f39c12;"); // Couleur jaune-orange pour les étoiles
+            
+            // Date avec icône améliorée et colorée
+            HBox dateBox = new HBox(5);
+            dateBox.setAlignment(Pos.CENTER_LEFT);
+            Label dateIcon = new Label("📅");
+            dateIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #3498db;"); // Couleur bleue pour l'icône calendrier
+            Label dateLabel = new Label(event.getDateD() != null ? event.getDateD().format(formatter) : "Date non définie");
+            dateLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
+            dateBox.getChildren().addAll(dateIcon, dateLabel);
+            
+            // Lieu avec icône améliorée et colorée
+            HBox locationBox = new HBox(5);
+            locationBox.setAlignment(Pos.CENTER_LEFT);
+            Label locationIcon = new Label("📍");
+            locationIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #e74c3c;"); // Couleur rouge pour l'icône localisation
+            Label locationLabel = new Label(event.getLocation());
+            locationLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
+            locationBox.getChildren().addAll(locationIcon, locationLabel);
+            
+            // Places disponibles avec style conditionnelle et icône colorée
+            HBox capacityBox = new HBox(5);
+            capacityBox.setAlignment(Pos.CENTER_LEFT);
+            Label capacityIcon = new Label("👥");
+            capacityIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #9b59b6;"); // Couleur violette pour l'icône participants
+            
+            Label capacityLabel = new Label("Places: " + event.getNbPlace());
+            
+            // Couleur du texte selon disponibilité
+            if (event.getNbPlace() <= 0) {
+                capacityLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;"); // Rouge
+            } else if (event.getNbPlace() < 5) {
+                capacityLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #f39c12; -fx-font-weight: bold;"); // Orange
+            } else {
+                capacityLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #2ecc71; -fx-font-weight: bold;"); // Vert
+            }
+            
+            capacityBox.getChildren().addAll(capacityIcon, capacityLabel);
+            
+            // Description courte avec style amélioré
+            Label descriptionLabel = new Label();
+            String shortDesc = event.getDescription();
+            if (shortDesc != null && shortDesc.length() > 100) {
+                shortDesc = shortDesc.substring(0, 97) + "...";
+            }
+            descriptionLabel.setText(shortDesc != null ? shortDesc : "Aucune description");
+            descriptionLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-padding: 5 0;");
+            descriptionLabel.setWrapText(true);
+            
+            // Boutons d'action avec classes de style moderne
+            HBox actionButtons = new HBox(10);
+            actionButtons.setAlignment(Pos.CENTER);
+            actionButtons.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
+            
+            Button detailsButton = new Button("Détails");
+            detailsButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;");
+            detailsButton.setOnAction(e -> showEventDetails(event));
+            
+            Button sessionsButton = new Button("Sessions");
+            sessionsButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;");
+            sessionsButton.setOnAction(e -> showSessionsModal(event));
             
             Button reserveButton = new Button("Réserver");
-        reserveButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;");
-        reserveButton.setPrefWidth(120);
-        
-        Button detailsButton = new Button("Détails");
-        detailsButton.setStyle("-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;");
-        detailsButton.setPrefWidth(120);
-        
-        // Ajouter les actions aux boutons
-        reserveButton.setOnAction(e -> {
-            showReservationDialog(event);
-            e.consume();
-        });
-        
-        detailsButton.setOnAction(e -> {
-            showEventDetails(event);
-            e.consume();
-        });
-        
-        // Désactiver le bouton de réservation si l'événement est complet
-        if (event.getNbPlace() <= 0) {
-            reserveButton.setDisable(true);
-            reserveButton.setStyle("-fx-background-color: #bdc3c7; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;");
-        }
-        
-        actionButtons.getChildren().addAll(detailsButton, reserveButton);
-        
-        // Ajouter tous les éléments à la carte
-        card.getChildren().addAll(imageContainer, titleLabel, locationBox, dateBox, priceBox, starsBox, separator, actionButtons);
+            reserveButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;");
+            reserveButton.setOnAction(e -> showReservationDialog(event));
             
+            // Désactiver le bouton réserver si l'événement est complet
+            if (event.getNbPlace() <= 0) {
+                reserveButton.setDisable(true);
+                reserveButton.setText("Complet");
+                reserveButton.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 8 15;");
+            }
+            
+            // Ajouter des effets de survol
+            detailsButton.setOnMouseEntered(e -> detailsButton.setStyle("-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-padding: 8 15; -fx-translate-y: -1;"));
+            detailsButton.setOnMouseExited(e -> detailsButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;"));
+            
+            sessionsButton.setOnMouseEntered(e -> sessionsButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-padding: 8 15; -fx-translate-y: -1;"));
+            sessionsButton.setOnMouseExited(e -> sessionsButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;"));
+            
+            if (event.getNbPlace() > 0) {
+                reserveButton.setOnMouseEntered(e -> reserveButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-padding: 8 15; -fx-translate-y: -1;"));
+                reserveButton.setOnMouseExited(e -> reserveButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;"));
+            }
+            
+            // Ajouter effets de clic
+            AnimationUtils.addClickEffect(detailsButton);
+            AnimationUtils.addClickEffect(sessionsButton);
+            AnimationUtils.addClickEffect(reserveButton);
+            
+            actionButtons.getChildren().addAll(detailsButton, sessionsButton, reserveButton);
+            
+            // Ajouter tous les éléments à la carte
+            card.getChildren().addAll(
+                imageView,
+                titleLabel,
+                typeLabel,
+                ratingLabel, // Ajout de la note avec étoiles
+                dateBox,
+                locationBox,
+                capacityBox,
+                descriptionLabel,
+                actionButtons
+            );
+            
+            System.out.println("Carte créée avec succès pour: " + event.getTitre());
             return card;
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la création de la carte d'événement: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Créer une carte d'erreur avec style
+            VBox errorCard = new VBox(10);
+            errorCard.getStyleClass().addAll("card", "border-danger");
+            errorCard.setStyle("-fx-background-color: #ffeeee; -fx-padding: 15; -fx-border-color: #e74c3c; -fx-border-width: 1; -fx-border-radius: 5;");
+            
+            Label errorIcon = new Label("⚠️");
+            errorIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: #e74c3c;");
+            
+            Label errorLabel = new Label("Erreur: Impossible d'afficher l'événement");
+            errorLabel.getStyleClass().add("text-danger");
+            
+            errorCard.getChildren().addAll(errorIcon, errorLabel);
+            errorCard.setAlignment(Pos.CENTER);
+            
+            return errorCard;
+        }
+    }
+    
+    /**
+     * Crée un fond rose par défaut pour une ImageView quand aucune image n'est disponible
+     * @param imageView L'ImageView à modifier
+     */
+    private void createDefaultPinkBackground(ImageView imageView) {
+        // Créer un canvas de la taille de l'ImageView
+        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(
+            imageView.getFitWidth(), imageView.getFitHeight());
+        
+        // Obtenir le contexte graphique
+        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+        
+        // Remplir avec un dégradé rose
+        javafx.scene.paint.LinearGradient gradient = new javafx.scene.paint.LinearGradient(
+            0, 0, 1, 1, true, javafx.scene.paint.CycleMethod.NO_CYCLE,
+            new javafx.scene.paint.Stop(0, javafx.scene.paint.Color.rgb(255, 182, 193, 1.0)),  // Rose clair
+            new javafx.scene.paint.Stop(1, javafx.scene.paint.Color.rgb(219, 112, 147, 1.0))   // Rose foncé
+        );
+        
+        gc.setFill(gradient);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        
+        // Ajouter un texte centré
+        gc.setFill(javafx.scene.paint.Color.WHITE);
+        gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
+        // Au lieu d'utiliser VPos.CENTER, centrer manuellement le texte verticalement
+        double textHeight = 16; // Hauteur approximative du texte (taille de police)
+        double yPosition = canvas.getHeight() / 2 + textHeight / 4; // Position Y ajustée pour centrer verticalement
+        gc.setFont(new javafx.scene.text.Font("Arial", 16));
+        gc.fillText("Pas d'image disponible", canvas.getWidth() / 2, yPosition);
+        
+        // Convertir le canvas en image
+        javafx.scene.image.WritableImage writableImage = 
+            new javafx.scene.image.WritableImage((int)canvas.getWidth(), (int)canvas.getHeight());
+        canvas.snapshot(null, writableImage);
+        
+        // Définir l'image sur l'ImageView
+        imageView.setImage(writableImage);
     }
     
     private void filterEvents() {
@@ -725,10 +738,10 @@ public class FrontEventsController implements Initializable {
         try {
             System.out.println("Affichage des sessions pour l'événement " + event.getId());
             
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GestionSessions.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontSessions.fxml"));
             Parent root = loader.load();
             
-            GestionSessionsController controller = loader.getController();
+            FrontSessionsController controller = loader.getController();
             controller.setEvenement(event);
             
             Scene scene = new Scene(root);
@@ -748,7 +761,7 @@ public class FrontEventsController implements Initializable {
     private void showReservationDialog(Evenement event) {
         try {
             System.out.println("Affichage du dialogue de réservation pour l'événement " + event.getId());
-            
+
             // Vérifier si l'événement est complet
             if (event.getNbPlace() <= 0) {
                 showAlert(Alert.AlertType.INFORMATION, 
@@ -765,7 +778,7 @@ public class FrontEventsController implements Initializable {
             
             // Style du dialogue
             DialogPane dialogPane = dialog.getDialogPane();
-            dialogPane.setStyle("-fx-background-color: white;");
+            dialogPane.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);");
             dialogPane.setPrefWidth(550);
             
             // Configurer les boutons avec style
@@ -781,43 +794,96 @@ public class FrontEventsController implements Initializable {
             eventInfoBox.setPrefWidth(250);
             eventInfoBox.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);");
             
-            // Image de l'événement
+            // Image de l'événement avec animation de chargement
+            StackPane imageContainer = new StackPane();
             ImageView eventImage = new ImageView();
             eventImage.setFitWidth(220);
             eventImage.setFitHeight(130);
             eventImage.setPreserveRatio(true);
             
-            // Charger l'image
-            try {
-                String imagePath = event.getImage();
-                if (imagePath != null && !imagePath.isEmpty()) {
-                    File imageFile = new File(imagePath);
-                    if (imageFile.exists()) {
-                        eventImage.setImage(new Image(imageFile.toURI().toString()));
-                    } else {
-                        // Essayer dans le dossier d'images
-                        String uploadDir = "C:\\xampp\\htdocs\\imageP\\";
-                        File uploadedImage = new File(uploadDir + imagePath);
-                        if (uploadedImage.exists()) {
-                            eventImage.setImage(new Image(uploadedImage.toURI().toString()));
+            // Indicateur de chargement
+            ProgressIndicator loadingIndicator = new ProgressIndicator();
+            loadingIndicator.setPrefSize(50, 50);
+            loadingIndicator.setVisible(true);
+            
+            imageContainer.getChildren().addAll(loadingIndicator, eventImage);
+            
+            // Label pour afficher le prix total - défini ici pour être accessible dans toute la méthode
+            Label totalPriceLabel = new Label();
+            totalPriceLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            
+            // Charger l'image de manière asynchrone
+            new Thread(() -> {
+                Image img = null;
+                try {
+                    String imagePath = event.getImage();
+                    if (imagePath != null && !imagePath.isEmpty()) {
+                        // Essayer d'abord comme chemin absolu
+                        File imageFile = new File(imagePath);
+                        if (imageFile.exists()) {
+                            img = new Image(imageFile.toURI().toString(), true);
                         } else {
-                            // Image par défaut
-                            URL defaultImageUrl = getClass().getResource("/images/default-session.png");
-                            if (defaultImageUrl != null) {
-                                eventImage.setImage(new Image(defaultImageUrl.toExternalForm()));
+                            // Essayer dans le répertoire d'images XAMPP
+                            String uploadDir = "C:\\xampp\\htdocs\\imageP\\";
+                            File uploadedImage = new File(uploadDir + imagePath);
+                            System.out.println("Tentative de chargement de l'image de réservation: " + uploadedImage.getAbsolutePath());
+                            
+                            if (uploadedImage.exists()) {
+                                img = new Image(uploadedImage.toURI().toString(), true);
+                                System.out.println("✅ Image de réservation chargée avec succès depuis le répertoire XAMPP");
+                            } else {
+                                // Image par défaut
+                                System.out.println("❌ Image de réservation non trouvée: " + uploadedImage.getAbsolutePath());
+                                URL defaultImageUrl = getClass().getResource("/images/default-session.png");
+                                if (defaultImageUrl != null) {
+                                    img = new Image(defaultImageUrl.toExternalForm(), true);
+                                }
                             }
                         }
+                    } else {
+                        // Pas d'image spécifiée, essayer d'utiliser une image par défaut
+                        URL defaultImageUrl = getClass().getResource("/images/default-session.png");
+                        if (defaultImageUrl != null) {
+                            img = new Image(defaultImageUrl.toExternalForm(), true);
+                        }
                     }
+                    
+                    // Image finale à afficher
+                    final Image finalImage = img;
+                    if (finalImage != null) {
+                        javafx.application.Platform.runLater(() -> {
+                            eventImage.setImage(finalImage);
+                            loadingIndicator.setVisible(false);
+                            
+                            // Animation d'apparition de l'image
+                            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), eventImage);
+                            fadeIn.setFromValue(0.0);
+                            fadeIn.setToValue(1.0);
+                            fadeIn.play();
+                        });
+                    } else {
+                        javafx.application.Platform.runLater(() -> {
+                            loadingIndicator.setVisible(false);
+                            // Afficher une icône ou un message à la place de l'image
+                            Label noImageLabel = new Label("🖼️ Image non disponible");
+                            noImageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #7f8c8d;");
+                            imageContainer.getChildren().add(noImageLabel);
+                        });
+                    }
+                } catch (Exception e) {
+                    javafx.application.Platform.runLater(() -> {
+                        loadingIndicator.setVisible(false);
+                        System.err.println("Erreur de chargement d'image: " + e.getMessage());
+                    });
                 }
-            } catch (Exception e) {
-                System.err.println("Erreur de chargement d'image: " + e.getMessage());
-            }
+            }).start();
             
             // Clip pour arrondir les coins de l'image
             Rectangle clip = new Rectangle(eventImage.getFitWidth(), eventImage.getFitHeight());
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             eventImage.setClip(clip);
+            eventImage.setOpacity(0); // Commence invisible pour l'animation
             eventImage.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);");
             
             // Titre de l'événement
@@ -839,7 +905,7 @@ public class FrontEventsController implements Initializable {
             if (event.getDateD() != null) {
                 if (event.getDateF() != null && !event.getDateD().equals(event.getDateF())) {
                     dateStr = "Du " + event.getDateD().format(formatter) + " au " + event.getDateF().format(formatter);
-                } else {
+                    } else {
                     dateStr = event.getDateD().format(formatter);
                 }
             }
@@ -858,14 +924,23 @@ public class FrontEventsController implements Initializable {
             locationLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #34495e;");
             locationBox.getChildren().addAll(locationIcon, locationLabel);
             
-            detailsBox.getChildren().addAll(dateBox, locationBox);
+            // Prix
+            HBox priceBox = new HBox(10);
+            priceBox.setAlignment(Pos.CENTER_LEFT);
+            Label priceIcon = new Label("💲");
+            priceIcon.setStyle("-fx-font-size: 16px;");
+            Label priceLabel = new Label(String.format("%.2f €", event.getPrix()));
+            priceLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #34495e; -fx-font-weight: bold;");
+            priceBox.getChildren().addAll(priceIcon, priceLabel);
+            
+            detailsBox.getChildren().addAll(dateBox, locationBox, priceBox);
             
             // Badge de disponibilité
             Label availabilityLabel = new Label(event.getNbPlace() + " places disponibles");
             availabilityLabel.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15; -fx-background-radius: 20;");
             
             // Assembler la partie info événement
-            eventInfoBox.getChildren().addAll(eventImage, eventTitleLabel, detailsBox, availabilityLabel);
+            eventInfoBox.getChildren().addAll(imageContainer, eventTitleLabel, detailsBox, availabilityLabel);
             
             // Partie droite: formulaire de réservation
             VBox formBox = new VBox(15);
@@ -894,25 +969,57 @@ public class FrontEventsController implements Initializable {
             Button increaseButton = new Button("+");
             increaseButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 35px; -fx-min-height: 35px; -fx-background-radius: 5;");
             
-            // Ajout des écouteurs d'événements
+            // Ajout des écouteurs d'événements avec effets visuels améliorés
             decreaseButton.setOnAction(e -> {
                 int currentValue = placesSpinner.getValue();
                 if (currentValue > 1) {
                     placesSpinner.getValueFactory().setValue(currentValue - 1);
+                    updateTotalPriceUI(currentValue - 1, totalPriceLabel, event.getPrix());
                 }
+            });
+            
+            // Effet de survol sur le bouton -
+            decreaseButton.setOnMouseEntered(e -> {
+                decreaseButton.setStyle("-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 35px; -fx-min-height: 35px; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 1);");
+            });
+            
+            decreaseButton.setOnMouseExited(e -> {
+                decreaseButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 35px; -fx-min-height: 35px; -fx-background-radius: 5;");
             });
             
             increaseButton.setOnAction(e -> {
                 int currentValue = placesSpinner.getValue();
                 if (currentValue < event.getNbPlace()) {
                     placesSpinner.getValueFactory().setValue(currentValue + 1);
+                    updateTotalPriceUI(currentValue + 1, totalPriceLabel, event.getPrix());
                 }
+            });
+            
+            // Effet de survol sur le bouton +
+            increaseButton.setOnMouseEntered(e -> {
+                increaseButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 35px; -fx-min-height: 35px; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 1);");
+            });
+            
+            increaseButton.setOnMouseExited(e -> {
+                increaseButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 35px; -fx-min-height: 35px; -fx-background-radius: 5;");
+            });
+            
+            // Ajouter un listener pour mettre à jour le prix total quand le spinner change
+            placesSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+                updateTotalPriceUI(newVal, totalPriceLabel, event.getPrix());
             });
             
             spinnerBox.getChildren().addAll(decreaseButton, placesSpinner, increaseButton);
             
+            // Section prix total
+            Label totalPriceCaption = new Label("Prix total :");
+            totalPriceCaption.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e; -fx-font-weight: bold;");
+            
+            // Initialiser le prix total
+            updateTotalPriceUI(1, totalPriceLabel, event.getPrix());
+            
             // Assemblage de la partie formulaire
-            formBox.getChildren().addAll(formTitle, placesLabel, spinnerBox);
+            formBox.getChildren().addAll(formTitle, placesLabel, spinnerBox, totalPriceCaption, totalPriceLabel);
             
             // Disposition horizontale des deux parties
             HBox contentLayout = new HBox(20, eventInfoBox, formBox);
@@ -926,12 +1033,30 @@ public class FrontEventsController implements Initializable {
             // Styler les boutons du dialogue
             Button reserveButton = (Button) dialog.getDialogPane().lookupButton(reserveButtonType);
             if (reserveButton != null) {
-                reserveButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+                reserveButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 8 15;");
+                
+                // Ajouter des effets de survol
+                reserveButton.setOnMouseEntered(e -> {
+                    reserveButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 8 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 1); -fx-translate-y: -1;");
+                });
+                
+                reserveButton.setOnMouseExited(e -> {
+                    reserveButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 8 15;");
+                });
             }
             
             Button cancelButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
             if (cancelButton != null) {
-                cancelButton.setStyle("-fx-background-color: #7f8c8d; -fx-text-fill: white;");
+                cancelButton.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 8 15;");
+                
+                // Ajouter des effets de survol
+                cancelButton.setOnMouseEntered(e -> {
+                    cancelButton.setStyle("-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 8 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-translate-y: -1;");
+                });
+                
+                cancelButton.setOnMouseExited(e -> {
+                    cancelButton.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 8 15;");
+                });
             }
             
             // Convertir le résultat
@@ -949,90 +1074,176 @@ public class FrontEventsController implements Initializable {
             Optional<Integer> result = dialog.showAndWait();
             result.ifPresent(places -> {
                 try {
-                if (places > 0 && places <= event.getNbPlace()) {
-                    // Effectuer la réservation
-                    boolean success = evenementService.reserverPlace(event.getId(), places);
-                    
-                    if (success) {
-                        // Mettre à jour l'affichage
-                        event.setNbPlace(event.getNbPlace() - places);
+                    if (places > 0 && places <= event.getNbPlace()) {
+                        // Afficher un indicateur de chargement pendant le traitement
+                        ProgressDialog progressDialog = new ProgressDialog();
+                        progressDialog.setTitle("Traitement en cours");
+                        progressDialog.setHeaderText("Réservation en cours...");
+                        progressDialog.show();
                         
-                        // Rafraîchir l'affichage
-                        filterEvents();
-                        
-                            // Confirmation colorée et détaillée
-                            Dialog<Void> confirmationDialog = new Dialog<>();
-                            confirmationDialog.setTitle("Réservation confirmée");
-                            confirmationDialog.setHeaderText(null);
-                            
-                            // Contenu de confirmation
-                            VBox confirmContent = new VBox(15);
-                            confirmContent.setPadding(new Insets(20));
-                            confirmContent.setStyle("-fx-background-color: white;");
-                            
-                            // Icône de succès
-                            Label successIcon = new Label("✅");
-                            successIcon.setStyle("-fx-font-size: 48px; -fx-alignment: center;");
-                            
-                            // Message de succès
-                            Label successMessage = new Label("Réservation effectuée avec succès !");
-                            successMessage.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
-                            
-                            // Détails
-                            VBox detailsContent = new VBox(8);
-                            detailsContent.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
-                            
-                            Label eventNameDetail = new Label("Événement : " + event.getTitre());
-                            eventNameDetail.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-                            
-                            Label placesDetail = new Label("Nombre de places : " + places);
-                            placesDetail.setStyle("-fx-font-size: 14px;");
-                            
-                            Label dateDetail = new Label("Date : " + event.getDateD().format(formatter));
-                            dateDetail.setStyle("-fx-font-size: 14px;");
-                            
-                            detailsContent.getChildren().addAll(eventNameDetail, placesDetail, dateDetail);
-                            
-                            // Assembler le contenu
-                            HBox iconBox = new HBox(successIcon);
-                            iconBox.setAlignment(Pos.CENTER);
-                            
-                            confirmContent.getChildren().addAll(iconBox, successMessage, detailsContent);
-                            
-                            // Configurer le dialogue
-                            confirmationDialog.getDialogPane().setContent(confirmContent);
-                            confirmationDialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-                            
-                            Button okButton = (Button) confirmationDialog.getDialogPane().lookupButton(ButtonType.OK);
-                            if (okButton != null) {
-                                okButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
+                        // Effectuer la réservation de manière asynchrone
+                        new Thread(() -> {
+                            try {
+                                // Attendre un peu pour montrer le dialogue de progression (simuler un traitement)
+                                Thread.sleep(800);
+                                
+                                // Effectuer la réservation
+                                boolean success = evenementService.reserverPlace(event.getId(), places);
+                                
+                                // Fermer le dialogue de progression
+                                javafx.application.Platform.runLater(() -> {
+                                    progressDialog.close();
+                                    
+                                    if (success) {
+                                        // Mettre à jour l'affichage
+                                        event.setNbPlace(event.getNbPlace() - places);
+                                        
+                                        // Rafraîchir l'affichage
+                                        filterEvents();
+                                        
+                                        // Confirmation colorée et détaillée
+                                        showSuccessReservationDialog(event, places);
+                                    } else {
+                                        showAlert(Alert.AlertType.ERROR, 
+                                                "Erreur de réservation", 
+                                                "La réservation a échoué", 
+                                                "Impossible de réserver des places pour cet événement. Veuillez réessayer.");
+                                    }
+                                });
+                            } catch (Exception ex) {
+                                javafx.application.Platform.runLater(() -> {
+                                    progressDialog.close();
+                                    showAlert(Alert.AlertType.ERROR, 
+                                            "Erreur", 
+                                            "Erreur lors de la réservation", 
+                                            "Une erreur est survenue : " + ex.getMessage());
+                                });
                             }
-                            
-                            confirmationDialog.showAndWait();
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, 
-                                 "Erreur de réservation", 
-                                 "La réservation a échoué", 
-                                 "Une erreur est survenue lors de la réservation.");
+                        }).start();
                     }
-                }
-        } catch (Exception e) {
+                } catch (Exception e) {
                     System.err.println("Erreur lors de la réservation: " + e.getMessage());
                     e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, 
-                     "Erreur", 
-                     "Erreur lors de la réservation", 
-                     "Une erreur est survenue : " + e.getMessage());
+                    showAlert(Alert.AlertType.ERROR, 
+                            "Erreur", 
+                            "Erreur lors de la réservation", 
+                            "Une erreur est survenue : " + e.getMessage());
                 }
             });
         } catch (Exception e) {
             System.err.println("Erreur lors de l'affichage du dialogue de réservation: " + e.getMessage());
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, 
-                     "Erreur", 
-                     "Erreur lors de la réservation", 
-                     "Une erreur est survenue : " + e.getMessage());
+                    "Erreur", 
+                    "Erreur lors de la réservation", 
+                    "Une erreur est survenue : " + e.getMessage());
         }
+    }
+    
+    /**
+     * Met à jour l'affichage du prix total dans l'interface
+     */
+    private void updateTotalPriceUI(int quantity, Label totalLabel, double prixUnitaire) {
+        double total = quantity * prixUnitaire;
+        totalLabel.setText(String.format("%.2f €", total));
+        
+        // Animation de changement de prix
+        ScaleTransition st = new ScaleTransition(Duration.millis(200), totalLabel);
+        st.setFromX(1.0);
+        st.setFromY(1.0);
+        st.setToX(1.2);
+        st.setToY(1.2);
+        st.setCycleCount(2);
+        st.setAutoReverse(true);
+        st.play();
+    }
+    
+    /**
+     * Affiche un dialogue de confirmation stylisé après une réservation réussie
+     */
+    private void showSuccessReservationDialog(Evenement event, int places) {
+        Dialog<Void> confirmationDialog = new Dialog<>();
+        confirmationDialog.setTitle("Réservation confirmée");
+        confirmationDialog.setHeaderText(null);
+        
+        // Contenu de confirmation
+        VBox confirmContent = new VBox(15);
+        confirmContent.setPadding(new Insets(20));
+        confirmContent.setStyle("-fx-background-color: white;");
+        
+        // Icône de succès avec animation
+        StackPane iconContainer = new StackPane();
+        iconContainer.setMinHeight(100);
+        iconContainer.setAlignment(Pos.CENTER);
+        
+        Circle successCircle = new Circle(40);
+        successCircle.setFill(Color.valueOf("#2ecc71"));
+        successCircle.setOpacity(0);
+        
+        Label checkmark = new Label("✓");
+        checkmark.setStyle("-fx-font-size: 48px; -fx-text-fill: white; -fx-font-weight: bold;");
+        checkmark.setOpacity(0);
+        
+        iconContainer.getChildren().addAll(successCircle, checkmark);
+        
+        // Message de succès
+        Label successMessage = new Label("Réservation effectuée avec succès !");
+        successMessage.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
+        
+        // Détails
+        VBox detailsContent = new VBox(8);
+        detailsContent.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
+        
+        Label eventNameDetail = new Label("Événement : " + event.getTitre());
+        eventNameDetail.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        
+        Label placesDetail = new Label("Nombre de places : " + places);
+        placesDetail.setStyle("-fx-font-size: 14px;");
+        
+        Label dateDetail = new Label("Date : " + event.getDateD().format(formatter));
+        dateDetail.setStyle("-fx-font-size: 14px;");
+        
+        // Prix total
+        Label prixDetail = new Label(String.format("Prix total : %.2f €", places * event.getPrix()));
+        prixDetail.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        
+        detailsContent.getChildren().addAll(eventNameDetail, placesDetail, dateDetail, prixDetail);
+        
+        // Info supplémentaire (optionnelle)
+        Label infoLabel = new Label("Un e-mail de confirmation vous sera envoyé prochainement.");
+        infoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d; -fx-font-style: italic;");
+        
+        // Assembler le contenu
+        confirmContent.getChildren().addAll(iconContainer, successMessage, detailsContent, infoLabel);
+        
+        // Configurer le dialogue
+        confirmationDialog.getDialogPane().setContent(confirmContent);
+        confirmationDialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        
+        Button okButton = (Button) confirmationDialog.getDialogPane().lookupButton(ButtonType.OK);
+        if (okButton != null) {
+            okButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
+        }
+        
+        // Lancer les animations quand le dialogue est affiché
+        confirmationDialog.setOnShowing(e -> {
+            // Animation du cercle
+            FadeTransition fadeInCircle = new FadeTransition(Duration.millis(500), successCircle);
+            fadeInCircle.setFromValue(0.0);
+            fadeInCircle.setToValue(1.0);
+            
+            // Animation du checkmark
+            FadeTransition fadeInCheck = new FadeTransition(Duration.millis(500), checkmark);
+            fadeInCheck.setFromValue(0.0);
+            fadeInCheck.setToValue(1.0);
+            fadeInCheck.setDelay(Duration.millis(300));
+            
+            // Lancer les animations
+            fadeInCircle.play();
+            fadeInCheck.play();
+        });
+        
+        confirmationDialog.showAndWait();
     }
     
     private void updateTotalPrice(int quantity, Label totalLabel, double prixUnitaire) {
@@ -1056,8 +1267,8 @@ public class FrontEventsController implements Initializable {
                 try {
                     // Retour à l'interface utilisateur
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserInterface.fxml"));
-            Parent root = loader.load();
-                    
+                Parent root = loader.load();
+                
                     // Animation d'entrée pour la nouvelle vue
                     AnimationUtils.fadeIn(root, 500);
                     
@@ -1103,206 +1314,252 @@ public class FrontEventsController implements Initializable {
         try {
             System.out.println("Affichage des informations météo pour " + location);
             
-        Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Météo pour " + location);
-        dialog.setHeaderText("Informations météorologiques");
+            // Vérifier que la localisation n'est pas vide
+            if (location == null || location.trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, 
+                         "Emplacement non défini", 
+                         "Impossible d'afficher la météo", 
+                         "Aucun emplacement n'est défini pour cet événement.");
+                return;
+            }
             
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setTitle("Météo pour " + location);
+            dialog.setHeaderText("Informations météorologiques");
+                
             // Augmenter la taille de la boîte de dialogue
             DialogPane dialogPane = dialog.getDialogPane();
             dialogPane.setPrefWidth(700);
             dialogPane.setPrefHeight(500);
             dialogPane.setStyle("-fx-background-color: white;");
         
-        VBox content = new VBox(15);
-        content.setPadding(new javafx.geometry.Insets(20));
-        content.setStyle("-fx-background-color: linear-gradient(to bottom, #87CEFA, #1E90FF);");
+            VBox content = new VBox(15);
+            content.setPadding(new javafx.geometry.Insets(20));
+            content.setStyle("-fx-background-color: linear-gradient(to bottom, #87CEFA, #1E90FF);");
         
-        Label loadingLabel = new Label("Chargement des données météo...");
+            Label loadingLabel = new Label("Chargement des données météo...");
             loadingLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;");
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setStyle("-fx-progress-color: white;");
+            ProgressIndicator progressIndicator = new ProgressIndicator();
+            progressIndicator.setStyle("-fx-progress-color: white;");
             progressIndicator.setPrefSize(80, 80);
-            
+                
             VBox loadingBox = new VBox(20, loadingLabel, progressIndicator);
             loadingBox.setAlignment(Pos.CENTER);
             loadingBox.setPrefHeight(300);
-            
+                
             content.getChildren().add(loadingBox);
         
-        dialog.getDialogPane().setContent(content);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-            
+            dialog.getDialogPane().setContent(content);
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+                
             // Appliquer le style professionnel
             MainStyleFixer.styleProfessionalDialog(dialog.getDialogPane());
-            
+                
             // Afficher le dialogue immédiatement
             dialog.show();
         
-        // Charger les données météo réelles via l'API OpenWeatherMap
-        new Thread(() -> {
-            try {
-                    // Nouvelle clé API valide (API gratuite d'OpenWeatherMap)
-                    String apiKey = "4d8fb5b93d4af21d66a2948710284366";
-                String encodedLocation = java.net.URLEncoder.encode(location, "UTF-8");
-                String url = "https://api.openweathermap.org/data/2.5/weather?q=" + encodedLocation + "&units=metric&lang=fr&appid=" + apiKey;
-                    
+            // Charger les données météo réelles via l'API OpenWeatherMap
+            new Thread(() -> {
+                try {
+                    // Clé API valide d'OpenWeatherMap
+                    String apiKey = "8d4fa32d77dab0bbaccba3ffa0135ef8";
+                    String encodedLocation = java.net.URLEncoder.encode(location, "UTF-8");
+                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + encodedLocation + "&units=metric&lang=fr&appid=" + apiKey;
+                        
                     System.out.println("URL API météo: " + url);
                 
-                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
-                connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(10000); // Augmenter le délai à 10 secondes
-                    connection.setReadTimeout(10000); // Augmenter le délai à 10 secondes
+                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(15000); // Augmenter le délai à 15 secondes
+                    connection.setReadTimeout(15000); // Augmenter le délai à 15 secondes
                 
-                int responseCode = connection.getResponseCode();
+                    int responseCode = connection.getResponseCode();
                     System.out.println("Code de réponse API météo: " + responseCode);
                 
-                if (responseCode == 200) {
-                    java.io.BufferedReader reader = new java.io.BufferedReader(
-                            new java.io.InputStreamReader(connection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    reader.close();
-                    
-                    // Parser la réponse JSON
-                    org.json.JSONObject jsonResponse = new org.json.JSONObject(response.toString());
+                    if (responseCode == 200) {
+                        java.io.BufferedReader reader = new java.io.BufferedReader(
+                                new java.io.InputStreamReader(connection.getInputStream(), "UTF-8"));
+                        StringBuilder response = new StringBuilder();
+                        String line;
+                        
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+                        reader.close();
+                        
+                        // Parser la réponse JSON
+                        org.json.JSONObject jsonResponse = new org.json.JSONObject(response.toString());
                         System.out.println("Réponse JSON reçue: " + jsonResponse.toString().substring(0, Math.min(100, jsonResponse.toString().length())) + "...");
-                    
-                    // Extraire les données météo
-                    double temperature = jsonResponse.getJSONObject("main").getDouble("temp");
-                    int humidity = jsonResponse.getJSONObject("main").getInt("humidity");
-                    double pressure = jsonResponse.getJSONObject("main").getDouble("pressure");
-                    double windSpeed = jsonResponse.getJSONObject("wind").getDouble("speed");
-                    String weatherDescription = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("description");
-                    String weatherIcon = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("icon");
+                        
+                        // Extraire les données météo
+                        double temperature = jsonResponse.getJSONObject("main").getDouble("temp");
+                        int humidity = jsonResponse.getJSONObject("main").getInt("humidity");
+                        double pressure = jsonResponse.getJSONObject("main").getDouble("pressure");
+                        double windSpeed = jsonResponse.getJSONObject("wind").getDouble("speed");
+                        String weatherDescription = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("description");
+                        String weatherIcon = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("icon");
                         double feelsLike = jsonResponse.getJSONObject("main").getDouble("feels_like");
                         double minTemp = jsonResponse.getJSONObject("main").getDouble("temp_min");
                         double maxTemp = jsonResponse.getJSONObject("main").getDouble("temp_max");
                         long sunrise = jsonResponse.getJSONObject("sys").getLong("sunrise");
                         long sunset = jsonResponse.getJSONObject("sys").getLong("sunset");
-                    
-                    // Obtenir le nom de la ville à partir de la réponse
-                    String cityName = jsonResponse.getString("name");
-                    String country = jsonResponse.getJSONObject("sys").getString("country");
-                    
-                    // Mettre à jour l'interface utilisateur
-                    javafx.application.Platform.runLater(() -> {
-                        content.getChildren().clear();
                         
-                            // En-tête avec la ville et le pays
-                        Label locationLabel = new Label(cityName + ", " + country);
-                            locationLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);");
-                            
-                            // Section principale: température et icône
-                            HBox mainWeatherInfo = new HBox(30);
-                            mainWeatherInfo.setAlignment(javafx.geometry.Pos.CENTER);
-                            mainWeatherInfo.setPadding(new Insets(20));
+                        // Obtenir le nom de la ville à partir de la réponse
+                        String cityName = jsonResponse.getString("name");
+                        String country = jsonResponse.getJSONObject("sys").getString("country");
                         
-                        // Ajouter une icône météo
-                        ImageView weatherIconView = new ImageView();
-                        try {
-                            // Utiliser l'icône réelle d'OpenWeatherMap
-                                String iconUrl = "http://openweathermap.org/img/wn/" + weatherIcon + "@4x.png";
-                                System.out.println("URL icône météo: " + iconUrl);
-                                Image image = new Image(iconUrl, true); // true pour chargement en arrière-plan
-                            weatherIconView.setImage(image);
-                                weatherIconView.setFitWidth(150);
-                                weatherIconView.setFitHeight(150);
-                        } catch (Exception e) {
-                                System.err.println("Erreur lors du chargement de l'icône météo: " + e.getMessage());
-                            e.printStackTrace();
-                                // Utiliser un texte à la place de l'icône en cas d'erreur
-                                Label iconPlaceholder = new Label("☁️");
-                                iconPlaceholder.setStyle("-fx-font-size: 80px;");
-                                mainWeatherInfo.getChildren().add(iconPlaceholder);
-                        }
+                        // Mettre à jour l'interface utilisateur
+                        javafx.application.Platform.runLater(() -> {
+                            try {
+                                content.getChildren().clear();
+                                
+                                // En-tête avec la ville et le pays
+                                Label locationLabel = new Label(cityName + ", " + country);
+                                locationLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);");
+                                
+                                // Section principale: température et icône
+                                HBox mainWeatherInfo = new HBox(30);
+                                mainWeatherInfo.setAlignment(javafx.geometry.Pos.CENTER);
+                                mainWeatherInfo.setPadding(new Insets(20));
                             
-                            // Zone de température principale
-                            VBox tempBox = new VBox(10);
-                            tempBox.setAlignment(Pos.CENTER);
-                        
-                        Label temperatureLabel = new Label(String.format("%.1f°C", temperature));
-                            temperatureLabel.setStyle("-fx-font-size: 60px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);");
-                        
-                            Label feelsLikeLabel = new Label("Ressenti: " + String.format("%.1f°C", feelsLike));
-                            feelsLikeLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);");
-                        
-                        Label conditionLabel = new Label(weatherDescription);
-                            conditionLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);");
+                                // Ajouter une icône météo
+                                ImageView weatherIconView = new ImageView();
+                                try {
+                                    // Utiliser l'icône réelle d'OpenWeatherMap avec HTTPS pour éviter les problèmes de sécurité
+                                    String iconUrl = "https://openweathermap.org/img/wn/" + weatherIcon + "@4x.png";
+                                    System.out.println("URL icône météo: " + iconUrl);
+                                    Image image = new Image(iconUrl, true); // true pour chargement en arrière-plan
+                                    weatherIconView.setImage(image);
+                                    weatherIconView.setFitWidth(150);
+                                    weatherIconView.setFitHeight(150);
+                                    mainWeatherInfo.getChildren().add(weatherIconView);
+                                } catch (Exception e) {
+                                    System.err.println("Erreur lors du chargement de l'icône météo: " + e.getMessage());
+                                    e.printStackTrace();
+                                    // Utiliser un texte à la place de l'icône en cas d'erreur
+                                    Label iconPlaceholder = new Label("☁️");
+                                    iconPlaceholder.setStyle("-fx-font-size: 80px;");
+                                    mainWeatherInfo.getChildren().add(iconPlaceholder);
+                                }
+                                
+                                // Zone de température principale
+                                VBox tempBox = new VBox(10);
+                                tempBox.setAlignment(Pos.CENTER);
                             
-                            tempBox.getChildren().addAll(temperatureLabel, feelsLikeLabel, conditionLabel);
+                                Label temperatureLabel = new Label(String.format("%.1f°C", temperature));
+                                temperatureLabel.setStyle("-fx-font-size: 60px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);");
                             
-                            mainWeatherInfo.getChildren().addAll(weatherIconView, tempBox);
-                        
-                        Separator separator = new Separator();
-                            separator.setStyle("-fx-background-color: white; -fx-opacity: 0.7;");
-                        
-                            // Panneau pour les détails météo supplémentaires
-                        GridPane weatherDetails = new GridPane();
-                            weatherDetails.setHgap(50);
-                            weatherDetails.setVgap(30);
-                            weatherDetails.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 15; -fx-padding: 20;");
-                            weatherDetails.setPadding(new javafx.geometry.Insets(20));
-                            weatherDetails.setAlignment(Pos.CENTER);
+                                Label feelsLikeLabel = new Label("Ressenti: " + String.format("%.1f°C", feelsLike));
+                                feelsLikeLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);");
                             
-                            // Formatage de l'heure pour lever/coucher du soleil
-                            java.util.Date sunriseDate = new java.util.Date(sunrise * 1000);
-                            java.util.Date sunsetDate = new java.util.Date(sunset * 1000);
-                            java.text.SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("HH:mm");
-                            String sunriseTime = timeFormat.format(sunriseDate);
-                            String sunsetTime = timeFormat.format(sunsetDate);
+                                Label conditionLabel = new Label(weatherDescription);
+                                conditionLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0, 0, 1);");
+                                
+                                tempBox.getChildren().addAll(temperatureLabel, feelsLikeLabel, conditionLabel);
+                                mainWeatherInfo.getChildren().add(tempBox);
                             
-                            // Créer tous les indicateurs météo
-                            createWeatherDetailItem(weatherDetails, 0, 0, "Humidité", humidity + "%", "💧");
-                            createWeatherDetailItem(weatherDetails, 1, 0, "Vent", String.format("%.1f km/h", windSpeed * 3.6), "💨");
-                            createWeatherDetailItem(weatherDetails, 0, 1, "Pression", String.format("%.0f hPa", pressure), "🔄");
-                            createWeatherDetailItem(weatherDetails, 1, 1, "Min/Max", String.format("%.1f°C / %.1f°C", minTemp, maxTemp), "🌡️");
-                            createWeatherDetailItem(weatherDetails, 0, 2, "Lever du soleil", sunriseTime, "🌅");
-                            createWeatherDetailItem(weatherDetails, 1, 2, "Coucher du soleil", sunsetTime, "🌇");
+                                Separator separator = new Separator();
+                                separator.setStyle("-fx-background-color: white; -fx-opacity: 0.7;");
                             
-                            // Assembler tous les éléments
-                        content.getChildren().addAll(
-                            locationLabel,
-                            mainWeatherInfo,
-                            separator,
-                            weatherDetails
-                        );
-                    });
-                } else {
+                                // Panneau pour les détails météo supplémentaires
+                                GridPane weatherDetails = new GridPane();
+                                weatherDetails.setHgap(50);
+                                weatherDetails.setVgap(30);
+                                weatherDetails.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 15; -fx-padding: 20;");
+                                weatherDetails.setPadding(new javafx.geometry.Insets(20));
+                                weatherDetails.setAlignment(Pos.CENTER);
+                                
+                                // Formatage de l'heure pour lever/coucher du soleil
+                                java.util.Date sunriseDate = new java.util.Date(sunrise * 1000);
+                                java.util.Date sunsetDate = new java.util.Date(sunset * 1000);
+                                java.text.SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("HH:mm");
+                                String sunriseTime = timeFormat.format(sunriseDate);
+                                String sunsetTime = timeFormat.format(sunsetDate);
+                                
+                                // Créer tous les indicateurs météo
+                                createWeatherDetailItem(weatherDetails, 0, 0, "Humidité", humidity + "%", "💧");
+                                createWeatherDetailItem(weatherDetails, 1, 0, "Vent", String.format("%.1f km/h", windSpeed * 3.6), "💨");
+                                createWeatherDetailItem(weatherDetails, 0, 1, "Pression", String.format("%.0f hPa", pressure), "🔄");
+                                createWeatherDetailItem(weatherDetails, 1, 1, "Min/Max", String.format("%.1f°C / %.1f°C", minTemp, maxTemp), "🌡️");
+                                createWeatherDetailItem(weatherDetails, 0, 2, "Lever du soleil", sunriseTime, "🌅");
+                                createWeatherDetailItem(weatherDetails, 1, 2, "Coucher du soleil", sunsetTime, "🌇");
+                                
+                                // Assembler tous les éléments
+                                content.getChildren().addAll(
+                                    locationLabel,
+                                    mainWeatherInfo,
+                                    separator,
+                                    weatherDetails
+                                );
+                            } catch (Exception ex) {
+                                System.err.println("Erreur lors de la mise à jour de l'interface météo: " + ex.getMessage());
+                                ex.printStackTrace();
+                                content.getChildren().clear();
+                                    
+                                Label errorLabel = new Label("Erreur lors de l'affichage des données météo");
+                                errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
+                                    
+                                Label detailsLabel = new Label("Une erreur technique est survenue: " + ex.getMessage());
+                                detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+                                detailsLabel.setWrapText(true);
+                                    
+                                content.getChildren().addAll(errorLabel, detailsLabel);
+                            }
+                        });
+                    } else {
                         System.err.println("Erreur API météo: code " + responseCode);
-                    javafx.application.Platform.runLater(() -> {
-                        content.getChildren().clear();
-                        
-                        Label errorLabel = new Label("Impossible de récupérer les données météo");
+                        javafx.application.Platform.runLater(() -> {
+                            content.getChildren().clear();
+                            
+                            Label errorLabel = new Label("Impossible de récupérer les données météo");
                             errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
-                        
-                            Label detailsLabel = new Label("Erreur " + responseCode + " : Vérifiez le nom de la ville ou votre connexion internet");
+                            
+                            Label detailsLabel = new Label("Erreur " + responseCode + " : Vérifiez le nom de la ville \"" + location + "\" ou votre connexion internet");
                             detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
                             detailsLabel.setWrapText(true);
-                        
-                        content.getChildren().addAll(errorLabel, detailsLabel);
-                    });
-                }
-            } catch (Exception e) {
+                            
+                            // Ajouter un bouton pour réessayer
+                            Button retryButton = new Button("Réessayer");
+                            retryButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
+                            retryButton.setOnAction(e -> {
+                                dialog.close();
+                                showWeatherDialog(location);
+                            });
+                            
+                            VBox errorBox = new VBox(20, errorLabel, detailsLabel, retryButton);
+                            errorBox.setAlignment(Pos.CENTER);
+                            
+                            content.getChildren().add(errorBox);
+                        });
+                    }
+                } catch (Exception e) {
                     System.err.println("Erreur lors de la récupération des données météo: " + e.getMessage());
-                e.printStackTrace();
-                javafx.application.Platform.runLater(() -> {
-                    content.getChildren().clear();
-                    
-                    Label errorLabel = new Label("Erreur de connexion");
+                    e.printStackTrace();
+                    javafx.application.Platform.runLater(() -> {
+                        content.getChildren().clear();
+                        
+                        Label errorLabel = new Label("Erreur de connexion");
                         errorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
-                    
+                        
                         Label detailsLabel = new Label("Vérifiez votre connexion internet. Détail: " + e.getMessage());
                         detailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
                         detailsLabel.setWrapText(true);
-                    
-                    content.getChildren().addAll(errorLabel, detailsLabel);
-                });
-            }
-        }).start();
+                        
+                        // Ajouter un bouton pour réessayer
+                        Button retryButton = new Button("Réessayer");
+                        retryButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
+                        retryButton.setOnAction(evt -> {
+                            dialog.close();
+                            showWeatherDialog(location);
+                        });
+                        
+                        VBox errorBox = new VBox(20, errorLabel, detailsLabel, retryButton);
+                        errorBox.setAlignment(Pos.CENTER);
+                        
+                        content.getChildren().add(errorBox);
+                    });
+                }
+            }).start();
         
         } catch (Exception e) {
             System.err.println("Erreur lors de l'affichage du dialogue météo: " + e.getMessage());
@@ -1817,15 +2074,33 @@ public class FrontEventsController implements Initializable {
             try {
                 String imagePath = event.getImage();
                 if (imagePath != null && !imagePath.isEmpty()) {
+                    // Essayer d'abord comme chemin absolu
                     File imageFile = new File(imagePath);
                     if (imageFile.exists()) {
                         eventImage.setImage(new Image(imageFile.toURI().toString()));
                     } else {
-                        // Image par défaut
-                        URL defaultImageUrl = getClass().getResource("/images/default-event.jpg");
-                        if (defaultImageUrl != null) {
-                            eventImage.setImage(new Image(defaultImageUrl.toExternalForm()));
+                        // Essayer dans le répertoire d'images XAMPP
+                        String uploadDir = "C:\\xampp\\htdocs\\imageP\\";
+                        File uploadedImage = new File(uploadDir + imagePath);
+                        System.out.println("Tentative de chargement de l'image détaillée: " + uploadedImage.getAbsolutePath());
+                        
+                        if (uploadedImage.exists()) {
+                            eventImage.setImage(new Image(uploadedImage.toURI().toString()));
+                            System.out.println("✅ Image détaillée chargée avec succès depuis le répertoire XAMPP");
+                        } else {
+                            // Image par défaut
+                            System.out.println("❌ Image détaillée non trouvée: " + uploadedImage.getAbsolutePath());
+                            URL defaultImageUrl = getClass().getResource("/images/default-event.jpg");
+                            if (defaultImageUrl != null) {
+                                eventImage.setImage(new Image(defaultImageUrl.toExternalForm()));
+                            }
                         }
+                    }
+                } else {
+                    // Pas d'image spécifiée, essayer d'utiliser une image par défaut
+                    URL defaultImageUrl = getClass().getResource("/images/default-event.jpg");
+                    if (defaultImageUrl != null) {
+                        eventImage.setImage(new Image(defaultImageUrl.toExternalForm()));
                     }
                 }
             } catch (Exception e) {
@@ -1997,7 +2272,17 @@ public class FrontEventsController implements Initializable {
             Button weatherButton = new Button("Météo");
             weatherButton.setStyle(buttonBaseStyle + "-fx-background-color: #9b59b6; -fx-text-fill: white;");
             weatherButton.setOnAction(e -> {
-                showWeatherDialog(event.getLocation());
+                try {
+                    System.out.println("Affichage des informations météo pour " + event.getLocation());
+                    showWeatherDialog(event.getLocation());
+                } catch (Exception ex) {
+                    System.err.println("Erreur lors de l'affichage des données météo: " + ex.getMessage());
+                    ex.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, 
+                             "Erreur", 
+                             "Erreur de connexion météo", 
+                             "Impossible d'afficher les informations météo: " + ex.getMessage());
+                }
             });
             
             // Désactiver le bouton de réservation si l'événement est complet
@@ -2054,11 +2339,11 @@ public class FrontEventsController implements Initializable {
             
             Stage stage = new Stage();
             stage.setTitle("Modifier l'événement");
-            Scene scene = new Scene(root);
-            
+                Scene scene = new Scene(root);
+                
             // Appliquer le style professionnel
-            MainStyleFixer.applyProfessionalStyle(scene);
-            
+                MainStyleFixer.applyProfessionalStyle(scene);
+                
             stage.setScene(scene);
             stage.show();
             
@@ -2158,39 +2443,61 @@ public class FrontEventsController implements Initializable {
         return stars.toString();
     }
     
-    /**
-     * Méthode pour afficher la vue des réservations de l'utilisateur
-     */
+    // Méthode pour accéder à l'interface d'administration
     @FXML
-    private void handleShowReservations() {
+    private void handleAdminAccess() {
         try {
-            System.out.println("Chargement de la vue des réservations...");
-            
-            // Charger la vue des réservations
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MyReservations.fxml"));
-            Parent reservationsView = loader.load();
-            
-            // Créer la scène
-            Scene scene = new Scene(reservationsView);
-            
-            // Récupérer la fenêtre actuelle
-            Stage stage = (Stage) btnMyReservations.getScene().getWindow();
-            
-            // Appliquer le style professionnel à la nouvelle scène
-            MainStyleFixer.applyProfessionalStyle(scene);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvent.fxml"));
+            Parent root = loader.load();
             
             // Changer la scène
+            Stage stage = (Stage) btnAdmin.getScene().getWindow();
+            Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setTitle("Gestion des Événements - Administration");
             stage.show();
-            
-            System.out.println("Vue des réservations chargée avec succès");
         } catch (IOException e) {
-            System.err.println("Erreur lors du chargement de la vue des réservations: " + e.getMessage());
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, 
-                    "Erreur de navigation", 
-                    "Impossible d'afficher la vue des réservations", 
-                    e.getMessage());
+                     "Erreur", 
+                     "Erreur de navigation", 
+                     "Impossible d'accéder à l'interface d'administration: " + e.getMessage());
+        }
+    }
+}
+
+/**
+ * Classe utilitaire pour afficher un dialogue de progression
+ */
+class ProgressDialog extends Dialog<Void> {
+    private ProgressIndicator progressIndicator;
+    
+    public ProgressDialog() {
+        initComponents();
+    }
+    
+    private void initComponents() {
+        setTitle("Traitement en cours");
+        
+        // Créer l'indicateur de progression
+        progressIndicator = new ProgressIndicator();
+        progressIndicator.setPrefSize(50, 50);
+        
+        // Créer la disposition
+        VBox content = new VBox(15);
+        content.setAlignment(Pos.CENTER);
+        content.setPadding(new Insets(20));
+        content.getChildren().add(progressIndicator);
+        
+        // Configurer le dialogue
+        getDialogPane().setContent(content);
+        getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        getDialogPane().setStyle("-fx-background-color: white;");
+        
+        // Masquer le bouton d'annulation (optionnel)
+        Button cancelButton = (Button) getDialogPane().lookupButton(ButtonType.CANCEL);
+        if (cancelButton != null) {
+            cancelButton.setVisible(false);
         }
     }
 }

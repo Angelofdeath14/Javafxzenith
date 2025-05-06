@@ -192,9 +192,12 @@ public class AjouterEventController implements Initializable {
 
             Path destPath = destDir.resolve(fileName);
             Files.copy(file.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
-
+            
+            System.out.println("✅ Image sauvegardée avec succès: " + destPath.toString());
+            // On sauvegarde seulement le nom du fichier, pas le chemin absolu
             return fileName;
         } catch (IOException e) {
+            System.err.println("❌ Erreur lors de la sauvegarde de l'image: " + e.getMessage());
             e.printStackTrace();
             return null;
         }

@@ -27,25 +27,59 @@ public class MyDatabase {
                 stmt.execute("USE artyphoria");
                 
                 // Création de la table evenement
-                String createTableSQL = "CREATE TABLE IF NOT EXISTS evenement (" +
+                String createTableEventSQL = "CREATE TABLE IF NOT EXISTS evenement (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +
                     "titre VARCHAR(255) NOT NULL," +
                     "description TEXT," +
                     "type VARCHAR(100)," +
-                    "location VARCHAR(255)," +
-                    "dateD DATETIME," +
-                    "dateF DATETIME," +
+                    "lieu VARCHAR(255)," +
+                    "date_debut DATETIME," +
+                    "date_fin DATETIME," +
                     "image VARCHAR(255)," +
-                    "nbPlace INT" +
+                    "nbPlace INT," +
+                    "prix DOUBLE DEFAULT 0.0" +
                 ")";
                 
-                System.out.println("Création de la table avec la requête : " + createTableSQL);
-                stmt.execute(createTableSQL);
+                System.out.println("Création de la table evenement avec la requête : " + createTableEventSQL);
+                stmt.execute(createTableEventSQL);
                 System.out.println("Table 'evenement' créée avec succès!");
                 
-                // Vérifier la structure de la table
-                java.sql.ResultSet rs = stmt.executeQuery("DESCRIBE evenement");
+                // Création de la table session (et non sessions)
+                String createTableSessionSQL = "CREATE TABLE IF NOT EXISTS session (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY," +
+                    "evenement_id INT," +
+                    "titre VARCHAR(255) NOT NULL," +
+                    "description TEXT," +
+                    "start_time DATETIME," +
+                    "end_time DATETIME," +
+                    "image VARCHAR(255)," +
+                    "capacity INT DEFAULT 0," +
+                    "available_seats INT DEFAULT 0," +
+                    "location VARCHAR(255)," +
+                    "FOREIGN KEY (evenement_id) REFERENCES evenement(id) ON DELETE CASCADE" +
+                ")";
+                
+                System.out.println("Création de la table session avec la requête : " + createTableSessionSQL);
+                stmt.execute(createTableSessionSQL);
+                System.out.println("Table 'session' créée avec succès!");
+                
+                // Supprimer la table sessions (avec s) si elle existe
+                try {
+                    stmt.execute("DROP TABLE IF EXISTS sessions");
+                    System.out.println("Table 'sessions' supprimée avec succès (si elle existait)!");
+                } catch (SQLException e) {
+                    System.out.println("Note: La table 'sessions' n'existait pas ou n'a pas pu être supprimée.");
+                }
+                
+                // Vérifier la structure des tables
                 System.out.println("\nStructure de la table 'evenement' :");
+                java.sql.ResultSet rs = stmt.executeQuery("DESCRIBE evenement");
+                while (rs.next()) {
+                    System.out.println(rs.getString("Field") + " - " + rs.getString("Type"));
+                }
+                
+                System.out.println("\nStructure de la table 'session' :");
+                rs = stmt.executeQuery("DESCRIBE session");
                 while (rs.next()) {
                     System.out.println(rs.getString("Field") + " - " + rs.getString("Type"));
                 }

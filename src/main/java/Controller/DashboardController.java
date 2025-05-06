@@ -15,9 +15,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.chart.*;
 import services.EvenementService;
+import Service.StatisticsService;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -45,6 +47,7 @@ public class DashboardController implements Initializable {
     @FXML private Label lblTotalCapacity;
     @FXML private Label lblActiveSessions;
     @FXML private Label lblReservationRate;
+    @FXML private VBox actionsPane;
 
     private EvenementService evenementService;
 
@@ -75,6 +78,8 @@ public class DashboardController implements Initializable {
 
             // Chargement des données
             loadDashboardData();
+
+            setupCleanupButton();
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR,
@@ -401,5 +406,49 @@ public class DashboardController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    /**
+     * Configure le bouton de nettoyage des doublons dans les fichiers de statistiques
+     */
+    private void setupCleanupButton() {
+        Button cleanupButton = new Button("Nettoyer les doublons");
+        cleanupButton.getStyleClass().add("action-button");
+        cleanupButton.setOnAction(event -> cleanupDuplicateFiles());
+        
+        // Ajouter le bouton au panneau d'actions
+        if (actionsPane != null) {
+            actionsPane.getChildren().add(cleanupButton);
+        }
+    }
+    
+    /**
+     * Nettoie les doublons des fichiers de statistiques
+     */
+    private void cleanupDuplicateFiles() {
+        try {
+            StatisticsService statsService = new StatisticsService();
+            
+            // Répertoire où sont stockés les fichiers de statistiques
+            String statsDirectory = "src/main/resources/stats";
+            
+            // Effectuer le nettoyage
+            int removedCount = statsService.cleanupDuplicateStatFiles(statsDirectory);
+            
+            // Afficher un message de succès
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Nettoyage terminé");
+            alert.setHeaderText("Nettoyage des fichiers de statistiques");
+            alert.setContentText(removedCount + " fichier(s) en double ont été supprimés.");
+            alert.showAndWait();
+            
+        } catch (SQLException | IOException e) {
+            // Afficher une alerte en cas d'erreur
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur lors du nettoyage des fichiers");
+            alert.setContentText("Une erreur est survenue: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 } 

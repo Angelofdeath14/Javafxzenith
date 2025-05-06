@@ -10,6 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Service dédié aux calculs statistiques pour les sessions et événements
@@ -303,5 +306,82 @@ public class StatisticsService {
         }
         
         return result;
+    }
+    
+    /**
+     * Supprime les doublons des fichiers de statistiques
+     * Cette méthode parcourt les fichiers générés par les statistiques et élimine les doublons
+     * @param directoryPath Chemin du répertoire contenant les fichiers de statistiques
+     * @return Nombre de fichiers en double supprimés
+     */
+    public int cleanupDuplicateStatFiles(String directoryPath) throws IOException {
+        int removedCount = 0;
+        File directory = new File(directoryPath);
+        
+        if (!directory.exists() || !directory.isDirectory()) {
+            throw new IOException("Le répertoire spécifié n'existe pas ou n'est pas un dossier");
+        }
+        
+        // Récupérer tous les fichiers du répertoire
+        File[] files = directory.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        
+        // Utiliser un Set pour stocker les empreintes des fichiers (par contenu)
+        Set<String> uniqueFileHashes = new HashSet<>();
+        List<File> duplicateFiles = new ArrayList<>();
+        
+        for (File file : files) {
+            if (file.isFile()) {
+                try {
+                    // Calculer le hash du contenu du fichier
+                    byte[] fileContent = Files.readAllBytes(file.toPath());
+                    String fileHash = calculateMD5Hash(fileContent);
+                    
+                    // Si ce hash existe déjà, c'est un doublon
+                    if (uniqueFileHashes.contains(fileHash)) {
+                        duplicateFiles.add(file);
+                    } else {
+                        uniqueFileHashes.add(fileHash);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Erreur lors de la lecture du fichier " + file.getName() + ": " + e.getMessage());
+                }
+            }
+        }
+        
+        // Supprimer les fichiers en double
+        for (File duplicateFile : duplicateFiles) {
+            if (duplicateFile.delete()) {
+                removedCount++;
+                System.out.println("Fichier supprimé: " + duplicateFile.getName());
+            } else {
+                System.err.println("Impossible de supprimer le fichier: " + duplicateFile.getName());
+            }
+        }
+        
+        return removedCount;
+    }
+    
+    /**
+     * Calcule le hash MD5 d'un tableau d'octets
+     * @param data Données à hacher
+     * @return Hash MD5 sous forme de chaîne hexadécimale
+     */
+    private String calculateMD5Hash(byte[] data) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] hashBytes = md.digest(data);
+            
+            // Convertir les bytes en représentation hexadécimale
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException("Algorithme MD5 non disponible", e);
+        }
     }
 } 

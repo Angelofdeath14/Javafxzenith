@@ -550,4 +550,130 @@ public class MainStyleFixer {
         // S'assurer que la fenêtre est redimensionnable
         stage.setResizable(true);
     }
+    
+    /**
+     * Applique un style de bouton moderne et coloré
+     * @param scene La scène à styliser
+     */
+    public static void applyColorfulButtonsStyle(Scene scene) {
+        if (scene == null) return;
+        
+        // Définir les couleurs modernes pour les boutons
+        String buttonStyles = 
+            ".button-primary { -fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); }" +
+            ".button-primary:hover { -fx-background-color: #2980b9; -fx-cursor: hand; }" +
+            
+            ".button-success { -fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); }" +
+            ".button-success:hover { -fx-background-color: #27ae60; -fx-cursor: hand; }" +
+            
+            ".button-warning { -fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); }" +
+            ".button-warning:hover { -fx-background-color: #d35400; -fx-cursor: hand; }" +
+            
+            ".button-danger { -fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); }" +
+            ".button-danger:hover { -fx-background-color: #c0392b; -fx-cursor: hand; }" +
+            
+            ".button-info { -fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); }" +
+            ".button-info:hover { -fx-background-color: #8e44ad; -fx-cursor: hand; }" +
+            
+            ".button-neutral { -fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1); }" +
+            ".button-neutral:hover { -fx-background-color: #bdc3c7; -fx-cursor: hand; }" +
+            
+            // Styles pour les éléments de carte
+            ".card { -fx-background-color: white; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-padding: 15; }" +
+            ".card-title { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; }" +
+            
+            // Badges colorés
+            ".badge { -fx-padding: 2 8; -fx-background-radius: 10; -fx-font-size: 10px; -fx-font-weight: bold; }" +
+            ".badge-primary { -fx-background-color: #3498db; -fx-text-fill: white; }" +
+            ".badge-success { -fx-background-color: #2ecc71; -fx-text-fill: white; }" +
+            ".badge-warning { -fx-background-color: #f39c12; -fx-text-fill: white; }" +
+            ".badge-danger { -fx-background-color: #e74c3c; -fx-text-fill: white; }" +
+            ".badge-info { -fx-background-color: #9b59b6; -fx-text-fill: white; }" +
+            
+            // Textes colorés
+            ".text-primary { -fx-text-fill: #3498db; }" +
+            ".text-success { -fx-text-fill: #2ecc71; }" +
+            ".text-warning { -fx-text-fill: #f39c12; }" +
+            ".text-danger { -fx-text-fill: #e74c3c; }" +
+            ".text-info { -fx-text-fill: #9b59b6; }" +
+            
+            // Bordures
+            ".border-primary { -fx-border-color: #3498db; -fx-border-width: 1; -fx-border-radius: 5; }" +
+            ".border-success { -fx-border-color: #2ecc71; -fx-border-width: 1; -fx-border-radius: 5; }" +
+            ".border-warning { -fx-border-color: #f39c12; -fx-border-width: 1; -fx-border-radius: 5; }" +
+            ".border-danger { -fx-border-color: #e74c3c; -fx-border-width: 1; -fx-border-radius: 5; }" +
+            ".border-info { -fx-border-color: #9b59b6; -fx-border-width: 1; -fx-border-radius: 5; }";
+            
+        scene.getRoot().getStylesheets().add("data:text/css," + buttonStyles.replace(" ", "%20"));
+    }
+    
+    /**
+     * Améliore le design global avec des couleurs modernes et des effets d'animation
+     * @param scene La scène à styliser
+     */
+    public static void applyModernDesign(Scene scene) {
+        // Appliquer le style professionnel de base
+        applyProfessionalStyle(scene.getRoot());
+        
+        // Appliquer les styles de boutons colorés
+        applyColorfulButtonsStyle(scene);
+        
+        // Ajouter des ombres et des coins arrondis aux panneaux
+        String panelStyles = 
+            ".panel { -fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4); }" +
+            ".panel-header { -fx-background-color: linear-gradient(to right, #3498db, #2980b9); -fx-padding: 10; -fx-background-radius: 8 8 0 0; }" +
+            ".panel-title { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white; }" +
+            ".panel-body { -fx-padding: 15; -fx-background-radius: 0 0 8 8; }";
+            
+        scene.getRoot().getStylesheets().add("data:text/css," + panelStyles.replace(" ", "%20"));
+        
+        // Améliorer les champs de texte et les zones de texte
+        String inputStyles = 
+            ".text-field, .text-area { -fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-radius: 4; -fx-background-radius: 4; }" +
+            ".text-field:focused, .text-area:focused { -fx-border-color: #3498db; -fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(52,152,219,0.3), 3, 0, 0, 0); }";
+            
+        scene.getRoot().getStylesheets().add("data:text/css," + inputStyles.replace(" ", "%20"));
+    }
+    
+    /**
+     * Applique automatiquement les styles colorés aux boutons en fonction de leur texte
+     * @param root Le nœud racine contenant les boutons
+     */
+    public static void styleButtonsByText(Parent root) {
+        if (root == null) return;
+        
+        // Parcourir tous les nœuds pour trouver les boutons
+        for (javafx.scene.Node node : root.lookupAll(".button")) {
+            if (node instanceof javafx.scene.control.Button button) {
+                String text = button.getText().toLowerCase();
+                
+                // Assigner la classe de style appropriée selon le texte du bouton
+                if (text.contains("ajout") || text.contains("créer") || text.contains("nouveau") || 
+                    text.contains("add") || text.contains("create") || text.contains("new")) {
+                    button.getStyleClass().add("button-success");
+                }
+                else if (text.contains("suppr") || text.contains("delet") || text.contains("remov")) {
+                    button.getStyleClass().add("button-danger");
+                }
+                else if (text.contains("modif") || text.contains("edit") || text.contains("updat")) {
+                    button.getStyleClass().add("button-warning");
+                }
+                else if (text.contains("detail") || text.contains("voir") || text.contains("affich") || 
+                        text.contains("view") || text.contains("show")) {
+                    button.getStyleClass().add("button-info");
+                }
+                else if (text.contains("reserv") || text.contains("book")) {
+                    button.getStyleClass().add("button-primary");
+                }
+                else if (text.contains("annul") || text.contains("retour") || text.contains("back") || 
+                        text.contains("cancel")) {
+                    button.getStyleClass().add("button-neutral");
+                }
+                else if (button.getStyleClass().size() <= 1) {
+                    // Si aucun style spécifique n'a été attribué et qu'il n'y a que la classe par défaut
+                    button.getStyleClass().add("button-primary");
+                }
+            }
+        }
+    }
 } 

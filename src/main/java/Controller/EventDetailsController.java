@@ -405,36 +405,53 @@ public class EventDetailsController implements Initializable {
             String imagePath = event.getImage();
             
             if (imagePath != null && !imagePath.isEmpty()) {
-                Image image;
+                Image image = null;
+                boolean imageLoaded = false;
                 
                 // Vérifier si c'est une URL ou un chemin local
                 if (imagePath.startsWith("http") || imagePath.startsWith("www")) {
                     // Image à partir d'une URL
                     image = new Image(imagePath, true);
+                    imageLoaded = true;
                 } else {
-                    // Image locale
+                    // Image locale - d'abord essayer le chemin direct
                     File file = new File(imagePath);
                     if (file.exists()) {
                         image = new Image(file.toURI().toString());
+                        imageLoaded = true;
                     } else {
-                        // Image par défaut si le fichier n'existe pas
-                        loadDefaultImage(event.getType());
-                        return;
+                        // Essayer dans le répertoire d'images XAMPP
+                        String uploadDir = "C:\\xampp\\htdocs\\imageP\\";
+                        File uploadedImage = new File(uploadDir + imagePath);
+                        System.out.println("Tentative de chargement de l'image EventDetails: " + uploadedImage.getAbsolutePath());
+                        
+                        if (uploadedImage.exists()) {
+                            image = new Image(uploadedImage.toURI().toString());
+                            imageLoaded = true;
+                            System.out.println("✅ Image EventDetails chargée avec succès depuis le répertoire XAMPP");
+                        } else {
+                            System.out.println("❌ Image EventDetails non trouvée: " + uploadedImage.getAbsolutePath());
+                        }
                     }
                 }
                 
-                eventImage.setImage(image);
-                
-                // Gérer les erreurs de chargement d'image
-                image.errorProperty().addListener((obs, oldError, error) -> {
-                    if (error) {
-                        loadDefaultImage(event.getType());
-                    }
-                });
+                if (imageLoaded && image != null) {
+                    eventImage.setImage(image);
+                    
+                    // Gérer les erreurs de chargement d'image
+                    image.errorProperty().addListener((obs, oldError, error) -> {
+                        if (error) {
+                            loadDefaultImage(event.getType());
+                        }
+                    });
+                } else {
+                    loadDefaultImage(event.getType());
+                }
             } else {
                 loadDefaultImage(event.getType());
             }
         } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image EventDetails: " + e.getMessage());
             loadDefaultImage(event.getType());
         }
     }

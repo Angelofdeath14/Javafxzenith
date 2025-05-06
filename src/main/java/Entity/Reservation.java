@@ -2,6 +2,11 @@ package Entity;
 
 import java.time.LocalDateTime;
 
+/**
+ * Représente une réservation dans le système
+ * Cette entité permet de gérer toutes les réservations des utilisateurs
+ * pour les événements et sessions.
+ */
 public class Reservation {
     private int id;
     private int userId;
@@ -9,38 +14,47 @@ public class Reservation {
     private int sessionId;
     private int nombrePlaces;
     private LocalDateTime dateReservation;
-    private double prixTotal;
     private String statut;
-
-    // Constructeur par défaut
+    private double prixTotal;
+    
+    /**
+     * Constructeur par défaut
+     */
     public Reservation() {
+        // Par défaut, toute nouvelle réservation est "En attente"
+        this.statut = "En attente";
         this.dateReservation = LocalDateTime.now();
-        this.statut = "confirmé";
+        this.prixTotal = 0.0;
     }
-
-    // Constructeur complet
-    public Reservation(int id, int userId, int eventId, int sessionId, int nombrePlaces, 
-                       LocalDateTime dateReservation, double prixTotal, String statut) {
+    
+    /**
+     * Constructeur avec paramètres
+     */
+    public Reservation(int id, int userId, int eventId, int sessionId, 
+                      int nombrePlaces, LocalDateTime dateReservation, 
+                      String statut) {
         this.id = id;
         this.userId = userId;
         this.eventId = eventId;
         this.sessionId = sessionId;
         this.nombrePlaces = nombrePlaces;
         this.dateReservation = dateReservation;
-        this.prixTotal = prixTotal;
         this.statut = statut;
+        this.prixTotal = 0.0;
     }
-
-    // Constructeur sans ID pour les nouvelles réservations
-    public Reservation(int userId, int eventId, int sessionId, int nombrePlaces, 
-                      double prixTotal) {
+    
+    /**
+     * Constructeur utilisé lors de la création d'une nouvelle réservation
+     */
+    public Reservation(int userId, int eventId, int sessionId, 
+                      int nombrePlaces) {
         this.userId = userId;
         this.eventId = eventId;
         this.sessionId = sessionId;
         this.nombrePlaces = nombrePlaces;
         this.dateReservation = LocalDateTime.now();
-        this.prixTotal = prixTotal;
-        this.statut = "confirmé";
+        this.statut = "En attente";
+        this.prixTotal = 0.0;
     }
 
     // Getters et Setters
@@ -92,14 +106,6 @@ public class Reservation {
         this.dateReservation = dateReservation;
     }
 
-    public double getPrixTotal() {
-        return prixTotal;
-    }
-
-    public void setPrixTotal(double prixTotal) {
-        this.prixTotal = prixTotal;
-    }
-
     public String getStatut() {
         return statut;
     }
@@ -107,7 +113,15 @@ public class Reservation {
     public void setStatut(String statut) {
         this.statut = statut;
     }
-
+    
+    public double getPrixTotal() {
+        return prixTotal;
+    }
+    
+    public void setPrixTotal(double prixTotal) {
+        this.prixTotal = prixTotal;
+    }
+    
     @Override
     public String toString() {
         return "Reservation{" +
@@ -117,8 +131,8 @@ public class Reservation {
                 ", sessionId=" + sessionId +
                 ", nombrePlaces=" + nombrePlaces +
                 ", dateReservation=" + dateReservation +
-                ", prixTotal=" + prixTotal +
                 ", statut='" + statut + '\'' +
+                ", prixTotal=" + prixTotal +
                 '}';
     }
 } 

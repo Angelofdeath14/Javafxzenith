@@ -138,24 +138,26 @@ public class AjouterSessionController2 implements Initializable {
                 session.setImage(imageField.getText().trim());
 
                 if (sessionToEdit != null) {
-                    boolean success = sessionService.updateSession(session);
-                    if (success) {
+                    try {
+                        sessionService.updateSession(session);
                         showAlert(Alert.AlertType.INFORMATION, "Succès", "Modification réussie", 
                                 "La session a été modifiée avec succès !");
                         closeWindow();
-                    } else {
+                    } catch (SQLException e) {
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification", 
-                                "La session n'a pas pu être modifiée.");
+                                "La session n'a pas pu être modifiée: " + e.getMessage());
                     }
                 } else {
                     boolean success = sessionService.createSession(session);
                     if (success) {
                         showAlert(Alert.AlertType.INFORMATION, "Succès", "Ajout réussi", 
                                 "La session a été ajoutée avec succès !");
+                        System.out.println("Session ajoutée avec succès - ID: " + session.getId() + ", Titre: " + session.getTitre());
                         closeWindow();
                     } else {
+                        System.err.println("Échec de l'ajout de session - Message d'erreur affiché à l'utilisateur");
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ajout", 
-                                "La session n'a pas pu être ajoutée.");
+                                "La session n'a pas pu être ajoutée. Vérifiez la table 'session' et les noms des colonnes.");
                     }
                 }
             } catch (Exception e) {
@@ -193,8 +195,9 @@ public class AjouterSessionController2 implements Initializable {
         if (placesDisponiblesField.getText().trim().isEmpty() || Integer.parseInt(placesDisponiblesField.getText().trim()) < 0) {
             errors.append("Le nombre de places disponibles doit être un nombre positif ou zéro.\n");
         }
-        if (Integer.parseInt(placesDisponiblesField.getText().trim()) > Integer.parseInt(capaciteField.getText().trim())) {
-            errors.append("Le nombre de places disponibles ne peut pas dépasser la capacité totale.\n");
+        if (!placesDisponiblesField.getText().trim().isEmpty() && !capaciteField.getText().trim().isEmpty() &&
+            Integer.parseInt(placesDisponiblesField.getText().trim()) > Integer.parseInt(capaciteField.getText().trim())) {
+            errors.append("Le nombre de places disponibles ne peut pas dépasser la capacité de la session.\n");
         }
 
         if (errors.length() > 0) {

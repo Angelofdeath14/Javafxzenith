@@ -1,0 +1,300 @@
+2025-05-06 00:45:20 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événements récupérés: 11 événements
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: null
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-15T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-08T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: null
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-30T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-07T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-22T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-08T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-08T00:00
+2025-05-06 00:45:20 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 00:45:20 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 00:45:20 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 00:45:20 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 00:46:10 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événements récupérés: 12 événements
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: null
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-15T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-08T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: null
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-30T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-07T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-22T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-08T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-08T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événement ID: 12, Titre: gvbjhn, Type: fcgvbhn, Date: 2025-05-23T00:00
+2025-05-06 00:46:10 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 00:46:10 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 00:46:10 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 00:46:10 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 00:46:59 [INFO][DatabaseUpdate] Connexion à la base de données établie
+2025-05-06 00:46:59 [ERROR][DatabaseUpdate] Erreur inattendue
+Exception: Cannot invoke "java.sql.Connection.getMetaData()" because "<parameter1>" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.getMetaData()" because "<parameter1>" is null
+	at Utils.DatabaseUpdateScript.columnExists(DatabaseUpdateScript.java:51)
+	at Utils.DatabaseUpdateScript.main(DatabaseUpdateScript.java:23)
+
+2025-05-06 00:47:28 [INFO][DatabaseUpdate] Connexion à la base de données établie
+2025-05-06 00:47:28 [ERROR][DatabaseUpdate] Erreur inattendue
+Exception: Cannot invoke "java.sql.Connection.getMetaData()" because "<parameter1>" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.getMetaData()" because "<parameter1>" is null
+	at Utils.DatabaseUpdateScript.columnExists(DatabaseUpdateScript.java:51)
+	at Utils.DatabaseUpdateScript.main(DatabaseUpdateScript.java:23)
+
+2025-05-06 00:49:24 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événements récupérés: 12 événements
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: null
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-15T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-08T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: null
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-30T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-07T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-22T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-08T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-08T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ID: 12, Titre: gvbjhn, Type: fcgvbhn, Date: 2025-05-23T00:00
+2025-05-06 00:49:24 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 00:49:24 [INFO][FrontEventsController] Début du remplissage du conteneur d'événements avec 12 événements
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 1 - Test Evenement
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: Test Evenement
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 2 - gvbhn
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbhn
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 3 - dfyg
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: dfyg
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 4 - Concert de Jazz
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 5 - Concert de Jazz
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 6 - fgbhnk
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: fgbhnk
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 7 - abir
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: abir
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 8 - guhb
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: guhb
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 9 - gvj
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: gvj
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 10 - Concert Jazz Test
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert Jazz Test
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 11 - gg
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: gg
+2025-05-06 00:49:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 12 - gvbjhn
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbjhn
+2025-05-06 00:49:24 [INFO][FrontEventsController] Fin du remplissage du conteneur d'événements - 12 cartes ajoutées
+2025-05-06 00:49:24 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 00:49:24 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 00:49:24 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 00:52:20 [INFO][DatabaseUpdate] Connexion à la base de données établie
+2025-05-06 00:52:20 [ERROR][DatabaseUpdate] Erreur inattendue
+Exception: Cannot invoke "java.sql.Connection.getMetaData()" because "connection" is null
+java.lang.NullPointerException: Cannot invoke "java.sql.Connection.getMetaData()" because "connection" is null
+	at Utils.DatabaseUpdateScript.columnExists(DatabaseUpdateScript.java:51)
+	at Utils.DatabaseUpdateScript.main(DatabaseUpdateScript.java:23)
+
+2025-05-06 00:55:24 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événements récupérés: 13 événements
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: null
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-15T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-08T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: null
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-30T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-07T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-22T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-08T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-08T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 12, Titre: gvbjhn, Type: fcgvbhn, Date: 2025-05-23T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] Événement ID: 13, Titre: BHNJ, Type: gvbjn, Date: 2025-05-14T00:00
+2025-05-06 00:55:24 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 00:55:24 [INFO][FrontEventsController] Début du remplissage du conteneur d'événements avec 13 événements
+2025-05-06 00:55:24 [INFO][FrontEventsController] Création de la carte pour l'événement: 1 - Test Evenement
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: Test Evenement
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 2 - gvbhn
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbhn
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 3 - dfyg
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: dfyg
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 4 - Concert de Jazz
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 5 - Concert de Jazz
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 6 - fgbhnk
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: fgbhnk
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 7 - abir
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: abir
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 8 - guhb
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: guhb
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 9 - gvj
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: gvj
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 10 - Concert Jazz Test
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert Jazz Test
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 11 - gg
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: gg
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 12 - gvbjhn
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbjhn
+2025-05-06 00:55:25 [INFO][FrontEventsController] Création de la carte pour l'événement: 13 - BHNJ
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événement ajouté au conteneur: BHNJ
+2025-05-06 00:55:25 [INFO][FrontEventsController] Fin du remplissage du conteneur d'événements - 13 cartes ajoutées
+2025-05-06 00:55:25 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 00:55:25 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 00:55:25 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 00:55:40 [INFO][ReservationController] Chargement des sessions pour l'événement: 7 - abir
+2025-05-06 00:55:40 [INFO][ReservationController] Nombre de sessions récupérées: 0
+2025-05-06 00:55:40 [INFO][ReservationController] Aucune session disponible pour cet événement
+2025-05-06 00:58:07 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événements récupérés: 13 événements
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: null
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-15T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-08T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: null
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-30T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-07T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-22T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-08T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-06-15T19:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-08T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 12, Titre: gvbjhn, Type: fcgvbhn, Date: 2025-05-23T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ID: 13, Titre: BHNJ, Type: gvbjn, Date: 2025-05-14T00:00
+2025-05-06 00:58:07 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 00:58:07 [INFO][FrontEventsController] Début du remplissage du conteneur d'événements avec 13 événements
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 1 - Test Evenement
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: Test Evenement
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 2 - gvbhn
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbhn
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 3 - dfyg
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: dfyg
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 4 - Concert de Jazz
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 5 - Concert de Jazz
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 6 - fgbhnk
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: fgbhnk
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 7 - abir
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: abir
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 8 - guhb
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: guhb
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 9 - gvj
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: gvj
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 10 - Concert Jazz Test
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert Jazz Test
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 11 - gg
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: gg
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 12 - gvbjhn
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbjhn
+2025-05-06 00:58:07 [INFO][FrontEventsController] Création de la carte pour l'événement: 13 - BHNJ
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événement ajouté au conteneur: BHNJ
+2025-05-06 00:58:07 [INFO][FrontEventsController] Fin du remplissage du conteneur d'événements - 13 cartes ajoutées
+2025-05-06 00:58:07 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 00:58:07 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 00:58:07 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 00:58:12 [INFO][ReservationController] Chargement des sessions pour l'événement: 3 - dfyg
+2025-05-06 00:58:12 [INFO][ReservationController] Nombre de sessions récupérées: 0
+2025-05-06 00:58:12 [INFO][ReservationController] Aucune session disponible pour cet événement
+2025-05-06 01:01:15 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événements récupérés: 13 événements
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: 2025-05-06T01:01:15.937234500
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-06T01:01:15.938238800
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-06T01:01:15.938238800
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-05-06T01:01:15.939261200
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: 2025-05-06T01:01:15.939261200
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-06T01:01:15.939261200
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-06T01:01:15.940261100
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-06T01:01:15.940261100
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-06T01:01:15.940261100
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-05-06T01:01:15.941261300
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-06T01:01:15.941261300
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 12, Titre: gvbjhn, Type: fcgvbhn, Date: 2025-05-06T01:01:15.941261300
+2025-05-06 01:01:15 [INFO][FrontEventsController] Événement ID: 13, Titre: BHNJ, Type: gvbjn, Date: 2025-05-06T01:01:15.942261200
+2025-05-06 01:01:15 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 01:01:15 [INFO][FrontEventsController] Début du remplissage du conteneur d'événements avec 13 événements
+2025-05-06 01:01:15 [INFO][FrontEventsController] Création de la carte pour l'événement: 1 - Test Evenement
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: Test Evenement
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 2 - gvbhn
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbhn
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 3 - dfyg
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: dfyg
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 4 - Concert de Jazz
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 5 - Concert de Jazz
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 6 - fgbhnk
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: fgbhnk
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 7 - abir
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: abir
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 8 - guhb
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: guhb
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 9 - gvj
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: gvj
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 10 - Concert Jazz Test
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert Jazz Test
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 11 - gg
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: gg
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 12 - gvbjhn
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbjhn
+2025-05-06 01:01:16 [INFO][FrontEventsController] Création de la carte pour l'événement: 13 - BHNJ
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événement ajouté au conteneur: BHNJ
+2025-05-06 01:01:16 [INFO][FrontEventsController] Fin du remplissage du conteneur d'événements - 13 cartes ajoutées
+2025-05-06 01:01:16 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 01:01:16 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 01:01:16 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 01:01:21 [INFO][ReservationController] Chargement des sessions pour l'événement: 4 - Concert de Jazz
+2025-05-06 01:01:21 [INFO][ReservationController] Nombre de sessions récupérées: 0
+2025-05-06 01:01:21 [INFO][ReservationController] Aucune session disponible pour cet événement
+2025-05-06 01:01:41 [INFO][FrontEventsController] Chargement des événements...
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événements récupérés: 13 événements
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 1, Titre: Test Evenement, Type: , Date: 2025-05-06T01:01:41.809793400
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 2, Titre: gvbhn, Type: , Date: 2025-05-06T01:01:41.810792400
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 3, Titre: dfyg, Type: fgbjn, Date: 2025-05-06T01:01:41.810792400
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 4, Titre: Concert de Jazz, Type: Concert, Date: 2025-05-06T01:01:41.810792400
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 5, Titre: Concert de Jazz, Type: Concert, Date: 2025-05-06T01:01:41.810792400
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 6, Titre: fgbhnk, Type: dfgvbn, Date: 2025-05-06T01:01:41.811793300
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 7, Titre: abir, Type: dance, Date: 2025-05-06T01:01:41.811793300
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 8, Titre: guhb, Type: vgbjn, Date: 2025-05-06T01:01:41.811793300
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 9, Titre: gvj, Type: kjb, Date: 2025-05-06T01:01:41.811793300
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 10, Titre: Concert Jazz Test, Type: Concert, Date: 2025-05-06T01:01:41.812846600
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 11, Titre: gg, Type: cgv, Date: 2025-05-06T01:01:41.812846600
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 12, Titre: gvbjhn, Type: fcgvbhn, Date: 2025-05-06T01:01:41.812846600
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ID: 13, Titre: BHNJ, Type: gvbjn, Date: 2025-05-06T01:01:41.813797700
+2025-05-06 01:01:41 [INFO][FrontEventsController] eventsContainer est disponible
+2025-05-06 01:01:41 [INFO][FrontEventsController] Début du remplissage du conteneur d'événements avec 13 événements
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 1 - Test Evenement
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: Test Evenement
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 2 - gvbhn
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbhn
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 3 - dfyg
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: dfyg
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 4 - Concert de Jazz
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 5 - Concert de Jazz
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert de Jazz
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 6 - fgbhnk
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: fgbhnk
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 7 - abir
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: abir
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 8 - guhb
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: guhb
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 9 - gvj
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: gvj
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 10 - Concert Jazz Test
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: Concert Jazz Test
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 11 - gg
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: gg
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 12 - gvbjhn
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: gvbjhn
+2025-05-06 01:01:41 [INFO][FrontEventsController] Création de la carte pour l'événement: 13 - BHNJ
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événement ajouté au conteneur: BHNJ
+2025-05-06 01:01:41 [INFO][FrontEventsController] Fin du remplissage du conteneur d'événements - 13 cartes ajoutées
+2025-05-06 01:01:41 [INFO][FrontEventsController] thisWeekEventsContainer est disponible
+2025-05-06 01:01:41 [INFO][FrontEventsController] upcomingEventsContainer est disponible
+2025-05-06 01:01:41 [INFO][FrontEventsController] Événements chargés avec succès
+2025-05-06 01:02:43 [INFO][ReservationController] Chargement des sessions pour l'événement: 11 - gg
+2025-05-06 01:02:43 [INFO][ReservationController] Nombre de sessions récupérées: 0
+2025-05-06 01:02:43 [INFO][ReservationController] Aucune session disponible pour cet événement

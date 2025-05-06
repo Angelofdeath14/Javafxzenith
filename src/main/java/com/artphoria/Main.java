@@ -1,5 +1,6 @@
 package com.artphoria;
 
+import Utils.DatabaseUpdater;
 import Utils.MainStyleFixer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Mettre à jour la structure de la base de données
+        DatabaseUpdater.updateDatabase();
+        
         // Initialiser les correctifs de style
         MainStyleFixer.initialize();
         
