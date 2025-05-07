@@ -5,11 +5,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tn.esprit.service.session.UserSession;
 
-public class NavigationController {
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public abstract class NavigationController {
 
     @FXML
     private Text currentUserName;
@@ -23,8 +31,7 @@ public class NavigationController {
             stage.setTitle("Add to Cart");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/add_panier.fxml"));
             Parent p = loader.load();
-            Scene scene = new Scene
-                    (p);
+            Scene scene = new Scene(p);
             stage.setScene(scene);
         } catch (Exception e){
             System.err.println(e);
@@ -165,6 +172,7 @@ public class NavigationController {
             System.err.println(e);
         }
     }
+
     @FXML
     public void goToOverview() {
         Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
@@ -180,6 +188,7 @@ public class NavigationController {
             System.err.println(e);
         }
     }
+
     @FXML
     public void Logout() {
         Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
@@ -190,6 +199,7 @@ public class NavigationController {
             stage.setTitle("Login");
             stage.setScene(scene);
             stage.show();
+            UserSession.CURRENT_USER.logout();
         } catch (Exception e){
             System.err.println(e);
         }
@@ -209,27 +219,11 @@ public class NavigationController {
             System.err.println(e);
         }
     }
-
     @FXML
     public void goToActivites (){
         Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvent.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setTitle("Activities Details");
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (Exception e){
-            System.err.println(e);
-        }
-    }
-    @FXML
-    public void addEvent (){
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterEvent.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherActivites.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             stage.setTitle("Activities Details");
@@ -247,13 +241,20 @@ public class NavigationController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProfileSetting.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            stage.setTitle("Profile edit");
+            stage.setTitle(" Edit Profile ");
             stage.setScene(scene);
             stage.show();
+
         } catch (Exception e){
             System.err.println(e);
         }
     }
 
+    @FXML
+    void initialize() throws SQLException {
+        currentUserName.setText(UserSession.CURRENT_USER.getUserLoggedIn().getfirst_name()+" "+UserSession.CURRENT_USER.getUserLoggedIn().getlast_name());
+        imgCircle.setStroke(Color.SEAGREEN);
+
+    }
 
 }
