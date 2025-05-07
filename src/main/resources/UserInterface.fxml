@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controller.UserInterfaceController"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Menu latéral -->
+    <left>
+        <VBox spacing="15" style="-fx-background-color: #2c3e50; -fx-padding: 25;">
+            <Label text="Artphoria" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 20 0;"/>
+            
+            <Button text="Événements" styleClass="menu-button, button-primary" onAction="#showEvents">
+                <graphic>
+                    <Label text="🎭" style="-fx-font-size: 18px;"/>
+                </graphic>
+            </Button>
+            
+            <Separator/>
+            
+            <Button text="Administration" styleClass="menu-button, button-warning" onAction="#showAdmin">
+                <graphic>
+                    <Label text="⚙️" style="-fx-font-size: 18px;"/>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- Zone de contenu principale -->
+    <center>
+        <StackPane fx:id="contentArea">
+            <!-- Le contenu sera chargé dynamiquement ici -->
+        </StackPane>
+    </center>
+
+</BorderPane> 

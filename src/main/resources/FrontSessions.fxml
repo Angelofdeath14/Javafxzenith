@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controller.FrontSessionsController"
+            prefHeight="800.0" prefWidth="1200.0"
+            style="-fx-background-color: white;">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <VBox spacing="15" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" 
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <!-- En-tête -->
+        <HBox alignment="CENTER" spacing="10">
+            <Label fx:id="eventTitleLabel" text="Sessions de l'événement" 
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        </HBox>
+
+        <!-- Informations de l'événement -->
+        <HBox spacing="15">
+            <!-- Informations de base -->
+            <VBox styleClass="event-info" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5);" HBox.hgrow="ALWAYS">
+                <Label fx:id="eventDetailsLabel" style="-fx-font-size: 14px; -fx-text-fill: #2c3e50;"/>
+            </VBox>
+        </HBox>
+        
+        <!-- Conteneur pour les cartes de sessions -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <VBox fx:id="sessionsContainer" spacing="20">
+                <!-- Le contenu sera ajouté dynamiquement -->
+            </VBox>
+        </ScrollPane>
+
+        <!-- Boutons d'action (retour uniquement) -->
+        <HBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="10" bottom="10"/>
+            </padding>
+            <Button fx:id="btnRetour" text="← Retour" onAction="#handleRetour"
+                    style="-fx-background-color: #555555; 
+                           -fx-text-fill: white; 
+                           -fx-font-weight: bold; 
+                           -fx-min-width: 120px; 
+                           -fx-min-height: 35px; 
+                           -fx-background-radius: 5px;
+                           -fx-cursor: hand;"/>
+        </HBox>
+    </VBox>
+</AnchorPane> 

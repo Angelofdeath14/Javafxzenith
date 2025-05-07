@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controller.EventStatsController"
+            prefHeight="700.0" prefWidth="1000.0"
+            stylesheets="@professional_style.css">
+    <top>
+        <VBox>
+            <!-- Barre principale bleue -->
+            <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
+                
+                <!-- Titre de la page -->
+                <Label text="Statistiques des Événements" styleClass="app-title" />
+                
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <!-- Contrôles de filtrage -->
+                <HBox alignment="CENTER_RIGHT" spacing="12">
+                    <ComboBox fx:id="eventSelector" promptText="Tous les événements" prefWidth="200" />
+                    <DatePicker fx:id="startDatePicker" promptText="Date de début" prefWidth="150" />
+                    <DatePicker fx:id="endDatePicker" promptText="Date de fin" prefWidth="150" />
+                    <Button text="Appliquer" onAction="#handleApplyFilter" styleClass="button, secondary" />
+                </HBox>
+            </HBox>
+            
+            <!-- Sélecteur de période rapide -->
+            <HBox style="-fx-background-color: #f8f9fa; -fx-padding: 10 25;">
+                <HBox spacing="10">
+                    <ToggleButton text="Aujourd'hui" styleClass="category-button" selected="true" />
+                    <ToggleButton text="Cette semaine" styleClass="category-button" />
+                    <ToggleButton text="Ce mois" styleClass="category-button" />
+                    <ToggleButton text="Cette année" styleClass="category-button" />
+                    <ToggleButton text="Personnalisé" styleClass="category-button" />
+                </HBox>
+                
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <ToggleButton fx:id="darkModeToggle" text="🌙 Mode sombre" styleClass="category-button" />
+                    <Button text="Exporter PDF" onAction="#handleExportPDF" styleClass="button, secondary" />
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
+            <VBox spacing="25">
+                <padding>
+                    <Insets top="25" right="25" bottom="25" left="25"/>
+                </padding>
+                
+                <!-- Cartes statistiques principales -->
+                <HBox spacing="20" alignment="CENTER">
+                    <!-- Carte avancée pour le total des événements -->
+                    <VBox fx:id="eventsCard" styleClass="stats-card" HBox.hgrow="ALWAYS" prefHeight="180">
+                        <!-- Cette VBox sera remplie par StatsUtils.createAdvancedStatCard dans le contrôleur -->
+                    </VBox>
+                    
+                    <!-- Carte avancée pour les sessions -->
+                    <VBox fx:id="sessionsCard" styleClass="stats-card" HBox.hgrow="ALWAYS" prefHeight="180">
+                        <!-- Cette VBox sera remplie par StatsUtils.createAdvancedStatCard dans le contrôleur -->
+                    </VBox>
+                    
+                    <!-- Carte avancée pour les réservations -->
+                    <VBox fx:id="reservationsCard" styleClass="stats-card" HBox.hgrow="ALWAYS" prefHeight="180">
+                        <!-- Cette VBox sera remplie par StatsUtils.createAdvancedStatCard dans le contrôleur -->
+                    </VBox>
+                    
+                    <!-- Carte de pourcentage pour le taux de réservation -->
+                    <VBox fx:id="reservationRateCard" styleClass="stats-card" HBox.hgrow="ALWAYS" prefHeight="180">
+                        <!-- Cette VBox sera remplie par StatsUtils.createPercentageCard dans le contrôleur -->
+                    </VBox>
+                </HBox>
+                
+                <!-- Section graphiques -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="📊" style="-fx-font-size: 22px;" />
+                    <Label text="Visualisation des données" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    <Rectangle width="250" height="2" fill="#3498db" translateY="12" />
+                </HBox>
+                
+                <!-- Graphiques -->
+                <HBox spacing="20" alignment="CENTER">
+                    <!-- Graphique camembert des catégories, amélioré -->
+                    <VBox fx:id="pieChartContainer" styleClass="stats-card" HBox.hgrow="ALWAYS" prefHeight="300">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15"/>
+                        </padding>
+                        <Label text="Répartition par catégorie" styleClass="stats-title"/>
+                        <PieChart fx:id="categoryChart" legendVisible="true" />
+                    </VBox>
+                    
+                    <!-- Graphique à barres des réservations, amélioré -->
+                    <VBox fx:id="barChartContainer" styleClass="stats-card" HBox.hgrow="ALWAYS" prefHeight="300">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15"/>
+                        </padding>
+                        <Label text="Réservations par événement" styleClass="stats-title"/>
+                        <BarChart fx:id="reservationChart" legendVisible="false" animated="true">
+                            <xAxis>
+                                <CategoryAxis fx:id="eventAxis" label="Événements"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="reservationAxis" label="Réservations"/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                </HBox>
+                
+                <!-- Graphique de tendance -->
+                <VBox fx:id="trendChartContainer" styleClass="stats-card" prefHeight="220">
+                    <!-- Cette VBox sera remplie par StatsUtils.createTrendCard dans le contrôleur -->
+                </VBox>
+                
+                <!-- Section tableau -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="📋" style="-fx-font-size: 22px;" />
+                    <Label text="Événements récents" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    <Rectangle width="250" height="2" fill="#3498db" translateY="12" />
+                </HBox>
+                
+                <!-- Tableau amélioré des événements récents -->
+                <VBox styleClass="stats-card">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Top événements par réservations" styleClass="stats-title"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <TextField promptText="Rechercher" styleClass="search-field" prefWidth="200" />
+                    </HBox>
+                    <TableView fx:id="eventsTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="colTitle" text="Titre" prefWidth="200"/>
+                            <TableColumn fx:id="colCategory" text="Catégorie" prefWidth="150"/>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="150"/>
+                            <TableColumn fx:id="colSessions" text="Sessions" prefWidth="100"/>
+                            <TableColumn fx:id="colReservations" text="Réservations" prefWidth="120"/>
+                            <TableColumn fx:id="colTrend" text="Tendance" prefWidth="100"/>
+                            <TableColumn fx:id="colActions" text="Actions" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane> 

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controller.DashboardController"
+            style="-fx-background-color: white;">
+
+    <!-- Barre de titre personnalisée -->
+    <HBox alignment="CENTER" styleClass="window-header" 
+          AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          prefHeight="30.0">
+        <Label text="Tableau de bord - Statistiques" styleClass="window-title"/>
+    </HBox>
+
+    <!-- Sidebar -->
+    <VBox layoutY="30.0" prefHeight="770.0" prefWidth="200" styleClass="sidebar"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
+        <Button fx:id="btnDashboard" onAction="#refreshDashboard" styleClass="button-route" text="Tableau de bord"/>
+        <Button fx:id="btnEvents" onAction="#goToEvents" styleClass="button-route" text="Événements"/>
+        <Button fx:id="btnUsers" onAction="#goToUsers" styleClass="button-route" text="Utilisateurs"/>
+        <Button fx:id="btnAddEvent" onAction="#goToAddEvent" styleClass="button-route" text="Ajouter un événement"/>
+        <Button fx:id="btnFront" onAction="#goToFrontView" styleClass="button-route" text="Front"/>
+        <Button fx:id="btnLogout" onAction="#logout" styleClass="button-route" text="Déconnexion"/>
+    </VBox>
+
+    <!-- Main Content -->
+    <ScrollPane fx:id="scrollPane" layoutX="220.0" layoutY="50.0" 
+                AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="20.0" 
+                AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="20.0">
+        <VBox fx:id="mainContainer" spacing="20" styleClass="main-content">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <!-- Titre du Dashboard -->
+            <Label text="Tableau de Bord" styleClass="header-title">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+            
+            <!-- Cartes de statistiques globales -->
+            <HBox spacing="20" alignment="CENTER">
+                <!-- Nombre total d'événements -->
+                <VBox styleClass="stat-card" style="-fx-background-color: #3498db;">
+                    <Label text="Total Événements" styleClass="stat-title"/>
+                    <Label fx:id="lblTotalEvents" text="0" styleClass="stat-value"/>
+                </VBox>
+                
+                <!-- Places disponibles -->
+                <VBox styleClass="stat-card" style="-fx-background-color: #2ecc71;">
+                    <Label text="Places Disponibles" styleClass="stat-title"/>
+                    <Label fx:id="lblTotalCapacity" text="0" styleClass="stat-value"/>
+                </VBox>
+                
+                <!-- Sessions actives -->
+                <VBox styleClass="stat-card" style="-fx-background-color: #e74c3c;">
+                    <Label text="Sessions Actives" styleClass="stat-title"/>
+                    <Label fx:id="lblActiveSessions" text="0" styleClass="stat-value"/>
+                </VBox>
+                
+                <!-- Taux moyen de réservation -->
+                <VBox styleClass="stat-card" style="-fx-background-color: #f39c12;">
+                    <Label text="Taux de Réservation" styleClass="stat-title"/>
+                    <Label fx:id="lblReservationRate" text="0%" styleClass="stat-value"/>
+                </VBox>
+            </HBox>
+            
+            <!-- Graphiques -->
+            <HBox spacing="20">
+                <!-- Graphique des événements par catégorie -->
+                <VBox style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5); -fx-padding: 15; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                    <Label text="Événements par catégorie" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <PieChart fx:id="categoryChart" legendVisible="true" labelsVisible="true"/>
+                </VBox>
+                
+                <!-- Graphique des réservations par événement -->
+                <VBox style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5); -fx-padding: 15; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                    <Label text="Top événements par réservation" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <BarChart fx:id="reservationChart">
+                        <xAxis>
+                            <CategoryAxis label="Événement"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Nombre de réservations"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+            </HBox>
+            
+            <!-- Tableau des événements récents -->
+            <VBox style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5); -fx-padding: 15; -fx-background-radius: 5;">
+                <Label text="Événements récents" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <TableView fx:id="recentEventsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colTitre" text="Titre" prefWidth="200"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="colDate" text="Date" prefWidth="150"/>
+                        <TableColumn fx:id="colCapacity" text="Places" prefWidth="80"/>
+                        <TableColumn fx:id="colReservations" text="Réservations" prefWidth="100"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+            
+            <!-- Statistiques par mois -->
+            <VBox style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 5); -fx-padding: 15; -fx-background-radius: 5;">
+                <Label text="Évolution par mois" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <LineChart fx:id="monthlyChart">
+                    <xAxis>
+                        <CategoryAxis label="Mois"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Nombre"/>
+                    </yAxis>
+                </LineChart>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</AnchorPane> 

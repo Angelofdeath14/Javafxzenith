@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controller.ViewEventsController"
+            prefHeight="600.0" prefWidth="900.0"
+            stylesheets="@style.css">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Liste des Événements" styleClass="page-title">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher un événement..." HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="categoryFilter" promptText="Catégorie"/>
+                <DatePicker fx:id="dateFilter" promptText="Date"/>
+                <Button text="Rechercher" onAction="#handleSearch" styleClass="button-primary"/>
+                <Button text="Réinitialiser" onAction="#handleReset" styleClass="button-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <FlowPane fx:id="eventContainer" hgap="20" vgap="20" alignment="CENTER">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Retour" onAction="#handleBack" styleClass="button-secondary"/>
+            <Button text="Voir les Sessions" onAction="#handleViewSessions" styleClass="button-primary"/>
+        </HBox>
+    </bottom>
+</BorderPane> 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.controller.ModifierSessionController"
+      spacing="10"
+      style="-fx-background-color: #f4f4f4;"
+      padding="20">
+
+    <Label text="Modifier la Session"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+
+    <GridPane vgap="10" hgap="10">
+        <Label text="Titre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="titreField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextArea fx:id="descriptionArea" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Date de début:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dateDebutPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Date de fin:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dateFinPicker" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Capacité:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="capaciteField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Lieu:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="locationField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="btnAnnuler" text="Annuler"
+                style="-fx-background-color: #666666; -fx-text-fill: white;"/>
+        <Button fx:id="btnValider" text="Valider"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    </HBox>
+
+</VBox> 

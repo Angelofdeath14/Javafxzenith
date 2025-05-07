@@ -1,0 +1,183 @@
+/* Styles pour la carte interactive - Mode clair */
+
+.map-container {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.map-view {
+    -fx-background-color: #ffffff; /* Fond blanc pour la carte */
+}
+
+/* Style pour le fond de la carte WebView */
+.web-view-map {
+    -fx-background-color: #ffffff;
+}
+
+/* Styles pour les routes */
+.map-road-main {
+    -fx-fill: #cccccc; /* Gris clair */
+    -fx-stroke: #bbbbbb;
+    -fx-stroke-width: 1;
+}
+
+.map-road {
+    -fx-fill: #dddddd; /* Gris plus clair */
+    -fx-stroke: #cccccc;
+    -fx-stroke-width: 0.5;
+}
+
+.map-road-name {
+    -fx-fill: #333333;
+    -fx-font-size: 10px;
+}
+
+/* Styles pour les bâtiments */
+.map-building {
+    -fx-fill: #e6e6e6; /* Gris très clair */
+    -fx-stroke: #cccccc;
+    -fx-stroke-width: 1;
+}
+
+.map-event-building {
+    -fx-fill: #ffd3b6; /* Couleur plus visible */
+    -fx-stroke: #ff8c66;
+    -fx-stroke-width: 2;
+}
+
+/* Styles pour les éléments naturels */
+.map-park {
+    -fx-fill: #a8e6cf; /* Vert clair */
+    -fx-stroke: #8ecab7;
+    -fx-stroke-width: 1;
+}
+
+.map-water {
+    -fx-fill: #add8e6; /* Bleu clair */
+    -fx-stroke: #95c2d0;
+    -fx-stroke-width: 1;
+}
+
+/* Styles pour les marqueurs */
+.map-marker {
+    -fx-fill: #e74c3c; /* Rouge */
+}
+
+.map-marker-outer {
+    -fx-fill: transparent;
+    -fx-stroke: #e74c3c;
+    -fx-stroke-width: 2;
+}
+
+/* Styles pour les POI (Points d'intérêt) */
+.poi-container {
+    -fx-padding: 2;
+}
+
+.poi-circle {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+.poi-label {
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+    -fx-padding: 2 4;
+    -fx-background-radius: 2;
+    -fx-font-size: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
+}
+
+/* Style pour les coordonnées GPS */
+.coords-display {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-padding: 5;
+    -fx-background-radius: 5;
+    -fx-text-fill: #333;
+    -fx-font-size: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+/* Style pour la légende */
+.legend-container {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.legend-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+    -fx-text-fill: #333;
+    -fx-padding: 0 0 5 0;
+}
+
+.legend-item {
+    -fx-padding: 2 0;
+    -fx-text-fill: #555;
+}
+
+/* Style pour les boutons de zoom */
+.zoom-button {
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-background-radius: 3;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.zoom-button:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+/* Style pour le bouton de mode */
+.mode-toggle {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-background-radius: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.mode-toggle:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Style pour la boussole */
+.compass {
+    -fx-fill: #ffffff;
+    -fx-stroke: #3498db;
+    -fx-stroke-width: 2;
+}
+
+.compass-inner {
+    -fx-fill: #f8f9fa;
+    -fx-stroke: #e0e0e0;
+    -fx-stroke-width: 1;
+}
+
+.north-line {
+    -fx-stroke: #e74c3c;
+    -fx-stroke-width: 2;
+}
+
+.direction-line {
+    -fx-stroke: #3498db;
+    -fx-stroke-width: 1;
+}
+
+.north-text {
+    -fx-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+.direction-text {
+    -fx-fill: #3498db;
+} 

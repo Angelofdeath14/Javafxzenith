@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controller.AffichageSessionsController"
+            prefHeight="600.0" prefWidth="900.0"
+            stylesheets="@professional_style.css">
+    
+    <top>
+        <VBox spacing="10" style="-fx-background-color: linear-gradient(to right, #3f51b5, #5c6bc0); -fx-padding: 15;">
+            <Label text="Sessions et Réservations" style="-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Label text="Consultez et gérez toutes vos sessions d'événements" style="-fx-font-size: 14px; -fx-text-fill: white;" />
+    </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher par titre, type..." prefWidth="300" styleClass="search-field" />
+                <ComboBox fx:id="filterTypeComboBox" prefWidth="150" promptText="Tous les types" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnRefresh" text="Actualiser" styleClass="button" />
+                <Button fx:id="btnAdd" text="Ajouter" styleClass="button" />
+        </HBox>
+
+            <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+            <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colTitle" text="Titre" prefWidth="150" />
+                    <TableColumn fx:id="colEvenement" text="Événement" prefWidth="150" />
+                    <TableColumn fx:id="colStartTime" text="Début" prefWidth="120" />
+                    <TableColumn fx:id="colEndTime" text="Fin" prefWidth="120" />
+                    <TableColumn fx:id="colLocation" text="Lieu" prefWidth="120" />
+                    <TableColumn fx:id="colCapacity" text="Capacité" prefWidth="80" />
+                    <TableColumn fx:id="colAvailable" text="Places disponibles" prefWidth="100" />
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="100" />
+            </columns>
+                <placeholder>
+                    <Label text="Aucune session disponible" />
+                </placeholder>
+        </TableView>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox style="-fx-padding: 10; -fx-background-color: #f8f9fa;" alignment="CENTER_RIGHT" spacing="10">
+            <Label fx:id="statusLabel" text="Total de sessions: 0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnBack" text="Retour" styleClass="button" onAction="#handleBack" />
+        </HBox>
+    </bottom>
+    
+</BorderPane> 

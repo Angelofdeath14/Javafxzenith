@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.controller.ReservationController"
+            prefHeight="700.0" prefWidth="1000.0"
+            style="-fx-background-color: white;">
+
+    <!-- En-tête -->
+    <top>
+        <VBox style="-fx-background-color: #3f51b5; -fx-padding: 20px;">
+            <Label text="Réservation" 
+                   style="-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Label text="Réservez votre place pour cet événement" 
+                   style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+        </VBox>
+    </top>
+    
+    <!-- Contenu principal -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox fx:id="mainContainer" spacing="20" style="-fx-padding: 20px;">
+                <!-- Détails de l'événement -->
+                <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 15px; -fx-background-radius: 8px;">
+                    <Label text="Détails de l'événement" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <Label fx:id="eventTitle" text="Titre de l'événement" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                    <Label fx:id="eventDate" text="Date: --/--/----" />
+                    <Label fx:id="eventLocation" text="Lieu: ----" />
+                </VBox>
+                
+                <!-- Sélection de la session -->
+                <VBox spacing="10">
+                    <Label text="Sélectionnez une session" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <ScrollPane style="-fx-background-color: transparent; -fx-padding: 0;" fitToWidth="true" prefHeight="250">
+                        <VBox fx:id="sessionsContainer" spacing="10">
+                            <!-- Les sessions seront ajoutées dynamiquement ici -->
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+                
+                <!-- Sélection du nombre de places -->
+                <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 15px; -fx-background-radius: 8px;">
+                    <Label text="Nombre de places" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Nombre de places:" />
+                        <TextField fx:id="nbPlacesField" prefWidth="100" text="1" />
+                    </HBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <!-- Pied de page avec les boutons -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_RIGHT" 
+              style="-fx-padding: 20px; -fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-width: 1 0 0 0;">
+            <Button fx:id="btnCancel" text="Annuler" 
+                    onAction="#handleCancel"
+                    style="-fx-background-color: #e0e0e0; -fx-text-fill: #333333; -fx-min-width: 100px;"/>
+            <Button fx:id="btnConfirm" text="Confirmer" 
+                    onAction="#handleConfirmation"
+                    style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-min-width: 120px;"/>
+        </HBox>
+    </bottom>
+</BorderPane> 

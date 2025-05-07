@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane fitToWidth="true" fitToHeight="true" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="tn.esprit.controller.AjouterEventController"
+            style="-fx-background-color: white;"
+            stylesheets="@style.css">
+    <AnchorPane fx:id="root" prefWidth="800" prefHeight="600">
+        <VBox spacing="15" alignment="CENTER"
+              styleClass="main-content"
+              AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+              AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+            <!-- Titre -->
+            <Label text="Ajouter un événement" styleClass="header-title"/>
+
+            <!-- Champs du formulaire -->
+            <VBox spacing="10" alignment="CENTER" maxWidth="500" styleClass="form-container">
+                <TextField fx:id="nomEventField" promptText="Nom de l'événement" styleClass="form-field"/>
+                <VBox spacing="5">
+                    <TextArea fx:id="descriptionField" promptText="Description" wrapText="true" prefRowCount="3" styleClass="form-field"/>
+                    <Button fx:id="genererDescriptionBtn" text="Générer une description" 
+                            style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                </VBox>
+                <TextField fx:id="typeField" promptText="Type" styleClass="form-field"/>
+                <TextField fx:id="lieuField" promptText="Lieu" styleClass="form-field"/>
+                <TextField fx:id="nbPlaceField" promptText="Nombre de places" styleClass="form-field"/>
+            </VBox>
+
+            <!-- Dates -->
+            <HBox spacing="20" alignment="CENTER" styleClass="date-container">
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Date de début" styleClass="date-label"/>
+                    <DatePicker fx:id="dateDebutPicker" styleClass="date-picker"/>
+                </VBox>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Date de fin" styleClass="date-label"/>
+                    <DatePicker fx:id="dateFinPicker" styleClass="date-picker"/>
+                </VBox>
+            </HBox>
+
+            <!-- Image -->
+            <VBox spacing="10" alignment="CENTER" styleClass="image-container">
+                <ImageView fx:id="imageView" fitWidth="180" fitHeight="120" preserveRatio="true"
+                           styleClass="rounded-image"/>
+                <Button text="Choisir une image..." onAction="#handleChooseImage" styleClass="button-route"/>
+            </VBox>
+
+            <!-- Boutons d'action -->
+            <HBox spacing="15" alignment="TOP_CENTER" styleClass="button-container">
+                <Button fx:id="ajouterEvents"
+                        text="Enregistrer"
+                        onAction="#handleAjoutEvent"
+                        styleClass="primary-button"/>
+                <Button text="Retour à la liste"
+                        onAction="#goToAffichageEvent"
+                        styleClass="button-route"/>
+            </HBox>
+        </VBox>
+    </AnchorPane>
+</ScrollPane>
