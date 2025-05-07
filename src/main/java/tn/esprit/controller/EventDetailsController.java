@@ -492,7 +492,7 @@ public class EventDetailsController implements Initializable {
      * Charge les données des sessions associées à cet événement
      */
     private void loadSessionsData() {
-        try {
+
             List<Session> sessions = sessionService.getSessionsByEvent(event.getId());
             
             // Vider le conteneur
@@ -509,11 +509,7 @@ public class EventDetailsController implements Initializable {
                 noSessionsLabel.getStyleClass().add("empty-message");
                 sessionsContainer.getChildren().add(noSessionsLabel);
             }
-        } catch (SQLException e) {
-            Label errorLabel = new Label("Impossible de charger les sessions: " + e.getMessage());
-            errorLabel.getStyleClass().add("error-message");
-            sessionsContainer.getChildren().add(errorLabel);
-        }
+
     }
     
     /**
@@ -657,7 +653,7 @@ public class EventDetailsController implements Initializable {
      * Met à jour le badge de disponibilité
      */
     private void updateAvailabilityBadge() {
-        try {
+
             // Récupérer les sessions associées à cet événement
             List<Session> sessions = sessionService.getSessionsByEvent(event.getId());
             
@@ -684,10 +680,7 @@ public class EventDetailsController implements Initializable {
                 availabilityBadge.setText(placesRestantes + " PLACES");
                 availabilityBadge.getStyleClass().add("badge-available");
             }
-        } catch (SQLException e) {
-            // En cas d'erreur, masquer le badge
-            availabilityBadge.setVisible(false);
-        }
+
     }
     
     /**

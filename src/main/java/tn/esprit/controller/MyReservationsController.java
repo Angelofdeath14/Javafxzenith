@@ -346,7 +346,7 @@ public class MyReservationsController implements Initializable {
         Optional<Integer> result = dialog.showAndWait();
         
         result.ifPresent(newPlacesCount -> {
-            try {
+
                 // Si le nombre a changé
                 if (newPlacesCount != reservation.getNombrePlaces()) {
                     int difference = newPlacesCount - reservation.getNombrePlaces();
@@ -365,9 +365,7 @@ public class MyReservationsController implements Initializable {
                     showSuccess("Réservation modifiée", 
                               "Votre réservation a été modifiée avec succès!");
                 }
-            } catch (SQLException e) {
-                showError("Erreur", "Impossible de modifier la réservation: " + e.getMessage());
-            }
+
         });
     }
     
@@ -389,7 +387,7 @@ public class MyReservationsController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
+
                 // Récupérer la session
                 Session session = sessionService.getOneById(reservation.getSessionId());
                 
@@ -409,9 +407,7 @@ public class MyReservationsController implements Initializable {
                 showSuccess("Réservation annulée", 
                           "Votre réservation a été annulée avec succès!");
                 
-            } catch (SQLException e) {
-                showError("Erreur", "Impossible d'annuler la réservation: " + e.getMessage());
-            }
+
         }
     }
     

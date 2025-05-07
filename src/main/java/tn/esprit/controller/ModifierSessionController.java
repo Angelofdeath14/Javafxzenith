@@ -70,14 +70,11 @@ public class ModifierSessionController implements Initializable {
                 session.setEndTime(LocalDateTime.of(dateFinPicker.getValue(), session.getEndTime().toLocalTime()));
             }
 
-            try {
+
                 sessionService.modifierSession(session);
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Session modifiée", "La session a été modifiée avec succès.");
                 closeWindow();
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de modification", 
-                        "Une erreur est survenue lors de la modification de la session: " + e.getMessage());
-            }
+
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Format invalide", "Veuillez entrer un nombre valide pour la capacité.");
         }

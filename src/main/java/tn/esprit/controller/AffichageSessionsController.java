@@ -161,16 +161,14 @@ public class AffichageSessionsController implements Initializable {
     }
 
     private void loadSessions() {
-        try {
+
             List<Session> sessions = sessionService.getAllSessions();
             sessionsList.setAll(sessions);
             tableView.setItems(sessionsList);
             
             // Mettre à jour le label de statut
             statusLabel.setText("Total de sessions: " + sessions.size());
-        } catch (SQLException e) {
-            showError("Erreur lors du chargement des sessions", e.getMessage());
-        }
+
     }
 
     private void setupEventFilter() {
@@ -211,7 +209,7 @@ public class AffichageSessionsController implements Initializable {
     }
 
     private void filterSessionsByEventType(String eventType) {
-        try {
+
             // Filtrer les sessions par type d'événement en utilisant les sessions disponibles
             // Nous devons implémenter le filtrage côté client puisque la méthode n'existe pas dans le service
             List<Session> allSessions = sessionService.getAllSessions();
@@ -238,19 +236,15 @@ public class AffichageSessionsController implements Initializable {
             
             sessionsList.setAll(filteredSessions);
             statusLabel.setText("Sessions de type \"" + eventType + "\": " + filteredSessions.size());
-        } catch (SQLException e) {
-            showError("Erreur lors du filtrage des sessions", e.getMessage());
-        }
+
     }
 
     private void filterSessionsBySearch(String searchText) {
-        try {
+
             List<Session> filteredSessions = sessionService.searchSessions(searchText);
             sessionsList.setAll(filteredSessions);
             statusLabel.setText("Résultats pour \"" + searchText + "\": " + filteredSessions.size());
-        } catch (SQLException e) {
-            showError("Erreur lors de la recherche", e.getMessage());
-        }
+
     }
 
     @FXML
@@ -313,13 +307,11 @@ public class AffichageSessionsController implements Initializable {
         
         confirmDialog.showAndWait().ifPresent(type -> {
             if (type == btnOui) {
-                try {
+
                     sessionService.supprimerSession(session.getId());
                     loadSessions();
                     showInfo("Succès", "La session a été supprimée avec succès");
-                } catch (SQLException e) {
-                    showError("Erreur", "Impossible de supprimer la session: " + e.getMessage());
-                }
+
             }
         });
     }
@@ -626,14 +618,12 @@ public class AffichageSessionsController implements Initializable {
         this.currentEvenement = evenement;
         
         if (evenement != null) {
-            try {
+
                 List<Session> sessions = sessionService.getSessionsByEvenementId(evenement.getId());
                 sessionsList.setAll(sessions);
                 tableView.setItems(sessionsList);
                 statusLabel.setText("Sessions pour \"" + evenement.getTitre() + "\": " + sessions.size());
-            } catch (SQLException e) {
-                showError("Erreur", "Impossible de charger les sessions pour cet événement: " + e.getMessage());
-            }
+
         }
     }
 } 

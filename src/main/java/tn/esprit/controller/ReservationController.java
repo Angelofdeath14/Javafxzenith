@@ -114,15 +114,15 @@ public class ReservationController implements Initializable {
                 LogUtils.error("ReservationController", "La liste des sessions est null", null);
                 sessions = new ArrayList<>();
             }
-            
+
             LogUtils.info("ReservationController", "Nombre de sessions récupérées: " + sessions.size());
-            
+
             if (sessions.isEmpty()) {
                 LogUtils.info("ReservationController", "Aucune session disponible pour cet événement");
                 showNoSessionsMessage();
                 return;
             }
-            
+
             // Vider le conteneur de sessions
             if (sessionsContainer != null) {
                 sessionsContainer.getChildren().clear();
@@ -130,21 +130,21 @@ public class ReservationController implements Initializable {
                 LogUtils.error("ReservationController", "Le conteneur de sessions est null", null);
                 return;
             }
-            
+
             // Nombre de sessions avec des places disponibles
             int availableSessions = 0;
-            
+
             // Ajouter une carte pour chaque session disponible
             for (Session session : sessions) {
                 if (session == null) {
                     LogUtils.error("ReservationController", "Session null trouvée dans la liste", null);
                     continue;
                 }
-                
-                LogUtils.info("ReservationController", "Traitement de la session: " + session.getId() + 
-                             ", Titre: " + (session.getTitre() != null ? session.getTitre() : "Sans titre") + 
-                             ", Capacité: " + session.getCapacity());
-                
+
+                LogUtils.info("ReservationController", "Traitement de la session: " + session.getId() +
+                        ", Titre: " + (session.getTitre() != null ? session.getTitre() : "Sans titre") +
+                        ", Capacité: " + session.getCapacity());
+
                 // Ne montrer que les sessions qui ont encore des places disponibles
                 if (session.getCapacity() > 0) {
                     VBox sessionCard = createSessionCard(session);
@@ -156,18 +156,15 @@ public class ReservationController implements Initializable {
                     LogUtils.info("ReservationController", "Session " + session.getId() + " ignorée (aucune place disponible)");
                 }
             }
-            
+
             LogUtils.info("ReservationController", "Nombre de sessions affichées: " + availableSessions);
-            
+
             // Si aucune session n'a de places disponibles, afficher un message
             if (availableSessions == 0) {
                 LogUtils.info("ReservationController", "Aucune session avec des places disponibles");
                 showNoSessionsMessage();
             }
-            
-        } catch (SQLException e) {
-            LogUtils.error("ReservationController", "Erreur SQL lors du chargement des sessions", e);
-            showError("Erreur de chargement", "Impossible de charger les sessions: " + e.getMessage());
+
         } catch (Exception e) {
             LogUtils.error("ReservationController", "Erreur inattendue lors du chargement des sessions", e);
             showError("Erreur", "Une erreur inattendue est survenue: " + e.getMessage());
@@ -318,7 +315,7 @@ public class ReservationController implements Initializable {
             
             LogUtils.info("ReservationController", "Tentative d'ajout de réservation: " + reservation);
             
-            try {
+
                 // Enregistrer la réservation
                 reservationService.ajouter(reservation);
                 LogUtils.info("ReservationController", "Réservation ajoutée avec succès. ID: " + reservation.getId());
@@ -343,11 +340,7 @@ public class ReservationController implements Initializable {
                     LogUtils.info("ReservationController", "Exécution du callback de fin de réservation");
                     onReservationCompleteCallback.run();
                 }
-            } catch (SQLException ex) {
-                LogUtils.error("ReservationController", "Erreur SQL lors de la réservation", ex);
-                showError("Erreur de base de données", 
-                         "Impossible de finaliser la réservation.\nDétails: " + ex.getMessage());
-            }
+
             
         } catch (NumberFormatException e) {
             LogUtils.error("ReservationController", "Format de nombre invalide", e);

@@ -76,7 +76,7 @@ public class AjouterSessionController implements Initializable {
     @FXML
     private void handleEnregistrer() {
         if (validateFields()) {
-            try {
+
                 Session session = new Session();
                 if (sessionToEdit != null) {
                     session.setId(sessionToEdit.getId());
@@ -101,10 +101,7 @@ public class AjouterSessionController implements Initializable {
                 }
 
                 closeWindow();
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'opération", e.getMessage());
-                e.printStackTrace();
-            }
+
         }
     }
 

@@ -270,7 +270,7 @@ public class EventCardController {
      * Met à jour le badge de disponibilité selon les places disponibles
      */
     private void updateAvailabilityBadge() {
-        try {
+
             // Récupérer les sessions associées à cet événement
             SessionService sessionService = new SessionService();
             List<Session> sessions = sessionService.getSessionsByEvent(event.getId());
@@ -299,10 +299,7 @@ public class EventCardController {
                 availabilityBadge.getStyleClass().add("badge-available");
             }
             
-        } catch (SQLException e) {
-            // En cas d'erreur, masquer le badge
-            availabilityBadge.setVisible(false);
-        }
+
     }
     
     /**

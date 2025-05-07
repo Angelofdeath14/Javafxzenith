@@ -144,15 +144,12 @@ public class AjouterSessionController2 implements Initializable {
                 session.setImage(imageField.getText().trim());
 
                 if (sessionToEdit != null) {
-                    try {
+
                         sessionService.modifierSession(session);
                         showAlert(Alert.AlertType.INFORMATION, "Succès", "Modification réussie", 
                                 "La session a été modifiée avec succès !");
                         closeWindow();
-                    } catch (SQLException e) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification", 
-                                "La session n'a pas pu être modifiée: " + e.getMessage());
-                    }
+
                 } else {
                     sessionService.ajouterSession(session);
 
