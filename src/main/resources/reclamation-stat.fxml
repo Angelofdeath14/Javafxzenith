@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controller.ReclamationStatController"
+            prefWidth="600" prefHeight="400">
+    <center>
+        <PieChart fx:id="pieChart" prefWidth="600" prefHeight="350" title="Répartition par urgence"/>
+    </center>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+            <Button fx:id="btnClose" text="Fermer"/>
+        </HBox>
+    </bottom>
+</BorderPane>
