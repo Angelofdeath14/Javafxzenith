@@ -3,12 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="582.0" prefWidth="650.0" style="-fx-background-color: #363B48;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AjouterCommandUserController">
    <children>
@@ -28,15 +31,25 @@
       </ScrollPane>
 
       <!-- Delivery Address -->
-      <Label layoutX="75.0" layoutY="365.0" style="-fx-text-fill: #fff; -fx-font-size:14px;" text="Adresse de livraison:" />
-      <TextArea fx:id="deliveryAddressField" layoutX="75.0" layoutY="385.0" prefHeight="80" prefWidth="200" promptText="Adresse de livraison" style="-fx-background-color: #D5CABC; -fx-border-radius:8px; -fx-background-radius:8px;" />
+      <Label layoutX="78.0" layoutY="391.0" style="-fx-text-fill: #fff; -fx-font-size:14px;" text="Adresse de livraison:" />
+      <TextArea fx:id="deliveryAddressField" layoutX="78.0" layoutY="411.0" prefHeight="80" prefWidth="200" promptText="Adresse de livraison" style="-fx-background-color: #D5CABC; -fx-border-radius:8px; -fx-background-radius:8px;" />
 
       <!-- Notes -->
-      <Label layoutX="325.0" layoutY="365.0" style="-fx-text-fill: #fff; -fx-font-size:14px;" text="Note:" />
-      <TextArea fx:id="notesArea" layoutX="325.0" layoutY="385.0" prefHeight="80" prefWidth="200" promptText="Notes" style="-fx-background-color: #D5CABC; -fx-border-radius:8px; -fx-background-radius:8px;" />
+      <Label layoutX="328.0" layoutY="391.0" style="-fx-text-fill: #fff; -fx-font-size:14px;" text="Note:" />
+      <TextArea fx:id="notesArea" layoutX="328.0" layoutY="411.0" prefHeight="80" prefWidth="200" promptText="Notes" style="-fx-background-color: #D5CABC; -fx-border-radius:8px; -fx-background-radius:8px;" />
+      <HBox alignment="CENTER_LEFT" layoutX="203.0" layoutY="506.0" spacing="20">
+         <children>
+            <Label style="-fx-text-fill: #fff;" text="Paiement :" />
 
+            <RadioButton fx:id="rbCash" selected="true" text="Cash" textFill="WHITE">
+               <toggleGroup>
+                  <ToggleGroup fx:id="paymentGroup" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="rbCard" text="Carte" textFill="WHITE" toggleGroup="$paymentGroup" />
+         </children>
+      </HBox>
       <!-- Confirm Button -->
-      <Button layoutX="253.0" layoutY="525.0" mnemonicParsing="false" onAction="#submit" style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="256.0" layoutY="551.0" mnemonicParsing="false" onAction="#submit" style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="5">
                <SVGPath content="M10 5 H14 V10 H19 V14 H14 V19 H10 V14 H5 V10 H10 Z" fill="white" scaleX="0.5" scaleY="0.5" />
@@ -46,7 +59,7 @@
       </Button>
 
       <!-- Retour Button -->
-      <Button layoutX="567.0" layoutY="17.0" mnemonicParsing="false" onAction="#retour" style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="570.0" layoutY="43.0" mnemonicParsing="false" onAction="#retour" style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="5">
                <SVGPath content="M10 6L6 10l4 4M6 10h12" fill="white" />
@@ -54,6 +67,11 @@
             </HBox>
          </graphic>
       </Button>
+      <Label fx:id="ltotal" layoutX="50.0" layoutY="357.0" text="Label" textFill="#75ff7a">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
 
    </children>
 </AnchorPane>

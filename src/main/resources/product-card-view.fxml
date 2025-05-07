@@ -43,5 +43,6 @@
             </Button>
 
         </VBox>
+      <ImageView fx:id="qrcode" fitHeight="90.0" fitWidth="123.0" layoutX="171.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true" />
     </children>
 </AnchorPane>

@@ -1,168 +1,159 @@
 package tn.esprit.controller;
 
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceProduit;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public class AfficherProduitAdminController {
-
-
-
-
-
-
-    String path="C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads";
-
     @FXML
-    private ListView<Produit> lvproduit;
-    ObservableList<Produit> produitList= FXCollections.observableArrayList();
-    ServiceProduit serviceProduit=new ServiceProduit();
-    public void initialize(){
+    private FlowPane cardsContainer;
+    private Produit selectedProduit;
+    private ServiceProduit serviceProduit = new ServiceProduit();
 
+    public void initialize() {
+        refreshCards();
+    }
 
-        refreshTable();
-        lvproduit.setCellFactory(lv -> new ListCell<Produit>() {
-            @Override
-            protected void updateItem(Produit produit, boolean empty) {
-                super.updateItem(produit, empty);
-                if (empty || produit == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    // Create ImageView objects for each image attribute.
-                    ImageView ivFront = createImageView(produit.getFront_image());
-                    ImageView ivBack = createImageView(produit.getBack_image());
-                    ImageView ivTop = createImageView(produit.getTop_image());
-
-                    // Create a VBox for product details.
-                    Label lblName = new Label("Nom: " + produit.getNom());
-                    Label lblDesc = new Label("Description: " + produit.getDescription());
-                    Label lblCat = new Label("Catégorie: " + produit.getCategorie());
-                    Label lblPrix = new Label("Prix: " + produit.getPrix());
-                    Label lblEtat = new Label("État: " + produit.getEtat());
-                    Label lblEtatProduit = new Label("État Produit: " + produit.getEtat_produit());
-
-                    VBox detailsBox = new VBox(5, lblName, lblDesc, lblCat, lblPrix, lblEtat, lblEtatProduit);
-
-                    // Create an HBox for images.
-                    HBox imagesBox = new HBox(10, ivFront, ivBack, ivTop);
-
-                    // Combine images and details in a main container.
-                    HBox cellBox = new HBox(15, imagesBox, detailsBox);
-                    setGraphic(cellBox);
-                }
+    private void refreshCards() {
+        cardsContainer.getChildren().clear();
+        List<Produit> produits = serviceProduit.getUserProducts(1);
+        for (Produit p : produits) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/product-card-view.fxml"));
+                AnchorPane card = loader.load();
+                ProductCardViewController ctrl = loader.getController();
+                ctrl.fillCard(p);
+                ctrl.getBtnAddToCart().setVisible(false);
+                card.setOnMouseClicked(e -> selectedProduit = p);
+                cardsContainer.getChildren().add(card);
+            } catch (IOException e) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Impossible de charger la carte produit : " + e.getMessage());
+                errorAlert.showAndWait();
             }
-
-            // Helper method to create an ImageView from a file name.
-            private ImageView createImageView(String fileName) {
-                ImageView imageView = new ImageView();
-                try {
-                    // Combine the base path with the file name.
-                    File file = new File("C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\"+ fileName);
-                    if (file.exists()) {
-                        FileInputStream fis = new FileInputStream(file);
-                        Image image = new Image(fis);
-                        imageView.setImage(image);
-                        imageView.setFitWidth(50);
-                        imageView.setFitHeight(50);
-                        imageView.setPreserveRatio(true);
-                    } else {
-                        imageView.setImage(null);
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error loading image: " + ex.getMessage());
-                }
-                return imageView;
-            }
-        });
+        }
     }
 
     @FXML
-    void ajouter(ActionEvent event) {
+    private void ajouter(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajouter-modifier-produit-admin.fxml"));
-            Parent root = loader.load();
+            AnchorPane root = loader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Ajouter Produit");
             stage.show();
-            Stage stage2 = (Stage) lvproduit.getScene().getWindow();
-            stage2.close();
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            ((Stage) cardsContainer.getScene().getWindow()).close();
+        } catch (IOException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Erreur");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("Impossible d'ouvrir l'interface d'ajout : " + e.getMessage());
+            errorAlert.showAndWait();
         }
-
     }
 
     @FXML
-    void modifier(ActionEvent event) {
-        Produit selectedProduit = lvproduit.getSelectionModel().getSelectedItem();
+    private void retour(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/afficher-produit-user.fxml"));
+            AnchorPane root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Produits Utilisateur");
+            stage.show();
+            ((Stage) cardsContainer.getScene().getWindow()).close();
+        } catch (IOException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Erreur");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("Impossible de revenir à l'affichage utilisateur : " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void modifier(ActionEvent event) {
         if (selectedProduit == null) {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Modification");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Veuillez sélectionner un produit à modifier.");
+            warningAlert.showAndWait();
+            return;
+        }
+        if ("Accepted".equals(selectedProduit.getEtat()) || "Rejected".equals(selectedProduit.getEtat())) {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Modification");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Un produit accepté ou rejeté ne peut pas être modifié.");
+            warningAlert.showAndWait();
             return;
         }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajouter-modifier-produit-admin.fxml"));
-            Parent root = loader.load();
+            AnchorPane root = loader.load();
+            AjouterModifierProduitAdminController ctrl = loader.getController();
+            ctrl.setProduit(selectedProduit);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Ajouter Produit");
+            stage.setTitle("Modifier Produit");
             stage.show();
-            Stage stage2 = (Stage) lvproduit.getScene().getWindow();
-            stage2.close();
-            AjouterModifierProduitAdminController controller = loader.getController();
-            controller.setProduit(selectedProduit);
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            ((Stage) cardsContainer.getScene().getWindow()).close();
+        } catch (IOException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Erreur");
+            errorAlert.setHeaderText(null);
+            errorAlert.setContentText("Impossible d'ouvrir l'interface de modification : " + e.getMessage());
+            errorAlert.showAndWait();
         }
+    }
 
-    }
-    private void refreshTable(){
-        produitList.setAll(serviceProduit.afficher());
-        lvproduit.setItems(produitList);
-    }
     @FXML
-    void supprimer(ActionEvent event) {
-        Produit p=lvproduit.getSelectionModel().getSelectedItem();
-        if(p!=null){
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Confirmation de suppression");
-            confirmAlert.setHeaderText("Suppression de produit");
-            confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer le produit \"" + p.getNom() + "\" ?");
-            Optional<ButtonType> result = confirmAlert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                serviceProduit.supprimer(p.getId());
-                refreshTable();
-            }
-
-        }else{
+    private void supprimer(ActionEvent event) {
+        if (selectedProduit == null) {
             Alert warningAlert = new Alert(Alert.AlertType.WARNING);
-            warningAlert.setTitle("Aucun produit sélectionné");
+            warningAlert.setTitle("Suppression");
             warningAlert.setHeaderText(null);
             warningAlert.setContentText("Veuillez sélectionner un produit à supprimer.");
             warningAlert.showAndWait();
+            return;
         }
-
+        if ("Accepted".equals(selectedProduit.getEtat())) {
+            Alert warningAlert = new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Suppression");
+            warningAlert.setHeaderText(null);
+            warningAlert.setContentText("Un produit accepté ne peut pas être supprimé.");
+            warningAlert.showAndWait();
+            return;
+        }
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation");
+        confirmAlert.setHeaderText("Suppression de produit");
+        confirmAlert.setContentText("Voulez-vous vraiment supprimer le produit \"" + selectedProduit.getNom() + "\" ?");
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            serviceProduit.supprimer(selectedProduit.getId());
+            refreshCards();
+            Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Suppression");
+            infoAlert.setHeaderText(null);
+            infoAlert.setContentText("Produit supprimé avec succès.");
+            infoAlert.showAndWait();
+        }
     }
-
 }
-

@@ -6,6 +6,7 @@ import tn.esprit.utils.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServiceProduit implements IService<Produit>{
     private Connection con;
@@ -106,4 +107,16 @@ public class ServiceProduit implements IService<Produit>{
         return produits;
 
     }
+    public List<Produit> getUserProducts(int id_user){
+        return afficher().stream().filter(p->p.getUser_id()==id_user).collect(Collectors.toList());
+    }
+    public List<Produit> getOtherProducts(int id_user){
+        return afficher().stream().filter(p->p.getUser_id()!=id_user).collect(Collectors.toList());
+    }
+    public List<Produit> getByCommandId(int id){
+        return afficher().stream().filter(p->p.getCommand_id()==id).collect(Collectors.toList());
+
+    }
+
+
 }
