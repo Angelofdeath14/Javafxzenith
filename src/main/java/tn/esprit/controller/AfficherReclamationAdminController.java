@@ -13,7 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import tn.esprit.entity.Reclamation;
+import tn.esprit.entities.Reclamation;
 import tn.esprit.service.ServiceReclamation;
 import tn.esprit.utils.ExportToExcel;
 import tn.esprit.utils.ReclamationClassifier;

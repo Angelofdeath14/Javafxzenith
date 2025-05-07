@@ -2,7 +2,7 @@ package tn.esprit.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import tn.esprit.entity.Reclamation;
+import tn.esprit.entities.Reclamation;
 
 import java.net.URI;
 import java.net.http.HttpClient;

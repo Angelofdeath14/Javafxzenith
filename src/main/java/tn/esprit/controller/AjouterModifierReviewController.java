@@ -9,7 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import tn.esprit.entity.Review;
+import tn.esprit.entities.Review;
 import tn.esprit.service.ServiceReview;
 
 import java.io.IOException;

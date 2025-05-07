@@ -3,8 +3,8 @@ package tn.esprit.service;
 
 
 
-import tn.esprit.entity.Reclamation;
-import tn.esprit.utils.MyDatabase;
+import tn.esprit.entities.Reclamation;
+import tn.esprit.utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ServiceReclamation implements IService<Reclamation>{
     private Connection connection;
     public ServiceReclamation() {
-        connection= MyDatabase.getInstance().getConnection();
+        connection= MyDataBase.getInstance().getCon();
     }
 
     @Override

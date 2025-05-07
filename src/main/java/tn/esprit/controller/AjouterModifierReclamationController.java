@@ -9,7 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import tn.esprit.entity.Reclamation;
+import tn.esprit.entities.Reclamation;
 import tn.esprit.service.ServiceReclamation;
 import tn.esprit.utils.BadWordFilter;
 

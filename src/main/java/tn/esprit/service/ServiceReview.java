@@ -1,8 +1,8 @@
 package tn.esprit.service;
 
 
-import tn.esprit.entity.Review;
-import tn.esprit.utils.MyDatabase;
+import tn.esprit.entities.Review;
+import tn.esprit.utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class ServiceReview implements IService<Review> {
     private final Connection connection;
 
     public ServiceReview() {
-        connection = MyDatabase.getInstance().getConnection();
+        connection = MyDataBase.getInstance().getCon();
     }
 
     @Override

@@ -2,7 +2,7 @@ package tn.esprit.utils;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import tn.esprit.entity.Reclamation;
+import tn.esprit.entities.Reclamation;
 
 import java.io.File;
 import java.io.FileOutputStream;

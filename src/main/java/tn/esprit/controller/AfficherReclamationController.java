@@ -11,7 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-import tn.esprit.entity.Reclamation;
+import tn.esprit.entities.Reclamation;
 import tn.esprit.service.ServiceReclamation;
 
 import java.io.IOException;
