@@ -156,7 +156,7 @@ public class DashboardController implements Initializable {
 
             // Pour le nombre d'utilisateurs, on met une valeur factice car
             // nous n'avons pas implémenté la gestion des utilisateurs
-            lblTotalUsers.setText("0");
+            //lblTotalUsers.setText("0");
             
             // Chargement des graphiques
             loadCharts(allEvents);
@@ -305,11 +305,31 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void goToUsers() {
-        // À implémenter si nécessaire
-        showAlert(Alert.AlertType.INFORMATION,
-                 "Information",
-                 "Fonctionnalité non implémentée",
-                 "La gestion des utilisateurs n'est pas encore implémentée.");
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL url = getClass().getResource("/ListUsers.fxml");
+            if (url == null) {
+                url = getClass().getClassLoader().getResource("ListUsers.fxml");
+            }
+            if (url == null) {
+                String resourcePath = "file:" + System.getProperty("user.dir") + "/target/classes/AffichageEvent.fxml";
+                url = new URL(resourcePath);
+            }
+
+            loader.setLocation(url);
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnEvents.getScene().getWindow();
+            stage.setTitle("Gestion des Utilisateurs");
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR,
+                    "Erreur",
+                    "Erreur de navigation",
+                    "Impossible de naviguer vers les utilisateurs: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
     /**

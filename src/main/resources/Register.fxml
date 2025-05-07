@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            style="-fx-background-color: #f6f9ff;"
+            stylesheets="@user-style.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controller.RegisterController">
+    <children>
+
+        <!-- Bloc principal blanc -->
+        <AnchorPane layoutX="150.0" layoutY="70.0" prefHeight="460.0" prefWidth="600.0"
+                    style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(1,41,112,0.1), 30, 0, 0, 0);">
+            <children>
+
+                <!-- Titre -->
+                <Text layoutX="130.0" layoutY="40.0" text="Welcome to Artyphoria" fill="#c8ad7f">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Text>
+
+                <!-- Sous-titre -->
+                <Text layoutX="100.0" layoutY="65.0" text="Enter your personal details to create an account" />
+
+                <!-- First & Last Name -->
+                <Text layoutX="50.0" layoutY="100.0" text="First Name" />
+                <TextField fx:id="ftfirst_name" layoutX="50.0" layoutY="110.0" prefWidth="200.0" />
+                <Text fx:id="fnError" layoutX="50.0" layoutY="135.0" fill="#dc3545" />
+
+                <Text layoutX="300.0" layoutY="100.0" text="Last Name" />
+                <TextField fx:id="ftlast_name" layoutX="300.0" layoutY="110.0" prefWidth="200.0" />
+                <Text fx:id="lnError" layoutX="300.0" layoutY="135.0" fill="#dc3545" />
+
+                <!-- Email -->
+                <Text layoutX="50.0" layoutY="160.0" text="Email" />
+                <TextField fx:id="ftEmail" layoutX="50.0" layoutY="170.0" prefWidth="450.0" />
+                <Text fx:id="emailError" layoutX="50.0" layoutY="195.0" fill="#dc3545" />
+
+                <!-- Password -->
+                <Text layoutX="50.0" layoutY="220.0" text="Password" />
+                <PasswordField fx:id="fpPass" layoutX="50.0" layoutY="230.0" prefWidth="200.0" />
+                <Text fx:id="passError" layoutX="50.0" layoutY="255.0" fill="#dc3545" />
+
+                <!-- Confirm Password -->
+                <Text layoutX="300.0" layoutY="220.0" text="Confirm Password" />
+                <PasswordField fx:id="fpCofirm" layoutX="300.0" layoutY="230.0" prefWidth="200.0" />
+                <Text fx:id="cPassError" layoutX="300.0" layoutY="255.0" fill="#dc3545" />
+
+                <!-- Agree checkbox -->
+                <CheckBox fx:id="ftAgree" layoutX="50.0" layoutY="280.0" text="I agree and accept the" />
+                <Hyperlink layoutX="200.0" layoutY="280.0" text="terms and conditions" />
+                <Text fx:id="agreeError" layoutX="50.0" layoutY="300.0" fill="#dc3545" />
+
+                <!-- Submit Button -->
+                <Button layoutX="50.0" layoutY="330.0" prefWidth="450.0" prefHeight="30.0"
+                        text="Create Account" onAction="#createAccount"
+                        style="-fx-background-color: #c8ad7f; -fx-background-radius: 5px;" textFill="white" />
+
+                <!-- Redirect Login -->
+                <Text layoutX="50.0" layoutY="380.0" text="Already have an account?" />
+                <Hyperlink layoutX="220.0" layoutY="365.0" text="Log in" onAction="#goToLogin" />
+
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

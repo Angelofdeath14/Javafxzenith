@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" stylesheets="@user-style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.ListUsersController">
+    <VBox layoutY="60.0" prefHeight="540.0" prefWidth="200" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="60.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+        <Button onAction="#goToDash" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="Dashboard" textFill="#4154f1" />
+        <Button onAction="#goToUsers" prefHeight="26.0" prefWidth="175.0" styleClass="button-route" text="Table of users" textFill="#4154f1" />
+        <Button onAction="#goToCategoryDetails" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="Table ofCategory" textFill="#4154f1" />
+        <Button layoutX="30.0" layoutY="83.0" onAction="#goToProduct" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="Table of Product" textFill="#4154f1" />
+        <Button onAction="#goToActivites" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="table of event " textFill="#012970" />
+        <Button layoutX="30.0" layoutY="83.0" onAction="#goToObjectives" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="table of Reclamtion" textFill="#012970" />
+        <Button layoutX="30.0" layoutY="30.0" onAction="#goToRecette" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="Table of Feedback" textFill="#4154f1" />
+        <Button layoutX="30.0" layoutY="30.0" onAction="#goToAddToCart" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="Add to cart" textFill="#4154f1" />
+        <Button layoutX="30.0" layoutY="30.0" onAction="#goToOverview" prefHeight="26.0" prefWidth="182.0" styleClass="button-route" text="Profile Setting" textFill="#012970" />
+        <Button onAction="#Logout" prefHeight="26.0" prefWidth="170.0" styleClass="button-route" text="Logout" textFill="#012970" />
+
+    </VBox>
+    <HBox prefHeight="60.0" prefWidth="1200.0" styleClass="header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+    <ListView layoutX="232.0" layoutY="100.0" prefHeight="486.0" prefWidth="966.0" styleClass="card" />
+    <HBox layoutX="959.0" layoutY="16.0" prefHeight="34.0" prefWidth="200.0" AnchorPane.rightAnchor="41.0">
+        <children>
+            <Circle fx:id="imgCircle" fill="DODGERBLUE" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+            <Text fx:id="currentUserName" fill="#012970" strokeType="OUTSIDE" strokeWidth="0.0">
+                <HBox.margin>
+                    <Insets left="10.0" top="5.0" />
+                </HBox.margin></Text>
+        </children>
+    </HBox>   <TreeTableView fx:id="tableView" layoutX="259.0" layoutY="177.0" prefHeight="320.0" prefWidth="900.0">
+    <columns>
+        <TreeTableColumn fx:id="ftId" prefWidth="50.0" text="ID" />
+
+        <TreeTableColumn fx:id="ftfirst_name" prefWidth="72.80001831054688" text="First Name" />
+        <TreeTableColumn fx:id="ftlast_name" prefWidth="79.99993896484375" text="Last Name" />
+        <TreeTableColumn fx:id="ftEmail" prefWidth="150.40011596679688" text="Email" />
+        <TreeTableColumn fx:id="ftStatus" prefWidth="50.4000244140625" text="Status" />
+        <TreeTableColumn fx:id="ftAction" prefWidth="208.79998779296875" text="Actions" />
+    </columns>
+</TreeTableView>
+</AnchorPane>
