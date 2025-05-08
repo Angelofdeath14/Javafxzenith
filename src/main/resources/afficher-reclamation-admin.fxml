@@ -1,16 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1"
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="tn.esprit.controller.AfficherReclamationAdminController"
-            prefWidth="860" prefHeight="640" style="-fx-background-color: #f0f2f5; -fx-padding: 20;">
-    <TextField fx:id="tfSearch" layoutX="20" layoutY="20" prefWidth="180" promptText="Recherche..."/>
-    <ComboBox fx:id="cbSort" layoutX="220" layoutY="20" prefWidth="140" promptText="Trier..."/>
-    <ComboBox fx:id="cbLanguage" layoutX="380" layoutY="20" prefWidth="120" promptText="Langue"/>
-    <Button fx:id="btnStats" layoutX="520" layoutY="20" text="Voir stats"/>
-    <Button fx:id="btnExport" layoutX="620" layoutY="20" text="Exporter Excel"/>
-    <ListView fx:id="lvReclamation" layoutX="20" layoutY="60" prefWidth="820" prefHeight="560"/>
+            stylesheets="@style.css"
+            prefWidth="1200" prefHeight="800"
+            style="-fx-background-color: white;">
+
+    <!-- Window header -->
+    <HBox styleClass="window-header"
+          AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          prefHeight="30">
+        <Label text="Gestion des Réclamations" styleClass="window-title"/>
+    </HBox>
+
+    <!-- Sidebar nav -->
+    <VBox layoutY="30" prefWidth="200" styleClass="sidebar"
+          AnchorPane.topAnchor="30" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0">
+        <Button fx:id="btnDashboard"    onAction="#goToDash"        styleClass="button-route" text="Tableau de bord"/>
+        <Button fx:id="btnEvents"       onAction="#goToEvents"      styleClass="button-route" text="Événements"/>
+        <Button fx:id="btnAddEvent"     onAction="#goToAddEvent"    styleClass="button-route" text="Ajouter un événement"/>
+        <Button fx:id="btnUsers"        onAction="#goToUsers"       styleClass="button-route" text="Utilisateurs"/>
+        <Button fx:id="btnProduit"      onAction="#goToProduit"     styleClass="button-route" text="Produits"/>
+        <Button fx:id="btnCommands"     onAction="#goToCommands"    styleClass="button-route" text="Commandes"/>
+        <Button fx:id="btnReclamation"     styleClass="button-route" text="Réclamations"/>
+        <Button fx:id="btnLogout"       onAction="#logout"          styleClass="button-route" text="Déconnexion"/>
+    </VBox>
+
+    <!-- User avatar & name -->
+    <HBox spacing="5" AnchorPane.topAnchor="5" AnchorPane.rightAnchor="20">
+        <Circle radius="13" fill="DODGERBLUE" stroke="BLACK"/>
+        <Text fx:id="currentUserName" text="Utilisateur">
+            <font><Font name="System Bold" size="14"/></font>
+        </Text>
+    </HBox>
+
+    <!-- Main content -->
+    <ScrollPane fx:id="scrollPane"
+                AnchorPane.topAnchor="50" AnchorPane.leftAnchor="220"
+                AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+        <VBox fx:id="mainContainer" spacing="15" styleClass="main-content">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <!-- Filter & action bar -->
+            <HBox spacing="10">
+                <TextField fx:id="tfSearch"    promptText="Recherche..." prefWidth="200"/>
+                <ComboBox fx:id="cbSort"       promptText="Trier..."      prefWidth="140"/>
+                <ComboBox fx:id="cbLanguage"   promptText="Langue"       prefWidth="120"/>
+                <Button fx:id="btnStats"  text="Voir stats" onAction="#openStats" styleClass="action-button"/>
+                <Button fx:id="btnExport" text="Exporter"   onAction="#exportToExcel" styleClass="action-button"/>
+            </HBox>
+
+            <!-- Reclamations list -->
+            <ListView fx:id="lvReclamation" VBox.vgrow="ALWAYS"
+                      styleClass="card-list"/>
+        </VBox>
+    </ScrollPane>
+
 </AnchorPane>

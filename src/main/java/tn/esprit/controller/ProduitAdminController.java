@@ -4,157 +4,169 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceProduit;
+import tn.esprit.service.session.UserSession;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class ProduitAdminController {
+public class ProduitAdminController implements Initializable {
+    @FXML private Text currentUserName;
+    @FXML private ListView<Produit> lvproduit;
+    @FXML private Button btnAccept, btnReject, btnCommandsView, btnStat;
+    @FXML private Button btnDashboard, btnEvents, btnAddEvent, btnUsers, btnProduit, btnCommands, btnReclamation, btnLogout;
+    @FXML private VBox mainContainer;
+    @FXML private ScrollPane scrollPane;
 
-    String path="C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads";
+    private final ServiceProduit serviceProduit = new ServiceProduit();
+    private final ObservableList<Produit> produitList = FXCollections.observableArrayList();
+    private final String uploadsPath = "C:\\Users\\Abir12\\Desktop\\artyphoria - Copy\\public\\uploads\\";
 
-    @FXML
-    private ListView<Produit> lvproduit;
-    ObservableList<Produit> produitList= FXCollections.observableArrayList();
-    ServiceProduit serviceProduit=new ServiceProduit();
-    public void initialize(){
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // show current user
+        currentUserName.setText(UserSession.CURRENT_USER.getUserLoggedIn().getfirst_name());
 
+        // set up nav buttons
+        btnDashboard.setOnAction(e -> goToDash());
+        btnEvents.setOnAction(e -> goToEvents());
+        btnAddEvent.setOnAction(e -> goToAddEvent());
+        btnUsers.setOnAction(e -> goToUsers());
+        btnProduit.setOnAction(e -> refreshList());
+        btnCommands.setOnAction(e -> goToCommands());
+        btnReclamation.setOnAction(e -> goToReclamation());
+        btnLogout.setOnAction(e -> logout());
 
-        refreshTable();
-        lvproduit.setCellFactory(lv -> new ListCell<Produit>() {
+        // list cell factory
+        lvproduit.setCellFactory(lv -> new ListCell<>() {
             @Override
-            protected void updateItem(Produit produit, boolean empty) {
-                super.updateItem(produit, empty);
-                if (empty || produit == null) {
-                    setText(null);
+            protected void updateItem(Produit p, boolean empty) {
+                super.updateItem(p, empty);
+                if (empty || p == null) {
                     setGraphic(null);
                 } else {
-                    // Create ImageView objects for each image attribute.
-                    ImageView ivFront = createImageView(produit.getFront_image());
-                    ImageView ivBack = createImageView(produit.getBack_image());
-                    ImageView ivTop = createImageView(produit.getTop_image());
-
-                    // Create a VBox for product details.
-                    Label lblName = new Label("Nom: " + produit.getNom());
-                    Label lblDesc = new Label("Description: " + produit.getDescription());
-                    Label lblCat = new Label("Catégorie: " + produit.getCategorie());
-                    Label lblPrix = new Label("Prix: " + produit.getPrix());
-                    Label lblEtat = new Label("État: " + produit.getEtat());
-                    Label lblEtatProduit = new Label("État Produit: " + produit.getEtat_produit());
-
-                    VBox detailsBox = new VBox(5, lblName, lblDesc, lblCat, lblPrix, lblEtat, lblEtatProduit);
-
-                    // Create an HBox for images.
-                    HBox imagesBox = new HBox(10, ivFront, ivBack, ivTop);
-
-                    // Combine images and details in a main container.
-                    HBox cellBox = new HBox(15, imagesBox, detailsBox);
-                    setGraphic(cellBox);
+                    // images
+                    HBox images = new HBox(5,
+                            makeImageView(p.getFront_image()),
+                            makeImageView(p.getBack_image()),
+                            makeImageView(p.getTop_image())
+                    );
+                    // details
+                    VBox details = new VBox(3,
+                            new Label("Nom: " + p.getNom()),
+                            new Label("Desc: " + p.getDescription()),
+                            new Label("Cat: " + p.getCategorie()),
+                            new Label("Prix: " + p.getPrix()),
+                            new Label("Etat: " + p.getEtat()),
+                            new Label("EtatProd: " + p.getEtat_produit())
+                    );
+                    setGraphic(new HBox(15, images, details));
                 }
-            }
-
-            // Helper method to create an ImageView from a file name.
-            private ImageView createImageView(String fileName) {
-                ImageView imageView = new ImageView();
-                try {
-                    // Combine the base path with the file name.
-                    File file = new File("C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\"+ fileName);
-                    if (file.exists()) {
-                        FileInputStream fis = new FileInputStream(file);
-                        Image image = new Image(fis);
-                        imageView.setImage(image);
-                        imageView.setFitWidth(50);
-                        imageView.setFitHeight(50);
-                        imageView.setPreserveRatio(true);
-                    } else {
-                        imageView.setImage(null);
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error loading image: " + ex.getMessage());
-                }
-                return imageView;
             }
         });
+
+        // wire action buttons
+        btnAccept.setOnAction(e -> changeState("Accepted"));
+        btnReject.setOnAction(e -> changeState("Rejected"));
+
+
+        // initial load
+        refreshList();
     }
-    private void refreshTable(){
+
+    private ImageView makeImageView(String fileName) {
+        var iv = new ImageView();
+        try {
+            File f = new File(uploadsPath + fileName);
+            if (f.exists()) {
+                iv.setImage(new javafx.scene.image.Image(new FileInputStream(f)));
+                iv.setFitWidth(50);
+                iv.setFitHeight(50);
+                iv.setPreserveRatio(true);
+            }
+        } catch (Exception ignored) {}
+        return iv;
+    }
+
+    private void refreshList() {
         produitList.setAll(serviceProduit.afficher());
         lvproduit.setItems(produitList);
     }
-    @FXML
-    void accept(ActionEvent event) {
-        Produit selectedProduit = lvproduit.getSelectionModel().getSelectedItem();
-        if (selectedProduit == null && selectedProduit.getEtat().equals("Pending")) {
-            return;
+
+    private void changeState(String newState) {
+        Produit sel = lvproduit.getSelectionModel().getSelectedItem();
+        if (sel != null && "Pending".equals(sel.getEtat())) {
+            sel.setEtat(newState);
+            serviceProduit.modifier(sel);
+            refreshList();
         }
-        selectedProduit.setEtat("Accepted");
-        serviceProduit.modifier(selectedProduit);
-        refreshTable();
     }
 
-    @FXML
-    void reject(ActionEvent event) {
-        Produit selectedProduit = lvproduit.getSelectionModel().getSelectedItem();
-        if (selectedProduit == null && selectedProduit.getEtat().equals("Pending")) {
-            return;
-        }
-        selectedProduit.setEtat("Rejected");
-        serviceProduit.modifier(selectedProduit);
-        refreshTable();
-    }
-    @FXML
-    void command(ActionEvent event) {
+    // --- Navigation helpers ---
+    public void goToDash()        { navigate("/Dashboard.fxml",                "Tableau de bord"); }
+    public void goToEvents()      { navigate("/AffichageEvent.fxml",           "Événements");    }
+    public void goToAddEvent()    { navigate("/AjouterEvent.fxml",             "Ajouter Événement"); }
+    public void goToUsers()       { navigate("/ListUsers.fxml",                "Utilisateurs");  }
+    public void goToCommands()    { navigate("/command-admin.fxml",           "Commandes");     }
+    public void goToReclamation() { navigate("/afficher-reclamation-admin.fxml","Réclamations"); }
+    public void goToStat()        { navigate("/product-stat.fxml",             "Stats Produits");}
+    public void logout()          { navigate("/Login.fxml",                    "Connexion");     }
+
+    private void navigate(String fxml, String title) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/command-admin.fxml"));
-            AnchorPane root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Command Admin");
-            stage.show();
-            ((Stage) lvproduit.getScene().getWindow()).close();
-        } catch (IOException e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setTitle("Erreur");
-            errorAlert.setHeaderText(null);
-            errorAlert.setContentText("Impossible de revenir à l'affichage utilisateur : " + e.getMessage());
-            errorAlert.showAndWait();
+            Parent r = FXMLLoader.load(getClass().getResource(fxml));
+            Stage st = (Stage) lvproduit.getScene().getWindow();
+            st.setTitle(title);
+            st.setScene(new Scene(r));
+        } catch (IOException ex) {
+            new Alert(Alert.AlertType.ERROR, "Navigation failed: "+ex.getMessage()).showAndWait();
         }
     }
-
-
-
+    /** Refresh the ListView with the latest data */
     @FXML
-    void stat(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/product-stat.fxml"));
-            AnchorPane root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Produits Stat");
-            stage.show();
+    private void refreshList(ActionEvent event) {
+        refreshList();
+    }
 
+    /** Accept the currently selected product */
+    @FXML
+    private void accept(ActionEvent event) {
+        changeState("Accepted");
+    }
+
+    /** Reject the currently selected product */
+    @FXML
+    private void reject(ActionEvent event) {
+        changeState("Rejected");
+    }
+    @FXML
+    private void goToStat(ActionEvent event) {
+        try {
+            Parent statRoot = FXMLLoader.load(getClass().getResource("/product-stat.fxml"));
+            Stage statStage = new Stage();
+            statStage.setTitle("Statistiques Produits");
+            statStage.setScene(new Scene(statRoot));
+            statStage.show();   // <-- show, not showAndWait, and we do NOT close the current stage
         } catch (IOException e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setTitle("Erreur");
-            errorAlert.setHeaderText(null);
-            errorAlert.setContentText("Impossible de revenir à l'affichage utilisateur : " + e.getMessage());
-            errorAlert.showAndWait();
+            System.out.println(e.getMessage());
         }
     }
+
+
 
 }
-

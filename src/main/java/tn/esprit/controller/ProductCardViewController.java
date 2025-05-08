@@ -78,7 +78,7 @@ public class ProductCardViewController {
 
     private void loadImage(String fileName) {
         try {
-            File f = new File("C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\" + fileName);
+            File f = new File("C:\\Users\\Abir12\\Desktop\\artyphoria - Copy\\public\\uploads\\" + fileName);
             if (f.exists()) {
                 try (FileInputStream fis = new FileInputStream(f)) {
                     imageView.setImage(new Image(fis));

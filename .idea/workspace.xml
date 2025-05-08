@@ -5,51 +5,97 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f58b0c09-02c9-4a1f-81a8-c951400f8fc8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/DashboardFrontController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/DashboardFront.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/dashboard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/translate_WS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AffichageSessionsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AffichageSessionsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterSessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterSessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterSessionController2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterSessionController2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/EventCardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/EventCardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/EventDetailsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/EventDetailsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ModifierSessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ModifierSessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/MyReservationsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/MyReservationsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ReservationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/service/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/service/SessionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/utils/WeatherAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/utils/WeatherAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AffichageEventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AffichageEventController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherProduitAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherProduitAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherProduitUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherProduitUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherReclamationAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherReclamationAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherReclamationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherReclamationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AfficherReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterCommandUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterCommandUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterModifierProduitAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterModifierProduitAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterModifierReclamationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/AjouterModifierReclamationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/CartItemViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/CartItemViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/CommandAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/CommandAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ListUsersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ListUsersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/NavigationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/NavigationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ProductCardViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ProductCardViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ProduitAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ProduitAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ProfileSettingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ProfileSettingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ShowProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/controller/ShowProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/entities/Reclamation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/entities/Reclamation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/service/ServiceReclamation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/service/ServiceReclamation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/service/ServiceUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/service/ServiceUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/service/session/MailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/service/session/MailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/test/MainFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/test/MainFX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tn/esprit/utils/MyDataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tn/esprit/utils/MyDataBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/AffichageEvent.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/AffichageEvent.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/FrontEvents.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FrontEvents.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ListUsers.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ListUsers.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ProfileSetting.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ProfileSetting.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ShowProfile.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ShowProfile.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/afficher-command-user.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/afficher-command-user.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/afficher-produit-admin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/afficher-produit-admin.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/afficher-produit-user.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/afficher-produit-user.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/afficher-reclamation-admin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/afficher-reclamation-admin.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/afficher-reclamation.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/afficher-reclamation.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/afficher-review.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/afficher-review.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ajouter-command-user.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ajouter-command-user.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/command-admin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/command-admin.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/produit-admin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/produit-admin.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2wlvICt72ZZ9ApwN2Fzwj18vnHR" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.artyphoria [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "integration",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.artyphoria [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.artyphoria [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.artyphoria [org.openjfx:javafx-maven-plugin:0.0.8:run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;integration&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -67,6 +113,7 @@
       <option name="presentableId" value="Default" />
       <updated>1746628892748</updated>
       <workItem from="1746628893832" duration="2783000" />
+      <workItem from="1746668395969" duration="7311000" />
     </task>
     <servers />
   </component>

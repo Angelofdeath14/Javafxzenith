@@ -1,43 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.shape.SVGPath?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="521.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.CommandAdminController">
-    <children>
-        <ListView fx:id="lvcommand" layoutX="63.0" layoutY="42.0" prefHeight="388.0" prefWidth="754.0" style="-fx-background-color: #D5CABC;                  -fx-control-inner-background: #D5CABC;                  -fx-border-color: #bbb;                  -fx-border-radius: 15px;                  -fx-background-radius: 15px;" />
-        <Button layoutX="353.0" layoutY="463.0" mnemonicParsing="false" onAction="#accept" style="-fx-background-color: #9E8277; -fx-text-fill: white; -fx-background-radius: 8px;">
-            <graphic>
-                <HBox alignment="CENTER_LEFT" spacing="5">
-                    <children>
-                        <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z                                  M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" fill="white" scaleX="0.9" scaleY="0.9" />
-                        <Label style="-fx-text-fill: white;" text="Accept" />
-                    </children>
-                </HBox>
-            </graphic>
-        </Button>
-        <Button layoutX="465.0" layoutY="463.0" mnemonicParsing="false" onAction="#reject" style="-fx-background-color: red; -fx-text-fill: white; -fx-background-radius: 8px;">
-            <graphic>
-                <HBox alignment="CENTER_LEFT" spacing="5">
-                    <children>
-                        <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z                                  M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" fill="white" scaleX="0.9" scaleY="0.9" />
-                        <Label style="-fx-text-fill: white;" text="Reject" />
-                    </children>
-                </HBox>
-            </graphic>
-        </Button>
-      <Button layoutX="726.0" layoutY="10.0" mnemonicParsing="false" onAction="#retour" style="-fx-background-color: #9E8277; -fx-text-fill: white; -fx-background-radius: 8px;">
-         <graphic>
-            <HBox alignment="CENTER_LEFT" spacing="5">
-               <children>
-                  <Label style="-fx-text-fill: white;" text="Retour" />
-               </children>
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controller.CommandAdminController"
+            stylesheets="@style.css"
+            prefWidth="1200" prefHeight="800"
+            style="-fx-background-color: white;">
+
+    <!-- Window header -->
+    <HBox styleClass="window-header"
+          AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          prefHeight="30">
+        <Label text="Gestion des Commandes" styleClass="window-title"/>
+    </HBox>
+
+    <!-- Sidebar nav -->
+    <VBox layoutY="30" prefWidth="200" styleClass="sidebar"
+          AnchorPane.topAnchor="30" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0">
+        <Button fx:id="btnDashboard"    onAction="#goToDash"        styleClass="button-route" text="Tableau de bord"/>
+        <Button fx:id="btnEvents"       onAction="#goToEvents"      styleClass="button-route" text="Événements"/>
+        <Button fx:id="btnAddEvent"     onAction="#goToAddEvent"    styleClass="button-route" text="Ajouter un événement"/>
+        <Button fx:id="btnUsers"        onAction="#goToUsers"       styleClass="button-route" text="Utilisateurs"/>
+        <Button fx:id="btnProduit"      onAction="#goToProduit"     styleClass="button-route" text="Produits"/>
+        <Button fx:id="btnCommands"     onAction="#refreshList"     styleClass="button-route" text="Commandes"/>
+        <Button fx:id="btnReclamation"  onAction="#goToReclamation" styleClass="button-route" text="Réclamations"/>
+        <Button fx:id="btnLogout"       onAction="#logout"         styleClass="button-route" text="Déconnexion"/>
+    </VBox>
+
+    <!-- User avatar & name -->
+    <HBox spacing="5" AnchorPane.topAnchor="5" AnchorPane.rightAnchor="20">
+        <Circle radius="13" fill="DODGERBLUE" stroke="BLACK"/>
+        <Text fx:id="currentUserName" text="Utilisateur">
+            <font><Font name="System Bold" size="14"/></font>
+        </Text>
+    </HBox>
+
+    <!-- Main content -->
+    <ScrollPane fx:id="scrollPane"
+                AnchorPane.topAnchor="50" AnchorPane.leftAnchor="220"
+                AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+        <VBox fx:id="mainContainer" spacing="15" styleClass="main-content">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <!-- Action buttons -->
+            <HBox spacing="10">
+                <Button fx:id="btnAccept"  text="Accept"  onAction="#accept"  styleClass="action-button"/>
+                <Button fx:id="btnReject"  text="Reject"  onAction="#reject"  styleClass="action-button"/>
             </HBox>
-         </graphic>
-      </Button>
-    </children>
+
+            <!-- Commands list -->
+            <ListView fx:id="lvcommand" VBox.vgrow="ALWAYS"
+                      styleClass="card-list"/>
+        </VBox>
+    </ScrollPane>
+
 </AnchorPane>

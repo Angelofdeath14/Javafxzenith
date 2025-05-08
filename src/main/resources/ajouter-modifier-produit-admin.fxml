@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -8,85 +9,64 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="482.0" prefWidth="564.0"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.controller.AjouterModifierProduitAdminController"
-            style="-fx-background-color: #363B48;">
+<AnchorPane prefHeight="482.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AjouterModifierProduitAdminController">
     <children>
-        <Label layoutX="20.0" layoutY="20.0" text="Nom:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="60.0" text="Description:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="162.0" text="Catégorie:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="202.0" text="Prix:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="249.0" text="État Produit:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="289.0" text="Front Image:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="329.0" text="Back Image:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
-        <Label layoutX="20.0" layoutY="369.0" text="Top Image:" style="-fx-font-size: 16px; -fx-text-fill: #939597;" />
+        <Label layoutX="20.0" layoutY="20.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Nom:" />
+        <Label layoutX="20.0" layoutY="60.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Description:" />
+        <Label layoutX="20.0" layoutY="162.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Catégorie:" />
+        <Label layoutX="20.0" layoutY="202.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Prix:" />
+        <Label layoutX="20.0" layoutY="249.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="État Produit:" />
+        <Label layoutX="20.0" layoutY="289.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Front Image:" />
+        <Label layoutX="20.0" layoutY="329.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Back Image:" />
+        <Label layoutX="20.0" layoutY="369.0" style="-fx-font-size: 16px; -fx-text-fill: #939597;" text="Top Image:" />
 
-        <TextField fx:id="txtNom" layoutX="120.0" layoutY="15.0" prefWidth="200.0"
-                   style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <TextArea fx:id="txtDescription" layoutX="120.0" layoutY="60.0" prefHeight="80.0" prefWidth="200.0"
-                  style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <ComboBox fx:id="cmbCategorie" layoutX="120.0" layoutY="157.0" prefWidth="200.0"
-                  style="-fx-background-color: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <TextField fx:id="txtPrix" layoutX="120.0" layoutY="197.0" prefWidth="200.0"
-                   style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <TextField fx:id="txtEtatProduit" layoutX="120.0" layoutY="244.0" prefWidth="200.0"
-                   style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <TextField fx:id="txtFrontImage" layoutX="120.0" layoutY="284.0" prefWidth="200.0"
-                   style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <TextField fx:id="txtBackImage" layoutX="120.0" layoutY="324.0" prefWidth="200.0"
-                   style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
-        <TextField fx:id="txtTopImage" layoutX="120.0" layoutY="364.0" prefWidth="200.0"
-                   style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextField fx:id="txtNom" layoutX="120.0" layoutY="15.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextArea fx:id="txtDescription" layoutX="120.0" layoutY="60.0" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <ComboBox fx:id="cmbCategorie" layoutX="120.0" layoutY="157.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextField fx:id="txtPrix" layoutX="120.0" layoutY="197.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextField fx:id="txtEtatProduit" layoutX="120.0" layoutY="244.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextField fx:id="txtFrontImage" layoutX="120.0" layoutY="284.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextField fx:id="txtBackImage" layoutX="120.0" layoutY="324.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
+        <TextField fx:id="txtTopImage" layoutX="120.0" layoutY="364.0" prefWidth="200.0" style="-fx-background-color: #D5CABC; -fx-control-inner-background: #D5CABC; -fx-border-color: #bbb; -fx-border-radius: 8px; -fx-background-radius: 8px;" />
 
-        <Button layoutX="337.0" layoutY="283.0" mnemonicParsing="false" onAction="#upload1"
-                style="-fx-background-color: #939597; -fx-text-fill: white; -fx-background-radius: 8px;">
+        <Button layoutX="337.0" layoutY="283.0" mnemonicParsing="false" onAction="#upload1" style="-fx-background-color: #939597; -fx-text-fill: white; -fx-background-radius: 8px;">
             <graphic>
-                <HBox spacing="5" alignment="CENTER_LEFT">
-                    <SVGPath content="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h4.66v-4h3.84L12 2z"
-                             fill="white" scaleX="0.5" scaleY="0.5"/>
-                    <Label text="Upload" style="-fx-text-fill: white;" />
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <SVGPath content="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h4.66v-4h3.84L12 2z" fill="white" scaleX="0.5" scaleY="0.5" />
+                    <Label style="-fx-text-fill: white;" text="Upload" />
                 </HBox>
             </graphic>
         </Button>
-        <Button layoutX="337.0" layoutY="323.0" mnemonicParsing="false" onAction="#upload2"
-                style="-fx-background-color: #939597; -fx-text-fill: white; -fx-background-radius: 8px;">
+        <Button layoutX="337.0" layoutY="323.0" mnemonicParsing="false" onAction="#upload2" style="-fx-background-color: #939597; -fx-text-fill: white; -fx-background-radius: 8px;">
             <graphic>
-                <HBox spacing="5" alignment="CENTER_LEFT">
-                    <SVGPath content="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h4.66v-4h3.84L12 2z"
-                             fill="white" scaleX="0.5" scaleY="0.5"/>
-                    <Label text="Upload" style="-fx-text-fill: white;" />
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <SVGPath content="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h4.66v-4h3.84L12 2z" fill="white" scaleX="0.5" scaleY="0.5" />
+                    <Label style="-fx-text-fill: white;" text="Upload" />
                 </HBox>
             </graphic>
         </Button>
-        <Button layoutX="337.0" layoutY="364.0" mnemonicParsing="false" onAction="#upload3"
-                style="-fx-background-color: #939597; -fx-text-fill: white; -fx-background-radius: 8px;">
+        <Button layoutX="337.0" layoutY="364.0" mnemonicParsing="false" onAction="#upload3" style="-fx-background-color: #939597; -fx-text-fill: white; -fx-background-radius: 8px;">
             <graphic>
-                <HBox spacing="5" alignment="CENTER_LEFT">
-                    <SVGPath content="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h4.66v-4h3.84L12 2z"
-                             fill="white" scaleX="0.5" scaleY="0.5"/>
-                    <Label text="Upload" style="-fx-text-fill: white;" />
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <SVGPath content="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h4.66v-4h3.84L12 2z" fill="white" scaleX="0.5" scaleY="0.5" />
+                    <Label style="-fx-text-fill: white;" text="Upload" />
                 </HBox>
             </graphic>
         </Button>
 
-        <Button fx:id="btnSave" layoutX="185.0" layoutY="417.0" onAction="#handleSave"
-                style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
+        <Button fx:id="btnSave" layoutX="185.0" layoutY="417.0" onAction="#handleSave" style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
             <graphic>
-                <HBox spacing="5" alignment="CENTER_LEFT">
-                    <SVGPath content="M10 5 H14 V10 H19 V14 H14 V19 H10 V14 H5 V10 H10 Z"
-                             fill="white" scaleX="0.5" scaleY="0.5"/>
-                    <Label text="Save" style="-fx-text-fill: white;" />
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <SVGPath content="M10 5 H14 V10 H19 V14 H14 V19 H10 V14 H5 V10 H10 Z" fill="white" scaleX="0.5" scaleY="0.5" />
+                    <Label style="-fx-text-fill: white;" text="Save" />
                 </HBox>
             </graphic>
         </Button>
-        <Button fx:id="btnCancel" layoutX="481.0" layoutY="25.0" onAction="#handleCancel"
-                style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
+        <Button fx:id="btnCancel" layoutX="481.0" layoutY="25.0" onAction="#handleCancel" style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
             <graphic>
-                <HBox spacing="5" alignment="CENTER_LEFT">
-                    <SVGPath content="M10 6 L4 12 L10 18" fill="white" scaleX="0.5" scaleY="0.5"/>
-                    <Label text="Retour" style="-fx-text-fill: white;" />
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <SVGPath content="M10 6 L4 12 L10 18" fill="white" scaleX="0.5" scaleY="0.5" />
+                    <Label style="-fx-text-fill: white;" text="Retour" />
                 </HBox>
             </graphic>
         </Button>

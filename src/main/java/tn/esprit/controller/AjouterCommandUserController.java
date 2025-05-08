@@ -14,6 +14,7 @@ import tn.esprit.entities.Command;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceCommand;
 import tn.esprit.service.ServiceProduit;
+import tn.esprit.service.session.UserSession;
 import tn.esprit.utils.EmailSender;
 
 import javax.mail.MessagingException;
@@ -101,7 +102,7 @@ public class AjouterCommandUserController {
         }
         if (currentCommand == null) {
             Command cmd = new Command();
-            cmd.setId_user(1);
+            cmd.setId_user(UserSession.CURRENT_USER.getUserLoggedIn().getId());
             cmd.setCreate_at(LocalDateTime.now());
             cmd.setStatus(status);
             cmd.setTotal_amount(
@@ -126,19 +127,7 @@ public class AjouterCommandUserController {
                 }
                 new Alert(Alert.AlertType.INFORMATION,
                         "Commande ajoutée avec succès !").showAndWait();
-                try {
-                    Parent root = FXMLLoader.load(
-                            getClass().getResource("/afficher-produit-user.fxml"));
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.setTitle("Produits");
-                    stage.show();
 
-                    Stage old = (Stage) cartScrollPane.getScene().getWindow();
-                    old.close();
-                } catch (IOException ex) {
-                    System.err.println(ex.getMessage());
-                }
             }
         } else {
             currentCommand.setDelivery_address(deliveryAddressField.getText());
@@ -146,19 +135,7 @@ public class AjouterCommandUserController {
             serviceCommand.modifier(currentCommand);
             new Alert(Alert.AlertType.INFORMATION,
                     "Commande modifiée avec succès !").showAndWait();
-            try {
-                Parent root = FXMLLoader.load(
-                        getClass().getResource("/afficher-produit-user.fxml"));
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Produits");
-                stage.show();
 
-                Stage old = (Stage) cartScrollPane.getScene().getWindow();
-                old.close();
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-            }
         }
     }
     private boolean showPaymentDialog() {
@@ -186,20 +163,5 @@ public class AjouterCommandUserController {
             return false;
         }
     }
-    @FXML
-    void retour(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource("/afficher-produit-user.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Produits");
-            stage.show();
 
-            Stage old = (Stage) cartScrollPane.getScene().getWindow();
-            old.close();
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-    }
 }

@@ -89,7 +89,7 @@ public class LoginController {
             if (role.contains("ROLE_ADMIN")) {
                 loadScene("/Dashboard.fxml");
             } else if (role.contains("ROLE_USER")) {
-                loadScene("/ShowProfile.fxml");
+                loadScene("/DashboardFront.fxml");
             } else {
                 invalidLogin.setText("Rôle non reconnu.");
             }

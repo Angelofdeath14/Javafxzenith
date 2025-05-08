@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="582.0" prefWidth="650.0" style="-fx-background-color: #363B48;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AjouterCommandUserController">
+<AnchorPane prefHeight="582.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AjouterCommandUserController">
    <children>
 
       <!-- Centered Title -->
@@ -31,21 +31,21 @@
       </ScrollPane>
 
       <!-- Delivery Address -->
-      <Label layoutX="78.0" layoutY="391.0" style="-fx-text-fill: #fff; -fx-font-size:14px;" text="Adresse de livraison:" />
+      <Label layoutX="78.0" layoutY="391.0" style="-fx-font-size: 14px;" text="Adresse de livraison:" />
       <TextArea fx:id="deliveryAddressField" layoutX="78.0" layoutY="411.0" prefHeight="80" prefWidth="200" promptText="Adresse de livraison" style="-fx-background-color: #D5CABC; -fx-border-radius:8px; -fx-background-radius:8px;" />
 
       <!-- Notes -->
-      <Label layoutX="328.0" layoutY="391.0" style="-fx-text-fill: #fff; -fx-font-size:14px;" text="Note:" />
+      <Label layoutX="328.0" layoutY="391.0" style="-fx-font-size: 14px;" text="Note:" />
       <TextArea fx:id="notesArea" layoutX="328.0" layoutY="411.0" prefHeight="80" prefWidth="200" promptText="Notes" style="-fx-background-color: #D5CABC; -fx-border-radius:8px; -fx-background-radius:8px;" />
       <HBox alignment="CENTER_LEFT" layoutX="203.0" layoutY="506.0" spacing="20">
          <children>
-            <Label style="-fx-text-fill: #fff;" text="Paiement :" />
+            <Label text="Paiement :" />
 
-            <RadioButton fx:id="rbCash" selected="true" text="Cash" textFill="WHITE">
+            <RadioButton fx:id="rbCash" selected="true" text="Cash">
                <toggleGroup>
                   <ToggleGroup fx:id="paymentGroup" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="rbCard" text="Carte" textFill="WHITE" toggleGroup="$paymentGroup" />
+            <RadioButton fx:id="rbCard" text="Carte" toggleGroup="$paymentGroup" />
          </children>
       </HBox>
       <!-- Confirm Button -->
@@ -57,17 +57,7 @@
             </HBox>
          </graphic>
       </Button>
-
-      <!-- Retour Button -->
-      <Button layoutX="570.0" layoutY="43.0" mnemonicParsing="false" onAction="#retour" style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
-         <graphic>
-            <HBox alignment="CENTER_LEFT" spacing="5">
-               <SVGPath content="M10 6L6 10l4 4M6 10h12" fill="white" />
-               <Label style="-fx-text-fill: white;" text="Retour" />
-            </HBox>
-         </graphic>
-      </Button>
-      <Label fx:id="ltotal" layoutX="50.0" layoutY="357.0" text="Label" textFill="#75ff7a">
+      <Label fx:id="ltotal" layoutX="50.0" layoutY="357.0" text="Label" textFill="#009605">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>

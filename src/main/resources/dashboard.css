@@ -1,0 +1,81 @@
+/* dashboard.css */
+
+/* Base styling */
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    -fx-base: #ffffff;
+}
+
+/* Navbar container */
+.top .hbox {
+    -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
+    -fx-padding: 10 20;
+}
+
+/* Navigation buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+}
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+.nav-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* User icon and label */
+#userIcon {
+    -fx-cursor: hand;
+    -fx-effect: none;
+    -fx-transition: all 0.3s ease;
+}
+#userIcon:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0, 0, 0);
+}
+#lblUsername {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+}
+
+/* Content pane styling */
+#contentPane {
+    -fx-padding: 20;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+}
+
+/* General button cursor */
+.button {
+    -fx-cursor: hand;
+}
+
+/* ScrollPane styling */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* TableView styling (if used) */
+.table-view {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: transparent;
+}
+.table-view .column-header-background {
+    -fx-background-color: #eef1f5;
+}
+.table-view .table-row-cell:filled:selected, .table-view .table-row-cell:filled:hover {
+    -fx-background-color: rgba(54, 132, 255, 0.1);
+}

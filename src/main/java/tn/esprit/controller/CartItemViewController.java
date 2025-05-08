@@ -54,7 +54,7 @@ public class CartItemViewController {
                 String imageFile = produit.getFront_image();
         if (imageFile != null && !imageFile.isBlank()) {
             try {
-                File file = new File("C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\" + imageFile);
+                File file = new File("C:\\Users\\Abir12\\Desktop\\artyphoria - Copy\\public\\uploads\\" + imageFile);
                 if (file.exists()) {
                     try (FileInputStream fis = new FileInputStream(file)) {
                         Image img = new Image(fis);

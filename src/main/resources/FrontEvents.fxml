@@ -1,76 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="tn.esprit.controller.FrontEventsController"
-            prefHeight="720.0" prefWidth="1280.0"
-            stylesheets="@professional_style.css">
+<BorderPane prefHeight="629.0" prefWidth="1002.0" stylesheets="@professional_style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.FrontEventsController">
     
     <!-- Barre supérieure avec logo, recherche et filtre -->
     <top>
-        <VBox spacing="0">
+        <VBox prefHeight="53.0" prefWidth="1909.0" spacing="0">
             <!-- Barre principale avec dégradé de couleur -->
-            <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="10">
+            <HBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="1141.0" spacing="10">
                 <padding>
-                    <Insets top="10" right="15" bottom="10" left="15"/>
+                    <Insets bottom="10" left="15" right="15" top="10" />
                 </padding>
-                
-                <!-- Bouton retour avec style amélioré -->
-                <Button fx:id="btnBack" text="← Retour" styleClass="button-neutral">
-                    <font>
-                        <Font name="System Bold" size="14.0"/>
-                    </font>
-                </Button>
-                
-                <!-- Titre de l'application avec style élégant -->
-                <Label styleClass="app-title" text="Artphoria" />
-                
-                <Region HBox.hgrow="ALWAYS" />
-                       
-                <!-- Bouton pour accéder à l'administration -->
-                <Button fx:id="btnAdmin" text="Administration" onAction="#handleAdminAccess"
-                       styleClass="button-info" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); -fx-padding: 8 15;" />
                 
                 <!-- Barre de recherche améliorée -->
                 <HBox alignment="CENTER" spacing="8" styleClass="search-container">
-                    <TextField fx:id="searchField" promptText="Rechercher un événement..." prefWidth="200" styleClass="search-field" />
+                    <TextField fx:id="searchField" prefWidth="200" promptText="Rechercher un événement..." styleClass="search-field" />
                     
                     <ComboBox fx:id="filterTypeComboBox" prefWidth="120" promptText="Tous les types" styleClass="filter-combo" />
                     <ComboBox fx:id="filterDate" prefWidth="120" promptText="Toutes les dates" styleClass="filter-combo" />
                 </HBox>
             </HBox>
-            
-            <!-- Ligne décorative sous la barre de navigation -->
-            <Line startX="0" endX="1280" stroke="#e0e0e0" strokeWidth="1.0" />
         </VBox>
     </top>
     
     <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll-pane">
-            <VBox spacing="20" style="-fx-padding: 20;">
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="629.0" prefWidth="1052.0" styleClass="transparent-scroll-pane">
+            <VBox prefHeight="629.0" prefWidth="800.0" spacing="20" style="-fx-padding: 20;">
                 <!-- Section "Cette semaine" avec style amélioré -->
                 <VBox spacing="10">
                     <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="Événements cette semaine" styleClass="section-title">
+                        <Label styleClass="section-title" text="Événements cette semaine">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Label>
-                        <Rectangle height="2" width="200" fill="#3498db" />
+                        <Rectangle fill="#3498db" height="2" width="200" />
                     </HBox>
                     
                     <!-- Conteneur pour les événements de cette semaine avec mise en page améliorée -->
-                    <FlowPane fx:id="thisWeekEventsContainer" hgap="15" vgap="15" prefWrapLength="1200">
+                    <FlowPane fx:id="thisWeekEventsContainer" hgap="15" prefWrapLength="1200" vgap="15">
                         <!-- Les événements seront ajoutés dynamiquement ici -->
                     </FlowPane>
                 </VBox>
@@ -78,16 +57,16 @@
                 <!-- Section "Prochainement" avec style amélioré -->
                 <VBox spacing="10">
                     <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="Prochainement" styleClass="section-title">
+                        <Label styleClass="section-title" text="Prochainement">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Label>
-                        <Rectangle height="2" width="200" fill="#2ecc71" />
+                        <Rectangle fill="#2ecc71" height="2" width="200" />
                     </HBox>
                     
                     <!-- Conteneur pour les événements à venir avec mise en page améliorée -->
-                    <FlowPane fx:id="upcomingEventsContainer" hgap="15" vgap="15" prefWrapLength="1200">
+                    <FlowPane fx:id="upcomingEventsContainer" hgap="15" prefWrapLength="1200" vgap="15">
                         <!-- Les événements à venir seront ajoutés dynamiquement ici -->
                     </FlowPane>
                 </VBox>
@@ -95,16 +74,16 @@
                 <!-- Section "Tous les événements" avec style amélioré -->
                 <VBox spacing="10">
                     <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="Catalogue complet" styleClass="section-title">
+                        <Label styleClass="section-title" text="Catalogue complet">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Label>
-                        <Rectangle height="2" width="200" fill="#9b59b6" />
+                        <Rectangle fill="#9b59b6" height="2" width="200" />
                     </HBox>
                     
                     <!-- Conteneur pour tous les événements avec mise en page améliorée -->
-                    <FlowPane fx:id="eventsContainer" hgap="15" vgap="15" prefWrapLength="1200">
+                    <FlowPane fx:id="eventsContainer" hgap="15" prefWrapLength="1200" vgap="15">
                         <!-- Les événements seront ajoutés dynamiquement ici -->
                     </FlowPane>
                 </VBox>
@@ -114,7 +93,7 @@
     
     <bottom>
         <HBox alignment="CENTER" style="-fx-background-color: #f8f9fa; -fx-padding: 10;">
-            <Label text="© 2024 Artphoria - Tous droits réservés" style="-fx-font-size: 10pt; -fx-text-fill: #757575;" />
+            <Label style="-fx-font-size: 10pt; -fx-text-fill: #757575;" text="© 2024 Artphoria - Tous droits réservés" />
         </HBox>
     </bottom>
-</BorderPane> 
+</BorderPane>

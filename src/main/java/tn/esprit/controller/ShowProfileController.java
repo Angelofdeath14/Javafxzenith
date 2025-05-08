@@ -2,6 +2,7 @@ package tn.esprit.controller;
 
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import tn.esprit.service.session.UserSession;
 
@@ -11,11 +12,11 @@ public class ShowProfileController extends NavigationController {
 
 
 
+
+
+
     @FXML
-    private Text currentUserName;
-
-
-
+    private Label navigate;
 
     @FXML
     private Text ftEmail;
@@ -36,7 +37,6 @@ public class ShowProfileController extends NavigationController {
 
     @FXML
     void initialize() throws SQLException {
-        assert currentUserName != null : "fx:id=\"currentUserName\" was not injected: check your FXML file 'ListUsers.fxml'.";
 
 
         assert ftEmail != null : "fx:id=\"ftEmail\" was not injected: check your FXML file 'ShowProfile.fxml'.";

@@ -246,4 +246,11 @@ public class ServiceUser implements CRUD<User> {
             }
         }
     }
+    public String findUserById(int id){
+        try {
+            return selectAll().stream().filter(u->u.getId()==id).findFirst().get().getfirst_name();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

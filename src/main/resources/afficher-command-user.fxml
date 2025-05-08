@@ -7,54 +7,26 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.controller.AfficherCommandUserController"
-            style="-fx-background-color: #363B48;">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AfficherCommandUserController">
    <children>
-      <ListView fx:id="lvcommand"
-                layoutX="54.0" layoutY="14.0"
-                prefHeight="305.0" prefWidth="463.0"
-                style="-fx-background-color: #D5CABC;
-                 -fx-control-inner-background: #D5CABC;
-                 -fx-border-color: #bbb;
-                  -fx-border-radius: 8px;
-                  -fx-background-radius: 8px;" />
-
-
-      <!-- Retour Button with Smaller Back Icon -->
-      <Button layoutX="525.0" layoutY="14.0" mnemonicParsing="false" onAction="#retour"
-              style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
-         <graphic>
-            <HBox spacing="5" alignment="CENTER_LEFT">
-               <SVGPath content="M10 6 L4 12 L10 18" fill="white" scaleX="0.9" scaleY="0.9"/>
-               <Label text="Retour" style="-fx-text-fill: white;" />
-            </HBox>
-         </graphic>
-      </Button>
+      <ListView fx:id="lvcommand" layoutX="54.0" layoutY="14.0" prefHeight="305.0" prefWidth="463.0" style="-fx-background-color: #D5CABC;                  -fx-control-inner-background: #D5CABC;                  -fx-border-color: #bbb;                   -fx-border-radius: 8px;                   -fx-background-radius: 8px;" />
 
       <!-- Annuler Button with Smaller Trash Icon -->
-      <Button layoutX="214.0" layoutY="341.0" mnemonicParsing="false" onAction="#annuler"
-              style="-fx-background-color: #7C4C53; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="214.0" layoutY="341.0" mnemonicParsing="false" onAction="#annuler" style="-fx-background-color: #7C4C53; -fx-text-fill: white; -fx-background-radius: 8px;">
          <graphic>
-            <HBox spacing="5" alignment="CENTER_LEFT">
-               <SVGPath content="M3 6 L5 6 L21 6 M19 6 L17.5 21 H6.5 L5 6 M10 11 V17 M14 11 V17"
-                        fill="white" scaleX="0.9" scaleY="0.9"/>
-               <Label text="Annuler" style="-fx-text-fill: white;" />
+            <HBox alignment="CENTER_LEFT" spacing="5">
+               <SVGPath content="M3 6 L5 6 L21 6 M19 6 L17.5 21 H6.5 L5 6 M10 11 V17 M14 11 V17" fill="white" scaleX="0.9" scaleY="0.9" />
+               <Label style="-fx-text-fill: white;" text="Annuler" />
             </HBox>
          </graphic>
       </Button>
 
       <!-- Modifier Button with Smaller Edit Icon -->
-      <Button layoutX="300.0" layoutY="341.0" mnemonicParsing="false" onAction="#modifier"
-              style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="300.0" layoutY="341.0" mnemonicParsing="false" onAction="#modifier" style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
          <graphic>
-            <HBox spacing="5" alignment="CENTER_LEFT">
-               <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z
-                                 M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"
-                        fill="white" scaleX="0.9" scaleY="0.9"/>
-               <Label text="Modifier" style="-fx-text-fill: white;" />
+            <HBox alignment="CENTER_LEFT" spacing="5">
+               <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z                                  M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" fill="white" scaleX="0.9" scaleY="0.9" />
+               <Label style="-fx-text-fill: white;" text="Modifier" />
             </HBox>
          </graphic>
       </Button>

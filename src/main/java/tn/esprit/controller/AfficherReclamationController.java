@@ -13,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import tn.esprit.entities.Reclamation;
 import tn.esprit.service.ServiceReclamation;
+import tn.esprit.service.session.UserSession;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class AfficherReclamationController {
     }
     private void refresh(){
         lvreclamation.getItems().clear();
-        reclamationObservableList.addAll(serviceReclamation.afficher());
+        reclamationObservableList.addAll(serviceReclamation.getReclamationByUserId(UserSession.CURRENT_USER.getUserLoggedIn().getId()));
         lvreclamation.setItems(reclamationObservableList);
     }
     @FXML
@@ -58,9 +59,8 @@ public class AfficherReclamationController {
             Stage stage = new Stage();
             stage.setTitle("Ajouter Reclamation");
             stage.setScene(new Scene(root));
-            stage.show();
-            Stage stage2 = (Stage) lvreclamation.getScene().getWindow();
-            stage2.close();
+            stage.showAndWait();
+            refresh();
 
 
         }catch (IOException e){
@@ -80,9 +80,8 @@ public class AfficherReclamationController {
                 Stage stage = new Stage();
                 stage.setTitle("Modifier Reclamation");
                 stage.setScene(new Scene(root));
-                stage.show();
-                Stage stage2 = (Stage) lvreclamation.getScene().getWindow();
-                stage2.close();
+                stage.showAndWait();
+                refresh();
 
 
             }catch (IOException e){

@@ -14,6 +14,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceProduit;
+import tn.esprit.service.SessionService;
+import tn.esprit.service.session.UserSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class AjouterModifierProduitAdminController {
-    String destinationFolder="C:\\xampp\\htdocs\\artyphoria - Copy - Copy\\public\\uploads\\";
+    String destinationFolder="C:\\Users\\Abir12\\Desktop\\artyphoria - Copy\\public\\uploads\\";
     private Produit currentProduit;
     @FXML private Button btnCancel;
     @FXML private Button btnSave;
@@ -98,24 +100,16 @@ public class AjouterModifierProduitAdminController {
             newProduit.setBack_image(txtBackImage.getText());
             newProduit.setTop_image(txtTopImage.getText());
             newProduit.setCommand_id(0);
-            newProduit.setUser_id(1);
+            newProduit.setUser_id(UserSession.CURRENT_USER.getUserLoggedIn().getId());
             serviceProduit.ajouter(newProduit);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Produit ajouté");
             alert.setHeaderText(null);
             alert.setContentText("Le produit a été ajouté avec succès.");
             alert.showAndWait();
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/afficher-produit-admin.fxml"));
-                Parent root = loader.load();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Afficher Produits");
-                stage.show();
+
                 ((Stage)btnCancel.getScene().getWindow()).close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
         } else {
             currentProduit.setNom(txtNom.getText());
             currentProduit.setDescription(txtDescription.getText());
@@ -131,17 +125,9 @@ public class AjouterModifierProduitAdminController {
             alert.setHeaderText(null);
             alert.setContentText("Le produit a été modifié avec succès.");
             alert.showAndWait();
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/afficher-produit-admin.fxml"));
-                Parent root = loader.load();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Afficher Produits");
-                stage.show();
+
                 ((Stage)btnCancel.getScene().getWindow()).close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
         }
     }
 

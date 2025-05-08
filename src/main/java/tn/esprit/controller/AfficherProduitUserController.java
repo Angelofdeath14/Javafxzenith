@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceProduit;
+import tn.esprit.service.session.UserSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class AfficherProduitUserController {
     @FXML private TextField searchField;
 
     private final ServiceProduit serviceProduit = new ServiceProduit();
-    private final List<Produit> allProducts = serviceProduit.getOtherProducts(1).stream()
+    private final List<Produit> allProducts = serviceProduit.getOtherProducts(UserSession.CURRENT_USER.getUserLoggedIn().getId()).stream()
             .filter(p -> "Accepted".equals(p.getEtat()))
             .collect(Collectors.toList());
     private final java.util.List<Produit> cart = new java.util.ArrayList<>();
@@ -89,8 +90,10 @@ public class AfficherProduitUserController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Ajouter Commande");
-            stage.show();
-            ((Stage) gridProducts.getScene().getWindow()).close();
+            stage.showAndWait();
+            renderGrid(serviceProduit.getOtherProducts(UserSession.CURRENT_USER.getUserLoggedIn().getId()).stream()
+                    .filter(p -> "Accepted".equals(p.getEtat()))
+                    .collect(Collectors.toList()));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

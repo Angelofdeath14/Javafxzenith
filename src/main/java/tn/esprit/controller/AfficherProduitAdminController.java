@@ -11,6 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import tn.esprit.entities.Produit;
 import tn.esprit.service.ServiceProduit;
+import tn.esprit.service.session.UserSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class AfficherProduitAdminController {
 
     private void refreshCards() {
         cardsContainer.getChildren().clear();
-        List<Produit> produits = serviceProduit.getUserProducts(1);
+        List<Produit> produits = serviceProduit.getUserProducts(UserSession.CURRENT_USER.getUserLoggedIn().getId());
         for (Produit p : produits) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/product-card-view.fxml"));
@@ -56,8 +57,8 @@ public class AfficherProduitAdminController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Ajouter Produit");
-            stage.show();
-            ((Stage) cardsContainer.getScene().getWindow()).close();
+            stage.showAndWait();
+            refreshCards();
         } catch (IOException e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Erreur");
@@ -76,7 +77,6 @@ public class AfficherProduitAdminController {
             stage.setScene(new Scene(root));
             stage.setTitle("Produits Utilisateur");
             stage.show();
-            ((Stage) cardsContainer.getScene().getWindow()).close();
         } catch (IOException e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Erreur");
@@ -112,8 +112,8 @@ public class AfficherProduitAdminController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Modifier Produit");
-            stage.show();
-            ((Stage) cardsContainer.getScene().getWindow()).close();
+            stage.showAndWait();
+            refreshCards();
         } catch (IOException e) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Erreur");

@@ -37,6 +37,12 @@ public class DashboardController implements Initializable {
     @FXML private Button btnEvents;
     @FXML private Button btnUsers;
     @FXML private Button btnLogout;
+    @FXML
+    private Button btnProduit;
+    @FXML
+    private Button btnCommands;
+    @FXML
+    private Button btnReclamation;
     @FXML private ScrollPane scrollPane;
     @FXML private VBox mainContainer;
     @FXML private Label lblTotalEvents;
@@ -241,12 +247,12 @@ public class DashboardController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             // Charger la nouvelle grille d'événements stylisée
-            URL url = getClass().getResource("/EventsGrid.fxml");
+            URL url = getClass().getResource("/AffichageEvent.fxml");
             if (url == null) {
-                url = getClass().getClassLoader().getResource("EventsGrid.fxml");
+                url = getClass().getClassLoader().getResource("AffichageEvent.fxml");
             }
             if (url == null) {
-                String resourcePath = "file:" + System.getProperty("user.dir") + "/target/classes/EventsGrid.fxml";
+                String resourcePath = "file:" + System.getProperty("user.dir") + "/target/classes/AffichageEvent.fxml";
                 url = new URL(resourcePath);
             }
             
@@ -474,6 +480,68 @@ public class DashboardController implements Initializable {
             alert.setHeaderText("Erreur lors du nettoyage des fichiers");
             alert.setContentText("Une erreur est survenue: " + e.getMessage());
             alert.showAndWait();
+        }
+    }
+    @FXML
+    private void goToProduit() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL url = getClass().getResource("/produit-admin.fxml");
+            if (url == null) url = getClass().getClassLoader().getResource("produit-admin.fxml");
+            loader.setLocation(url);
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnProduit.getScene().getWindow();
+            stage.setTitle("Gestion des Produits");
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR,
+                    "Erreur",
+                    "Navigation",
+                    "Impossible de naviguer vers les produits : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToCommands() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL url = getClass().getResource("/command-admin.fxml");
+            if (url == null) url = getClass().getClassLoader().getResource("command-admin.fxml");
+            loader.setLocation(url);
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnCommands.getScene().getWindow();
+            stage.setTitle("Gestion des Commandes");
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR,
+                    "Erreur",
+                    "Navigation",
+                    "Impossible de naviguer vers les commandes : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToReclamation() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL url = getClass().getResource("/afficher-reclamation-admin.fxml");
+            if (url == null) url = getClass().getClassLoader().getResource("afficher-reclamation-admin.fxml");
+            loader.setLocation(url);
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnReclamation.getScene().getWindow();
+            stage.setTitle("Gestion des Réclamations");
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR,
+                    "Erreur",
+                    "Navigation",
+                    "Impossible de naviguer vers les réclamations : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 } 

@@ -1,5 +1,7 @@
 package tn.esprit.entities;
 
+import tn.esprit.service.ServiceUser;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -74,17 +76,18 @@ public class Reclamation {
 
     @Override
     public String toString() {
+        ServiceUser su = new ServiceUser();
         return String.format(
                 "Reclamation{%n" +
                         "  titre='%s'%n" +
                         "  description='%s'%n" +
                         "  date_creation=%s%n" +
-                        "  id_user=%d%n" +
+                        "  User=%s%n" +
                         "}",
                 titre,
                 description,
                 date_creation,
-                id_user
+                su.findUserById(id_user)
         );
     }
 

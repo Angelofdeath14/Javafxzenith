@@ -9,6 +9,7 @@ import tn.esprit.utils.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ServiceReclamation implements IService<Reclamation>{
@@ -82,5 +83,8 @@ public class ServiceReclamation implements IService<Reclamation>{
             System.out.println(e.getMessage());
         }
         return reclamations;
+    }
+    public List<Reclamation> getReclamationByUserId(int id){
+        return afficher().stream().filter(reclamation -> reclamation.getId_user()==id).collect(Collectors.toList());
     }
 }

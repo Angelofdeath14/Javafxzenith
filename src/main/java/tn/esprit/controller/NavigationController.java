@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -20,13 +21,11 @@ import java.util.ResourceBundle;
 public abstract class NavigationController {
 
     @FXML
-    private Text currentUserName;
-    @FXML
-    private Circle imgCircle;
+    private Label navigate;
 
     @FXML
     void goToAddToCart(ActionEvent event) {
-        Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             stage.setTitle("Add to Cart");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/add_panier.fxml"));
@@ -40,7 +39,7 @@ public abstract class NavigationController {
     }
     @FXML
     void goToOverviewUser(ActionEvent event){
-        Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             stage.setTitle("Show User Details");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowOneUser.fxml"));
@@ -54,7 +53,7 @@ public abstract class NavigationController {
 
     @FXML
     void addLoyalityPoints(ActionEvent event){
-        Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             stage.setTitle("Show User Details");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddLoyalityPoints.fxml"));
@@ -68,7 +67,7 @@ public abstract class NavigationController {
     @FXML
     void goToRecette(ActionEvent event){
         try {
-            Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+            Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
             stage.setTitle("Recettes");
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/recette/AfficherRecette.fxml"));
@@ -86,7 +85,7 @@ public abstract class NavigationController {
     @FXML
     void goToLogin(ActionEvent event) {
         try {
-            Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+            Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
             stage.setTitle("Login");
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
@@ -105,7 +104,7 @@ public abstract class NavigationController {
 
     @FXML
     void goToCategoryDetails(ActionEvent event) {
-        Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             stage.setTitle("Category Details");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Category_details.fxml"));
@@ -119,7 +118,7 @@ public abstract class NavigationController {
     }
     @FXML
     void goToProduct(ActionEvent event) {
-        Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             stage.setTitle("Product Details");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProductDetails.fxml"));
@@ -132,7 +131,7 @@ public abstract class NavigationController {
     }
     @FXML
     void goToDash() {
-        Stage stage = (Stage) currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             stage.setTitle("Dashboard");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
@@ -145,7 +144,7 @@ public abstract class NavigationController {
     }
     @FXML
     public void goToUsers() {
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListUsers.fxml"));
             Parent root = loader.load();
@@ -159,7 +158,7 @@ public abstract class NavigationController {
     }
     @FXML
     public void goToChangePassword() {
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ChangePassword.fxml"));
             Parent root = loader.load();
@@ -175,7 +174,7 @@ public abstract class NavigationController {
 
     @FXML
     public void goToOverview() {
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowProfile.fxml"));
             Parent root = loader.load();
@@ -191,7 +190,7 @@ public abstract class NavigationController {
 
     @FXML
     public void Logout() {
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
@@ -206,7 +205,7 @@ public abstract class NavigationController {
     }
     @FXML
     public void goToObjectives(){
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherObjectifs.fxml"));
             Parent root = loader.load();
@@ -221,7 +220,7 @@ public abstract class NavigationController {
     }
     @FXML
     public void goToActivites (){
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherActivites.fxml"));
             Parent root = loader.load();
@@ -236,7 +235,7 @@ public abstract class NavigationController {
     }
     @FXML
     public void goToEditProfile() {
-        Stage stage = (Stage) this.currentUserName.getScene().getWindow(); // Get reference to the login window's stage
+        Stage stage = (Stage) this.navigate.getScene().getWindow(); // Get reference to the login window's stage
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProfileSetting.fxml"));
             Parent root = loader.load();
@@ -250,11 +249,6 @@ public abstract class NavigationController {
         }
     }
 
-    @FXML
-    void initialize() throws SQLException {
-        currentUserName.setText(UserSession.CURRENT_USER.getUserLoggedIn().getfirst_name()+" "+UserSession.CURRENT_USER.getUserLoggedIn().getlast_name());
-        imgCircle.setStroke(Color.SEAGREEN);
 
-    }
 
 }

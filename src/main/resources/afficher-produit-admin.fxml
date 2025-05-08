@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="578.0" prefWidth="903.0" style="-fx-background-color: #363B48;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AfficherProduitAdminController">
+<AnchorPane prefHeight="507.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AfficherProduitAdminController">
    <children>
-      <ScrollPane fx:id="scrollPane" layoutX="53" layoutY="32" prefHeight="470.0" prefWidth="767.0" style="-fx-background: #D5CABC; -fx-border-radius: 15px; -fx-background-radius: 15px;">
+      <ScrollPane fx:id="scrollPane" layoutX="53" layoutY="32" prefHeight="396.0" prefWidth="767.0" style="-fx-background: #D5CABC; -fx-border-radius: 15px; -fx-background-radius: 15px;">
          <content>
             <FlowPane fx:id="cardsContainer" hgap="15" prefWrapLength="754" vgap="15" />
          </content>
       </ScrollPane>
-      <Button layoutX="223.0" layoutY="522.0" mnemonicParsing="false" onAction="#ajouter" style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="290.0" layoutY="451.0" mnemonicParsing="false" onAction="#ajouter" style="-fx-background-color: #80856D; -fx-text-fill: white; -fx-background-radius: 8px;" text="Ajouter">
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="5">
                <SVGPath content="M12 5 L12 19 M5 12 L19 12" fill="transparent" scaleX="0.9" scaleY="0.9" stroke="white" strokeWidth="2" />
@@ -26,27 +25,17 @@
             </HBox>
          </graphic>
       </Button>
-      <Button layoutX="353.0" layoutY="521.0" mnemonicParsing="false" onAction="#modifier" style="-fx-background-color: #9E8277; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="420.0" layoutY="450.0" mnemonicParsing="false" onAction="#modifier" style="-fx-background-color: #9E8277; -fx-text-fill: white; -fx-background-radius: 8px;" text="Modifier">
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="5">
                <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" fill="white" scaleX="0.9" scaleY="0.9" />
             </HBox>
          </graphic>
       </Button>
-      <Button layoutX="488.0" layoutY="523.0" mnemonicParsing="false" onAction="#supprimer" style="-fx-background-color: #7C4C53; -fx-text-fill: white; -fx-background-radius: 8px;">
+      <Button layoutX="555.0" layoutY="452.0" mnemonicParsing="false" onAction="#supprimer" style="-fx-background-color: #7C4C53; -fx-text-fill: white; -fx-background-radius: 8px;" text="Supprimer">
          <graphic>
             <HBox alignment="CENTER_LEFT" spacing="5">
                <SVGPath content="M3 6 L5 6 L21 6 M19 6 L17.5 21 H6.5 L5 6 M10 11 V17 M14 11 V17" fill="white" scaleX="0.9" scaleY="0.9" />
-            </HBox>
-         </graphic>
-      </Button>
-      <Button layoutX="825.0" layoutY="14.0" mnemonicParsing="false" onAction="#retour" style="-fx-background-color: #C49D83; -fx-text-fill: white; -fx-background-radius: 8px;">
-         <graphic>
-            <HBox alignment="CENTER_LEFT" spacing="5">
-               <children>
-                  <SVGPath content="M10 6 L4 12 L10 18" fill="white" scaleX="0.9" scaleY="0.9" />
-                  <Label style="-fx-text-fill: white;" text="Retour" />
-               </children>
             </HBox>
          </graphic>
       </Button>

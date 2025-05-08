@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import tn.esprit.entities.Reclamation;
 import tn.esprit.service.ServiceReclamation;
+import tn.esprit.service.session.UserSession;
 import tn.esprit.utils.BadWordFilter;
 
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class AjouterModifierReclamationController {
             r.setTitre(tftitre.getText());
             r.setDescription(filteredText);
             r.setDate_creation(LocalDateTime.now());
-            r.setId_user(1);
+            r.setId_user(UserSession.CURRENT_USER.getUserLoggedIn().getId());
             serviceReclamation.ajouter(r);
             showAlert(Alert.AlertType.INFORMATION, "Ajout réussi", "La réclamation a été ajoutée.", null);
         }else{

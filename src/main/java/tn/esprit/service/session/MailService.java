@@ -10,8 +10,8 @@ import java.util.Properties;
 
 public class MailService {
     // Il est conseillé d'utiliser des variables d'environnement pour des raisons de sécurité
-    private static final String FROM_EMAIL = System.getenv("erijnasr@gmail.com"); // Ton email
-    private static final String PASSWORD = System.getenv("whxh xkuj ecap xvoh");   // Ton mot de passe d'application Gmail
+    private static final String FROM_EMAIL = "erijnasr@gmail.com"; // Ton email
+    private static final String PASSWORD = "whxh xkuj ecap xvoh";   // Ton mot de passe d'application Gmail
     public static void send(String recipientEmail, String subject, String body) throws MessagingException {
         // Vérifie que les identifiants sont bien présents
         if (FROM_EMAIL == null || PASSWORD == null) {

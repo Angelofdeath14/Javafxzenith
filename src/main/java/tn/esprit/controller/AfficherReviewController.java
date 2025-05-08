@@ -40,8 +40,8 @@ public class AfficherReviewController {
             Stage st = new Stage();
             st.setTitle("Ajouter Review");
             st.setScene(new Scene(root));
-            st.show();
-            ((Stage) lvReview.getScene().getWindow()).close();
+            st.showAndWait();
+            refresh();
 
         } catch (IOException ex) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir l'interface d'ajout.", ex.getMessage());
@@ -54,9 +54,8 @@ public class AfficherReviewController {
             Stage st = new Stage();
             st.setTitle("Ajouter Review");
             st.setScene(new Scene(root));
-            st.show();
-            ((Stage) lvReview.getScene().getWindow()).close();
-
+            st.showAndWait();
+            refresh();
         } catch (IOException ex) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir l'interface d'ajout.", ex.getMessage());
         }

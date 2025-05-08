@@ -24,9 +24,13 @@
           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
         <Button fx:id="btnDashboard" onAction="#refreshDashboard" styleClass="button-route" text="Tableau de bord"/>
         <Button fx:id="btnEvents" onAction="#goToEvents" styleClass="button-route" text="Événements"/>
-        <Button fx:id="btnUsers" onAction="#goToUsers" styleClass="button-route" text="Utilisateurs"/>
         <Button fx:id="btnAddEvent" onAction="#goToAddEvent" styleClass="button-route" text="Ajouter un événement"/>
-        <Button fx:id="btnFront" onAction="#goToFrontView" styleClass="button-route" text="Front"/>
+
+        <Button fx:id="btnUsers" onAction="#goToUsers" styleClass="button-route" text="Utilisateurs"/>
+        <Button fx:id="btnProduit" onAction="#goToProduit" styleClass="button-route" text="Produits"/>
+        <Button fx:id="btnCommands" onAction="#goToCommands" styleClass="button-route" text="Commands"/>
+        <Button fx:id="btnReclamation" onAction="#goToReclamation" styleClass="button-route" text="Reclamation"/>
+
         <Button fx:id="btnLogout" onAction="#logout" styleClass="button-route" text="Déconnexion"/>
     </VBox>
 
